@@ -17,9 +17,14 @@ export const emptyAssertionsDetector: Detector = {
 
     for (const file of changedTestFiles) {
       const source = await ctx.readFile(file.filename);
-      const scan = scanJavaScript(source, options.customAssertions);
+      const scan = scanJavaScript(source, options.customAssertions, options.lenientAssertNames);
 
       for (const testCase of scan.testCases) {
+        const isNew = file.addedLines.has(testCase.line);
+        if (options.newTestsOnly && !isNew) {
+          continue;
+        }
+
         if (testCase.emptyBody || testCase.returnOnly) {
           findings.push({
             detector: emptyAssertionsDetector.id,
@@ -36,7 +41,6 @@ export const emptyAssertionsDetector: Detector = {
         }
 
         if (testCase.assertionCount === 0) {
-          const isNew = file.addedLines.has(testCase.line);
           findings.push({
             detector: emptyAssertionsDetector.id,
             severity: options.noAssertSeverity,

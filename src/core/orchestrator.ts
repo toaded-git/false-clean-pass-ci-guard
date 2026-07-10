@@ -1,6 +1,11 @@
+import { baselineChangeDetector } from "../detectors/baseline-change";
+import { coverageRatchetDetector } from "../detectors/coverage-ratchet";
 import { emptyAssertionsDetector } from "../detectors/empty-assertions";
+import { envMissingDetector } from "../detectors/env-missing";
+import { ignoredFailuresDetector } from "../detectors/ignored-failures";
 import { skippedTestsDetector } from "../detectors/skipped-tests";
 import { suppressionRatchetDetector } from "../detectors/suppression-ratchet";
+import { testCountRatchetDetector } from "../detectors/test-count-ratchet";
 import { scanJavaScript } from "../parse/js-ast";
 import { isTestFile } from "./globs";
 import type { FailOn, Detector, DetectorContext, Finding, RunResult } from "./types";
@@ -11,10 +16,18 @@ export const milestone1Detectors: Detector[] = [
   suppressionRatchetDetector
 ];
 
+export const milestone2Detectors: Detector[] = [
+  envMissingDetector,
+  ignoredFailuresDetector,
+  coverageRatchetDetector,
+  baselineChangeDetector,
+  testCountRatchetDetector
+];
+
 export async function runGuard(ctx: DetectorContext, failOn: FailOn = ctx.config.failOn): Promise<RunResult> {
   const findings: Finding[] = await detectParseFailures(ctx);
 
-  for (const detector of milestone1Detectors) {
+  for (const detector of [...milestone1Detectors, ...milestone2Detectors]) {
     findings.push(...(await detector.run(ctx)));
   }
 

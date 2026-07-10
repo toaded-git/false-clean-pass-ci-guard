@@ -1,6 +1,8 @@
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { emptyAssertionsDetector } from "../src/detectors/empty-assertions";
-import { contextFor, diffFile } from "./helpers";
+import { contextFor, contextForRoot, diffFile, makeVerifyTempDir } from "./helpers";
 
 describe("emptyAssertionsDetector", () => {
   it("reports no-assertion and empty-body tests", async () => {
@@ -49,5 +51,42 @@ describe("emptyAssertionsDetector", () => {
     );
 
     expect(findings).toEqual([]);
+  });
+
+  it("only reports newly added tests by default and accepts lenient assertion helper names", async () => {
+    const root = makeVerifyTempDir("empty-");
+    mkdirSync(join(root, "src"), { recursive: true });
+    const file = "src/noop.test.ts";
+    writeFileSync(
+      join(root, file),
+      `
+test("legacy no assertions", () => {
+  const value = 1;
+});
+
+test("helper assertion", () => {
+  verifyResult();
+});
+`
+    );
+    const findings = await emptyAssertionsDetector.run(
+      contextForRoot(root, [
+        diffFile(
+          file,
+          `@@ -1,8 +1,12 @@
+ test("legacy no assertions", () => {
+   const value = 1;
+ });
+
++test("helper assertion", () => {
++  verifyResult();
++});
+`
+        )
+      ])
+    );
+
+    expect(findings).toEqual([]);
+    rmSync(root, { recursive: true, force: true });
   });
 });

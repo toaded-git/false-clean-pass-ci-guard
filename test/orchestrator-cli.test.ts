@@ -1,10 +1,9 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { runCli } from "../src/cli";
 import { runGuard } from "../src/core/orchestrator";
-import { contextFor, diffFile } from "./helpers";
+import { contextFor, diffFile, makeVerifyTempDir } from "./helpers";
 
 describe("milestone 1 orchestration", () => {
   it("returns no findings for the clean fixture", async () => {
@@ -76,7 +75,7 @@ describe("milestone 1 orchestration", () => {
   });
 
   it("returns a non-zero CLI code when fail-on=error sees an error finding", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "false-clean-pass-"));
+    const dir = makeVerifyTempDir("cli-");
     const diffPath = join(dir, "change.patch");
     writeFileSync(
       diffPath,
@@ -84,9 +83,12 @@ describe("milestone 1 orchestration", () => {
 index 1111111..2222222 100644
 --- a/test/fixtures/suppressions/src/suppressed.ts
 +++ b/test/fixtures/suppressions/src/suppressed.ts
-@@ -1,2 +1,3 @@
+@@ -1,2 +1,6 @@
  const value = 1;
 +// eslint-disable-next-line no-console
++// eslint-disable-next-line no-alert
++// @ts-ignore
++// # noqa
  console.log(value);
 `
     );
@@ -99,5 +101,6 @@ index 1111111..2222222 100644
 
     expect(code).toBe(1);
     expect(output).toContain("false-clean-pass fail");
+    rmSync(dir, { recursive: true, force: true });
   });
 });

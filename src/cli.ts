@@ -20,7 +20,16 @@ export async function runCli(
   const diff = args.diffFile
     ? parseUnifiedDiff(readFileSync(args.diffFile, "utf8"))
     : getLocalGitDiff(rootDir, args.base ?? "HEAD~1", args.head ?? "HEAD");
-  const result = await runGuard(createDetectorContext(rootDir, config, diff), args.failOn ?? config.failOn);
+  const result = await runGuard(
+    createDetectorContext(rootDir, config, diff, {
+      ciEnvKeys: args.ciEnvKeys,
+      testResultsGlob: args.testResultsGlob,
+      baseTestResultsGlob: args.baseTestResultsGlob,
+      coverageSummaryPath: args.coverageSummary,
+      prLabels: args.prLabels
+    }),
+    args.failOn ?? config.failOn
+  );
 
   if (args.json) {
     streams.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
@@ -40,6 +49,11 @@ interface CliArgs {
   base?: string;
   head?: string;
   failOn?: FailOn;
+  ciEnvKeys?: string[];
+  testResultsGlob?: string;
+  baseTestResultsGlob?: string;
+  coverageSummary?: string;
+  prLabels?: string[];
   json: boolean;
 }
 
@@ -68,6 +82,21 @@ function parseArgs(argv: string[]): CliArgs {
     } else if (arg === "--fail-on" && value) {
       args.failOn = parseFailOn(value);
       index += 1;
+    } else if (arg === "--ci-env-keys" && value) {
+      args.ciEnvKeys = splitCommaList(value);
+      index += 1;
+    } else if (arg === "--test-results-glob" && value) {
+      args.testResultsGlob = value;
+      index += 1;
+    } else if (arg === "--base-test-results-glob" && value) {
+      args.baseTestResultsGlob = value;
+      index += 1;
+    } else if (arg === "--coverage-summary" && value) {
+      args.coverageSummary = value;
+      index += 1;
+    } else if (arg === "--pr-label" && value) {
+      args.prLabels = [...(args.prLabels ?? []), value];
+      index += 1;
     } else if (arg === "--json") {
       args.json = true;
     } else {
@@ -76,6 +105,13 @@ function parseArgs(argv: string[]): CliArgs {
   }
 
   return args;
+}
+
+function splitCommaList(value: string): string[] {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function parseFailOn(value: string): FailOn {

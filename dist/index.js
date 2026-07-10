@@ -1,10 +1,10 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 2613:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("assert");
 
 /***/ }),
@@ -12,6 +12,7 @@ module.exports = require("assert");
 /***/ 181:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("buffer");
 
 /***/ }),
@@ -19,6 +20,7 @@ module.exports = require("buffer");
 /***/ 5317:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("child_process");
 
 /***/ }),
@@ -26,6 +28,7 @@ module.exports = require("child_process");
 /***/ 6982:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("crypto");
 
 /***/ }),
@@ -33,6 +36,7 @@ module.exports = require("crypto");
 /***/ 4434:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("events");
 
 /***/ }),
@@ -40,6 +44,7 @@ module.exports = require("events");
 /***/ 9896:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("fs");
 
 /***/ }),
@@ -47,6 +52,7 @@ module.exports = require("fs");
 /***/ 8611:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("http");
 
 /***/ }),
@@ -54,6 +60,7 @@ module.exports = require("http");
 /***/ 5692:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("https");
 
 /***/ }),
@@ -61,6 +68,7 @@ module.exports = require("https");
 /***/ 9278:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("net");
 
 /***/ }),
@@ -68,6 +76,7 @@ module.exports = require("net");
 /***/ 4589:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:assert");
 
 /***/ }),
@@ -75,6 +84,7 @@ module.exports = require("node:assert");
 /***/ 6698:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:async_hooks");
 
 /***/ }),
@@ -82,6 +92,7 @@ module.exports = require("node:async_hooks");
 /***/ 4573:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:buffer");
 
 /***/ }),
@@ -89,6 +100,7 @@ module.exports = require("node:buffer");
 /***/ 1421:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:child_process");
 
 /***/ }),
@@ -96,6 +108,7 @@ module.exports = require("node:child_process");
 /***/ 7540:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:console");
 
 /***/ }),
@@ -103,6 +116,7 @@ module.exports = require("node:console");
 /***/ 7598:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:crypto");
 
 /***/ }),
@@ -110,6 +124,7 @@ module.exports = require("node:crypto");
 /***/ 3053:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:diagnostics_channel");
 
 /***/ }),
@@ -117,6 +132,7 @@ module.exports = require("node:diagnostics_channel");
 /***/ 610:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:dns");
 
 /***/ }),
@@ -124,6 +140,7 @@ module.exports = require("node:dns");
 /***/ 8474:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:events");
 
 /***/ }),
@@ -131,6 +148,7 @@ module.exports = require("node:events");
 /***/ 3024:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:fs");
 
 /***/ }),
@@ -138,6 +156,7 @@ module.exports = require("node:fs");
 /***/ 1455:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:fs/promises");
 
 /***/ }),
@@ -145,6 +164,7 @@ module.exports = require("node:fs/promises");
 /***/ 7067:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:http");
 
 /***/ }),
@@ -152,6 +172,7 @@ module.exports = require("node:http");
 /***/ 2467:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:http2");
 
 /***/ }),
@@ -159,6 +180,7 @@ module.exports = require("node:http2");
 /***/ 7030:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:net");
 
 /***/ }),
@@ -166,6 +188,7 @@ module.exports = require("node:net");
 /***/ 6760:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:path");
 
 /***/ }),
@@ -173,6 +196,7 @@ module.exports = require("node:path");
 /***/ 643:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:perf_hooks");
 
 /***/ }),
@@ -180,6 +204,7 @@ module.exports = require("node:perf_hooks");
 /***/ 1792:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:querystring");
 
 /***/ }),
@@ -187,6 +212,7 @@ module.exports = require("node:querystring");
 /***/ 7075:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:stream");
 
 /***/ }),
@@ -194,6 +220,7 @@ module.exports = require("node:stream");
 /***/ 1692:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:tls");
 
 /***/ }),
@@ -201,6 +228,7 @@ module.exports = require("node:tls");
 /***/ 3136:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:url");
 
 /***/ }),
@@ -208,6 +236,7 @@ module.exports = require("node:url");
 /***/ 7975:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:util");
 
 /***/ }),
@@ -215,6 +244,7 @@ module.exports = require("node:util");
 /***/ 3429:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:util/types");
 
 /***/ }),
@@ -222,6 +252,7 @@ module.exports = require("node:util/types");
 /***/ 5919:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:worker_threads");
 
 /***/ }),
@@ -229,6 +260,7 @@ module.exports = require("node:worker_threads");
 /***/ 8522:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("node:zlib");
 
 /***/ }),
@@ -236,6 +268,7 @@ module.exports = require("node:zlib");
 /***/ 857:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("os");
 
 /***/ }),
@@ -243,6 +276,7 @@ module.exports = require("os");
 /***/ 6928:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("path");
 
 /***/ }),
@@ -250,6 +284,7 @@ module.exports = require("path");
 /***/ 932:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("process");
 
 /***/ }),
@@ -257,6 +292,7 @@ module.exports = require("process");
 /***/ 3193:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("string_decoder");
 
 /***/ }),
@@ -264,6 +300,7 @@ module.exports = require("string_decoder");
 /***/ 3557:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("timers");
 
 /***/ }),
@@ -271,6 +308,7 @@ module.exports = require("timers");
 /***/ 4756:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("tls");
 
 /***/ }),
@@ -278,6 +316,7 @@ module.exports = require("tls");
 /***/ 9023:
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("util");
 
 /***/ }),
@@ -285,9 +324,10 @@ module.exports = require("util");
 /***/ 6081:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.presets = exports.nodePreset = void 0;
+exports.presets = exports.pythonPreset = exports.nextPreset = exports.nodePreset = void 0;
 exports.nodePreset = {
     testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}"],
     detectors: {
@@ -302,9 +342,29 @@ exports.nodePreset = {
         }
     }
 };
+exports.nextPreset = {
+    ...exports.nodePreset,
+    testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}", "app/**/*.{test,spec}.{js,ts,jsx,tsx}"]
+};
+exports.pythonPreset = {
+    testGlobs: ["tests/**/*_test.py", "**/test_*.py"],
+    detectors: {
+        skippedTests: {
+            enabled: true
+        },
+        envMissing: {
+            enabled: true
+        },
+        suppressionRatchet: {
+            enabled: true
+        }
+    }
+};
 exports.presets = {
     none: {},
-    node: exports.nodePreset
+    node: exports.nodePreset,
+    next: exports.nextPreset,
+    python: exports.pythonPreset
 };
 
 
@@ -313,6 +373,7 @@ exports.presets = {
 /***/ 9382:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultConfig = void 0;
@@ -329,18 +390,75 @@ const skippedTestsSchema = zod_1.z.object({
     enabled: zod_1.z.boolean().optional(),
     onlyAlwaysError: zod_1.z.boolean().optional(),
     newSkipSeverity: severitySchema.optional(),
-    legacySkipSeverity: severitySchema.optional()
+    legacySkipSeverity: severitySchema.optional(),
+    pythonSkipifSilent: zod_1.z.boolean().optional()
 });
 const emptyAssertionsSchema = zod_1.z.object({
     enabled: zod_1.z.boolean().optional(),
     emptyBodySeverity: severitySchema.optional(),
     noAssertSeverity: severitySchema.optional(),
     customAssertions: zod_1.z.array(zod_1.z.string()).optional(),
-    ignoreTodo: zod_1.z.boolean().optional()
+    ignoreTodo: zod_1.z.boolean().optional(),
+    newTestsOnly: zod_1.z.boolean().optional(),
+    lenientAssertNames: zod_1.z.boolean().optional()
+});
+const envMissingSchema = zod_1.z.object({
+    enabled: zod_1.z.boolean().optional(),
+    required: zod_1.z.array(zod_1.z.string()).optional(),
+    optional: zod_1.z.array(zod_1.z.string()).optional(),
+    exampleFiles: zod_1.z.array(zod_1.z.string()).optional(),
+    ignore: zod_1.z.array(zod_1.z.string()).optional(),
+    knownProvided: zod_1.z.array(zod_1.z.string()).optional(),
+    dynamicAccessSeverity: severitySchema.optional(),
+    missingSeverity: severitySchema.optional(),
+    exampleMissingCiSeverity: severitySchema.optional(),
+    optionalSeverity: severitySchema.optional()
+});
+const ignoredFailuresSchema = zod_1.z.object({
+    enabled: zod_1.z.boolean().optional(),
+    newSeverity: severitySchema.optional(),
+    legacySeverity: severitySchema.optional(),
+    allowJobs: zod_1.z.array(zod_1.z.string()).optional(),
+    allowCleanupCommands: zod_1.z.boolean().optional(),
+    guardStepNames: zod_1.z.array(zod_1.z.string()).optional(),
+    guardWeakeningSeverity: severitySchema.optional(),
+    selfAttestation: zod_1.z.boolean().optional()
+});
+const coverageRatchetSchema = zod_1.z.object({
+    enabled: zod_1.z.boolean().optional(),
+    thresholdDropSeverity: severitySchema.optional(),
+    tolerance: zod_1.z.number().min(0).optional(),
+    baselineFile: zod_1.z.string().optional()
 });
 const suppressionRatchetSchema = zod_1.z.object({
     enabled: zod_1.z.boolean().optional(),
-    maxNewPerPR: zod_1.z.number().int().min(0).optional()
+    maxNewPerPR: zod_1.z.number().int().min(0).optional(),
+    totalIncreaseSeverity: severitySchema.optional(),
+    requireReason: zod_1.z.boolean().optional(),
+    baselineFile: zod_1.z.string().optional(),
+    excludePaths: zod_1.z.array(zod_1.z.string()).optional()
+});
+const baselineGuardSchema = zod_1.z.object({
+    enabled: zod_1.z.boolean().optional(),
+    paths: zod_1.z.array(zod_1.z.string()).optional(),
+    changeSeverity: severitySchema.optional(),
+    exemptLabel: zod_1.z.string().optional(),
+    allowInitialCreate: zod_1.z.boolean().optional()
+});
+const testCountRatchetSchema = zod_1.z.object({
+    enabled: zod_1.z.boolean().optional(),
+    maxDropPercent: zod_1.z.number().min(0).max(100).optional(),
+    skipRatioMax: zod_1.z.number().min(0).max(1).optional(),
+    baselineFile: zod_1.z.string().optional()
+});
+const detectorsSchema = zod_1.z.object({
+    skippedTests: skippedTestsSchema.optional(),
+    emptyAssertions: emptyAssertionsSchema.optional(),
+    envMissing: envMissingSchema.optional(),
+    ignoredFailures: ignoredFailuresSchema.optional(),
+    coverageRatchet: coverageRatchetSchema.optional(),
+    suppressionRatchet: suppressionRatchetSchema.optional(),
+    baselineGuard: baselineGuardSchema.optional()
 });
 const configInputSchema = zod_1.z
     .object({
@@ -348,38 +466,90 @@ const configInputSchema = zod_1.z
     preset: zod_1.z.string().optional(),
     failOn: failOnSchema.optional(),
     testGlobs: zod_1.z.array(zod_1.z.string()).optional(),
-    detectors: zod_1.z
-        .object({
-        skippedTests: skippedTestsSchema.optional(),
-        emptyAssertions: emptyAssertionsSchema.optional(),
-        suppressionRatchet: suppressionRatchetSchema.optional()
-    })
-        .optional()
+    detectors: detectorsSchema.optional(),
+    baselineGuard: baselineGuardSchema.optional(),
+    testCountRatchet: testCountRatchetSchema.optional(),
+    zeroTests: testCountRatchetSchema.optional()
 })
     .passthrough();
 exports.defaultConfig = {
     version: 1,
     preset: "node",
     failOn: "error",
-    testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}"],
+    testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}", "tests/**/*_test.py", "**/test_*.py"],
     detectors: {
         skippedTests: {
             enabled: true,
             onlyAlwaysError: true,
             newSkipSeverity: "error",
-            legacySkipSeverity: "warning"
+            legacySkipSeverity: "warning",
+            pythonSkipifSilent: true
         },
         emptyAssertions: {
             enabled: true,
             emptyBodySeverity: "error",
             noAssertSeverity: "warning",
             customAssertions: [],
-            ignoreTodo: true
+            ignoreTodo: true,
+            newTestsOnly: true,
+            lenientAssertNames: true
+        },
+        envMissing: {
+            enabled: true,
+            required: [],
+            optional: [],
+            exampleFiles: [".env.example"],
+            ignore: ["NODE_ENV", "CI", "PATH", "HOME", "PWD", "SHELL", "TMPDIR", "GITHUB_*", "RUNNER_*"],
+            knownProvided: [],
+            dynamicAccessSeverity: "info",
+            missingSeverity: "error",
+            exampleMissingCiSeverity: "warning",
+            optionalSeverity: "info"
+        },
+        ignoredFailures: {
+            enabled: true,
+            newSeverity: "error",
+            legacySeverity: "warning",
+            allowJobs: ["experimental-nightly"],
+            allowCleanupCommands: true,
+            guardStepNames: ["false-clean-pass"],
+            guardWeakeningSeverity: "error",
+            selfAttestation: true
+        },
+        coverageRatchet: {
+            enabled: true,
+            thresholdDropSeverity: "error",
+            tolerance: 0.5,
+            baselineFile: ".github/false-clean-pass-coverage.json"
         },
         suppressionRatchet: {
             enabled: true,
-            maxNewPerPR: 0
+            maxNewPerPR: 3,
+            totalIncreaseSeverity: "warning",
+            requireReason: true,
+            baselineFile: ".github/false-clean-pass-suppressions.json",
+            excludePaths: ["**/fixtures/**", "**/__mocks__/**", "node_modules/**", "build/**", "dist/**", ".git/**"]
+        },
+        baselineGuard: {
+            enabled: true,
+            paths: [".github/false-clean-pass-*.json"],
+            changeSeverity: "error",
+            exemptLabel: "baseline-update",
+            allowInitialCreate: true
         }
+    },
+    baselineGuard: {
+        enabled: true,
+        paths: [".github/false-clean-pass-*.json"],
+        changeSeverity: "error",
+        exemptLabel: "baseline-update",
+        allowInitialCreate: true
+    },
+    testCountRatchet: {
+        enabled: true,
+        maxDropPercent: 20,
+        skipRatioMax: 0.9,
+        baselineFile: ".github/false-clean-pass-test-count.json"
     }
 };
 function loadConfig(rootDir, configPath = ".github/false-clean-pass.yml") {
@@ -397,7 +567,9 @@ function loadConfig(rootDir, configPath = ".github/false-clean-pass.yml") {
 function mergeConfig(...parts) {
     const merged = parts.reduce((acc, part) => deepMerge(acc, part), {});
     const parsed = configInputSchema.parse(merged);
-    return {
+    const topLevelBaselineGuard = parsed.baselineGuard ?? parsed.detectors?.baselineGuard;
+    const testCountRatchet = parsed.testCountRatchet ?? parsed.zeroTests;
+    const config = {
         version: 1,
         preset: parsed.preset ?? exports.defaultConfig.preset,
         failOn: parsed.failOn ?? exports.defaultConfig.failOn,
@@ -413,12 +585,48 @@ function mergeConfig(...parts) {
                 customAssertions: parsed.detectors?.emptyAssertions?.customAssertions ??
                     exports.defaultConfig.detectors.emptyAssertions.customAssertions
             },
+            envMissing: {
+                ...exports.defaultConfig.detectors.envMissing,
+                ...parsed.detectors?.envMissing,
+                required: parsed.detectors?.envMissing?.required ?? exports.defaultConfig.detectors.envMissing.required,
+                optional: parsed.detectors?.envMissing?.optional ?? exports.defaultConfig.detectors.envMissing.optional,
+                exampleFiles: parsed.detectors?.envMissing?.exampleFiles ?? exports.defaultConfig.detectors.envMissing.exampleFiles,
+                ignore: parsed.detectors?.envMissing?.ignore ?? exports.defaultConfig.detectors.envMissing.ignore,
+                knownProvided: parsed.detectors?.envMissing?.knownProvided ?? exports.defaultConfig.detectors.envMissing.knownProvided
+            },
+            ignoredFailures: {
+                ...exports.defaultConfig.detectors.ignoredFailures,
+                ...parsed.detectors?.ignoredFailures,
+                allowJobs: parsed.detectors?.ignoredFailures?.allowJobs ?? exports.defaultConfig.detectors.ignoredFailures.allowJobs,
+                guardStepNames: parsed.detectors?.ignoredFailures?.guardStepNames ?? exports.defaultConfig.detectors.ignoredFailures.guardStepNames
+            },
+            coverageRatchet: {
+                ...exports.defaultConfig.detectors.coverageRatchet,
+                ...parsed.detectors?.coverageRatchet
+            },
             suppressionRatchet: {
                 ...exports.defaultConfig.detectors.suppressionRatchet,
-                ...parsed.detectors?.suppressionRatchet
+                ...parsed.detectors?.suppressionRatchet,
+                excludePaths: parsed.detectors?.suppressionRatchet?.excludePaths ?? exports.defaultConfig.detectors.suppressionRatchet.excludePaths
+            },
+            baselineGuard: {
+                ...exports.defaultConfig.detectors.baselineGuard,
+                ...topLevelBaselineGuard,
+                paths: topLevelBaselineGuard?.paths ?? exports.defaultConfig.detectors.baselineGuard.paths
             }
+        },
+        baselineGuard: {
+            ...exports.defaultConfig.baselineGuard,
+            ...topLevelBaselineGuard,
+            paths: topLevelBaselineGuard?.paths ?? exports.defaultConfig.baselineGuard.paths
+        },
+        testCountRatchet: {
+            ...exports.defaultConfig.testCountRatchet,
+            ...testCountRatchet
         }
     };
+    config.detectors.baselineGuard = config.baselineGuard;
+    return config;
 }
 function deepMerge(left, right) {
     if (!right) {
@@ -438,10 +646,38 @@ function deepMerge(left, right) {
                 ...left.detectors?.emptyAssertions,
                 ...right.detectors?.emptyAssertions
             },
+            envMissing: {
+                ...left.detectors?.envMissing,
+                ...right.detectors?.envMissing
+            },
+            ignoredFailures: {
+                ...left.detectors?.ignoredFailures,
+                ...right.detectors?.ignoredFailures
+            },
+            coverageRatchet: {
+                ...left.detectors?.coverageRatchet,
+                ...right.detectors?.coverageRatchet
+            },
             suppressionRatchet: {
                 ...left.detectors?.suppressionRatchet,
                 ...right.detectors?.suppressionRatchet
+            },
+            baselineGuard: {
+                ...left.detectors?.baselineGuard,
+                ...right.detectors?.baselineGuard
             }
+        },
+        baselineGuard: {
+            ...left.baselineGuard,
+            ...right.baselineGuard
+        },
+        testCountRatchet: {
+            ...left.testCountRatchet,
+            ...right.testCountRatchet
+        },
+        zeroTests: {
+            ...left.zeroTests,
+            ...right.zeroTests
         }
     };
 }
@@ -452,20 +688,67 @@ function deepMerge(left, right) {
 /***/ 9619:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createDetectorContext = createDetectorContext;
 const promises_1 = __nccwpck_require__(1455);
 const node_path_1 = __nccwpck_require__(6760);
-function createDetectorContext(rootDir, config, diff) {
+function createDetectorContext(rootDir, config, diff, options = {}) {
     return {
         rootDir,
         config,
         diff,
+        ciEnvKeys: new Set([...(options.ciEnvKeys ?? [])].map((key) => key.trim()).filter(Boolean)),
+        testResultsGlob: options.testResultsGlob,
+        baseTestResultsGlob: options.baseTestResultsGlob,
+        coverageSummaryPath: options.coverageSummaryPath,
+        prLabels: options.prLabels ?? [],
+        github: options.github,
+        codeOwnerReviewProvider: options.codeOwnerReviewProvider,
+        checkRunAttestationVerifier: options.checkRunAttestationVerifier,
         readFile(file) {
             return (0, promises_1.readFile)((0, node_path_1.resolve)(rootDir, file), "utf8");
+        },
+        readBaseFile: options.readBaseFile,
+        async fileExists(file) {
+            try {
+                await (0, promises_1.stat)((0, node_path_1.resolve)(rootDir, file));
+                return true;
+            }
+            catch {
+                return false;
+            }
+        },
+        listFiles() {
+            return options.listFiles ? options.listFiles() : listRepositoryFiles(rootDir);
         }
     };
+}
+async function listRepositoryFiles(rootDir) {
+    const files = [];
+    await walk(rootDir, "", files);
+    return files;
+}
+async function walk(rootDir, relativeDir, files) {
+    const absoluteDir = (0, node_path_1.resolve)(rootDir, relativeDir);
+    const entries = await (0, promises_1.readdir)(absoluteDir, { withFileTypes: true });
+    for (const entry of entries) {
+        const relativePath = relativeDir ? `${relativeDir}/${entry.name}` : entry.name;
+        if (entry.isDirectory()) {
+            if (isIgnoredDirectory(relativePath)) {
+                continue;
+            }
+            await walk(rootDir, relativePath, files);
+            continue;
+        }
+        if (entry.isFile()) {
+            files.push(relativePath);
+        }
+    }
+}
+function isIgnoredDirectory(relativePath) {
+    return [".git", "node_modules", "build", "dist", ".verify-tmp"].some((dir) => relativePath === dir || relativePath.startsWith(`${dir}/`));
 }
 
 
@@ -474,10 +757,13 @@ function createDetectorContext(rootDir, config, diff) {
 /***/ 8879:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.matchesAnyGlob = matchesAnyGlob;
 exports.isJavaScriptLikeFile = isJavaScriptLikeFile;
+exports.isPythonFile = isPythonFile;
+exports.isConfiguredTestFile = isConfiguredTestFile;
 exports.isTestFile = isTestFile;
 function matchesAnyGlob(file, globs) {
     const normalized = normalizePath(file);
@@ -485,6 +771,12 @@ function matchesAnyGlob(file, globs) {
 }
 function isJavaScriptLikeFile(file) {
     return /\.[cm]?[jt]sx?$/.test(file);
+}
+function isPythonFile(file) {
+    return /\.py$/.test(file);
+}
+function isConfiguredTestFile(file, globs) {
+    return matchesAnyGlob(file, globs);
 }
 function isTestFile(file, globs) {
     return isJavaScriptLikeFile(file) && matchesAnyGlob(file, globs);
@@ -546,14 +838,20 @@ function escapeRegExp(value) {
 /***/ 250:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.milestone1Detectors = void 0;
+exports.milestone2Detectors = exports.milestone1Detectors = void 0;
 exports.runGuard = runGuard;
 exports.shouldFail = shouldFail;
+const baseline_change_1 = __nccwpck_require__(1724);
+const coverage_ratchet_1 = __nccwpck_require__(1162);
 const empty_assertions_1 = __nccwpck_require__(9425);
+const env_missing_1 = __nccwpck_require__(9920);
+const ignored_failures_1 = __nccwpck_require__(974);
 const skipped_tests_1 = __nccwpck_require__(9610);
 const suppression_ratchet_1 = __nccwpck_require__(1373);
+const test_count_ratchet_1 = __nccwpck_require__(1578);
 const js_ast_1 = __nccwpck_require__(9526);
 const globs_1 = __nccwpck_require__(8879);
 exports.milestone1Detectors = [
@@ -561,9 +859,16 @@ exports.milestone1Detectors = [
     empty_assertions_1.emptyAssertionsDetector,
     suppression_ratchet_1.suppressionRatchetDetector
 ];
+exports.milestone2Detectors = [
+    env_missing_1.envMissingDetector,
+    ignored_failures_1.ignoredFailuresDetector,
+    coverage_ratchet_1.coverageRatchetDetector,
+    baseline_change_1.baselineChangeDetector,
+    test_count_ratchet_1.testCountRatchetDetector
+];
 async function runGuard(ctx, failOn = ctx.config.failOn) {
     const findings = await detectParseFailures(ctx);
-    for (const detector of exports.milestone1Detectors) {
+    for (const detector of [...exports.milestone1Detectors, ...exports.milestone2Detectors]) {
         findings.push(...(await detector.run(ctx)));
     }
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
@@ -611,9 +916,306 @@ function shouldFail(findings, failOn) {
 
 /***/ }),
 
+/***/ 1724:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.baselineChangeDetector = void 0;
+const globs_1 = __nccwpck_require__(8879);
+const reviews_1 = __nccwpck_require__(8325);
+const codeowners_1 = __nccwpck_require__(786);
+const codeownersPaths = [".github/CODEOWNERS", "CODEOWNERS", "docs/CODEOWNERS"];
+exports.baselineChangeDetector = {
+    id: "baseline-change",
+    async run(ctx) {
+        const options = ctx.config.baselineGuard;
+        if (!options.enabled) {
+            return [];
+        }
+        const changedBaselineFiles = ctx.diff.filter((file) => (0, globs_1.matchesAnyGlob)(file.filename, options.paths));
+        if (changedBaselineFiles.length === 0) {
+            return [];
+        }
+        const nonBaselineNonDocFiles = ctx.diff.filter((file) => !(0, globs_1.matchesAnyGlob)(file.filename, options.paths) && !isDocumentationFile(file.filename));
+        if (nonBaselineNonDocFiles.length > 0) {
+            const changedFiles = nonBaselineNonDocFiles.map((file) => file.filename).join(", ");
+            return changedBaselineFiles.map((file) => baselineFinding(ctx, file.filename, `Baseline updates can only be approved when the PR changes baseline files and related docs; also changed: ${changedFiles}. CODEOWNER approval and labels cannot downgrade mixed source/config changes.`));
+        }
+        const codeowners = await readCodeowners(ctx);
+        if (!codeowners) {
+            return changedBaselineFiles.map((file) => baselineFinding(ctx, file.filename, "CODEOWNERS file is missing; baseline changes are blocked fail-closed."));
+        }
+        const provider = ctx.codeOwnerReviewProvider ?? (ctx.github ? (0, reviews_1.createGitHubReviewProvider)(ctx.github) : undefined);
+        if (!provider) {
+            return changedBaselineFiles.map((file) => baselineFinding(ctx, file.filename, "PR review API is unavailable; CODEOWNER approval could not be verified."));
+        }
+        let reviews;
+        try {
+            reviews = await provider.listReviews();
+        }
+        catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            return changedBaselineFiles.map((file) => baselineFinding(ctx, file.filename, `PR reviews API failed; CODEOWNER approval could not be verified: ${message}`));
+        }
+        const findings = [];
+        for (const file of changedBaselineFiles) {
+            const owners = (0, codeowners_1.findCodeOwnersForFile)(codeowners.source, file.filename);
+            if (owners.length === 0) {
+                findings.push(baselineFinding(ctx, file.filename, "No CODEOWNERS entry matches this baseline file."));
+                continue;
+            }
+            const approval = await hasCodeOwnerApproval(owners, reviews, provider);
+            if (!approval.ok) {
+                findings.push(baselineFinding(ctx, file.filename, `${approval.reason} ${labelHint(ctx)}`.trim()));
+                continue;
+            }
+            findings.push({
+                detector: exports.baselineChangeDetector.id,
+                severity: "info",
+                ruleId: "false-clean-pass/baseline-change-approved",
+                file: file.filename,
+                message: `Baseline file changed with verified CODEOWNER approval from @${approval.reviewer}. ${labelHint(ctx)}`.trim()
+            });
+        }
+        return findings;
+    }
+};
+async function readCodeowners(ctx) {
+    for (const path of codeownersPaths) {
+        if (await ctx.fileExists(path)) {
+            return {
+                path,
+                source: await ctx.readFile(path)
+            };
+        }
+    }
+    return undefined;
+}
+async function hasCodeOwnerApproval(owners, reviews, provider) {
+    const latest = latestReviewsByUser(reviews);
+    const approvedReviewers = [...latest.values()]
+        .filter((review) => review.state.toUpperCase() === "APPROVED")
+        .map((review) => review.user);
+    for (const owner of owners) {
+        const normalized = owner.replace(/^@/, "");
+        if (!normalized.includes("/")) {
+            const reviewer = approvedReviewers.find((user) => user.toLowerCase() === normalized.toLowerCase());
+            if (reviewer) {
+                return { ok: true, reviewer };
+            }
+            continue;
+        }
+        const [teamOwner, teamSlug] = normalized.split("/");
+        if (!teamOwner || !teamSlug || !provider.isTeamMember) {
+            continue;
+        }
+        for (const reviewer of approvedReviewers) {
+            const isMember = await provider.isTeamMember(teamOwner, teamSlug, reviewer);
+            if (isMember) {
+                return { ok: true, reviewer };
+            }
+        }
+    }
+    const teamOwners = owners.filter((owner) => owner.includes("/"));
+    if (teamOwners.length > 0 && !provider.isTeamMember) {
+        return {
+            ok: false,
+            reason: `CODEOWNER is a team (${teamOwners.join(", ")}), but team membership cannot be verified; blocking fail-closed.`
+        };
+    }
+    return {
+        ok: false,
+        reason: `No approving PR review from matching CODEOWNER (${owners.join(", ")}) was verified.`
+    };
+}
+function latestReviewsByUser(reviews) {
+    const sorted = [...reviews].sort((left, right) => (left.submittedAt ?? "").localeCompare(right.submittedAt ?? ""));
+    const latest = new Map();
+    for (const review of sorted) {
+        latest.set(review.user.toLowerCase(), review);
+    }
+    return latest;
+}
+function baselineFinding(ctx, file, message) {
+    return {
+        detector: exports.baselineChangeDetector.id,
+        severity: ctx.config.baselineGuard.changeSeverity,
+        ruleId: "false-clean-pass/baseline-change-unapproved",
+        file,
+        message
+    };
+}
+function labelHint(ctx) {
+    const label = ctx.config.baselineGuard.exemptLabel;
+    return ctx.prLabels.includes(label)
+        ? `Label ${label} is present but CODEOWNER approval remains authoritative.`
+        : `Label ${label} is not present; label is only a secondary signal.`;
+}
+function isDocumentationFile(file) {
+    return /\.(?:md|mdx|rst|txt)$/i.test(file);
+}
+
+
+/***/ }),
+
+/***/ 1162:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.coverageRatchetDetector = void 0;
+const node_path_1 = __nccwpck_require__(6760);
+exports.coverageRatchetDetector = {
+    id: "coverage-ratchet",
+    async run(ctx) {
+        const options = ctx.config.detectors.coverageRatchet;
+        if (!options.enabled) {
+            return [];
+        }
+        const findings = [];
+        for (const file of ctx.diff) {
+            findings.push(...scanThresholdDrops(file, options.thresholdDropSeverity));
+        }
+        if (ctx.coverageSummaryPath) {
+            const measured = await readCoveragePercent(ctx, ctx.coverageSummaryPath);
+            const baseline = await readCoveragePercent(ctx, options.baselineFile);
+            if (measured === undefined) {
+                findings.push({
+                    detector: exports.coverageRatchetDetector.id,
+                    severity: "info",
+                    ruleId: "false-clean-pass/coverage-unreadable",
+                    file: ctx.coverageSummaryPath,
+                    message: "Coverage summary could not be read or did not contain a total percentage."
+                });
+            }
+            else if (baseline === undefined) {
+                findings.push({
+                    detector: exports.coverageRatchetDetector.id,
+                    severity: "info",
+                    ruleId: "false-clean-pass/coverage-baseline-missing",
+                    file: options.baselineFile,
+                    message: "Coverage baseline is missing; create the baseline in a CODEOWNER-approved baseline update PR."
+                });
+            }
+            else if (measured + options.tolerance < baseline) {
+                findings.push({
+                    detector: exports.coverageRatchetDetector.id,
+                    severity: "error",
+                    ruleId: "false-clean-pass/coverage-drop",
+                    file: ctx.coverageSummaryPath,
+                    message: `Measured coverage ${measured}% is below baseline ${baseline}% by more than ${options.tolerance} percentage points.`
+                });
+            }
+        }
+        return findings;
+    }
+};
+function scanThresholdDrops(file, severity) {
+    if (!isCoverageConfigFile(file.filename)) {
+        return [];
+    }
+    const removed = collectThresholds(file.removedLineContent);
+    const added = collectThresholds(file.addedLineContent);
+    const findings = [];
+    for (const [key, oldValue] of removed.entries()) {
+        const newValue = added.get(key);
+        if (newValue === undefined || newValue >= oldValue) {
+            continue;
+        }
+        findings.push({
+            detector: exports.coverageRatchetDetector.id,
+            severity,
+            ruleId: "false-clean-pass/coverage-threshold-drop",
+            file: file.filename,
+            message: `Coverage threshold ${key} decreased from ${oldValue} to ${newValue}.`
+        });
+    }
+    return findings;
+}
+function collectThresholds(lines) {
+    const thresholds = new Map();
+    for (const content of lines.values()) {
+        const match = content.match(/\b(lines|statements|branches|functions|fail_under)\b["']?\s*[:=]\s*(\d+(?:\.\d+)?)/i);
+        if (match) {
+            thresholds.set(match[1].toLowerCase(), Number(match[2]));
+            continue;
+        }
+        const coverageThreshold = content.match(/\bcoverageThreshold\b.*?(\d+(?:\.\d+)?)/i);
+        if (coverageThreshold) {
+            thresholds.set("coverageThreshold", Number(coverageThreshold[1]));
+        }
+    }
+    return thresholds;
+}
+async function readCoveragePercent(ctx, file) {
+    if (!(await ctx.fileExists(file))) {
+        return undefined;
+    }
+    try {
+        const raw = await ctx.readFile(file);
+        return extractCoveragePercent(JSON.parse(raw));
+    }
+    catch {
+        try {
+            const raw = await Promise.resolve(/* import() */).then(__nccwpck_require__.t.bind(__nccwpck_require__, 1455, 23)).then((fs) => fs.readFile((0, node_path_1.resolve)(ctx.rootDir, file), "utf8"));
+            return extractCoveragePercent(JSON.parse(raw));
+        }
+        catch {
+            return undefined;
+        }
+    }
+}
+function extractCoveragePercent(value) {
+    const record = asRecord(value);
+    if (!record) {
+        return undefined;
+    }
+    const total = asRecord(record.total);
+    const totalLines = asRecord(total?.lines);
+    const totalStatements = asRecord(total?.statements);
+    const candidates = [
+        totalLines?.pct,
+        totalStatements?.pct,
+        record.coverage,
+        record.lines,
+        record.line,
+        asRecord(record.total)?.pct
+    ];
+    for (const candidate of candidates) {
+        const parsed = parseNumber(candidate);
+        if (parsed !== undefined) {
+            return parsed;
+        }
+    }
+    return undefined;
+}
+function parseNumber(value) {
+    if (typeof value === "number" && Number.isFinite(value)) {
+        return value;
+    }
+    if (typeof value === "string") {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : undefined;
+    }
+    return undefined;
+}
+function asRecord(value) {
+    return value && typeof value === "object" && !Array.isArray(value) ? value : undefined;
+}
+function isCoverageConfigFile(file) {
+    return /(^|\/)(jest|vitest)\.config\.[cm]?[jt]s$/.test(file) || /(^|\/)\.nycrc(?:\.json)?$/.test(file) || /(^|\/)pyproject\.toml$/.test(file);
+}
+
+
+/***/ }),
+
 /***/ 9425:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.emptyAssertionsDetector = void 0;
@@ -630,8 +1232,12 @@ exports.emptyAssertionsDetector = {
         const changedTestFiles = ctx.diff.filter((file) => file.status !== "removed" && (0, globs_1.isTestFile)(file.filename, ctx.config.testGlobs));
         for (const file of changedTestFiles) {
             const source = await ctx.readFile(file.filename);
-            const scan = (0, js_ast_1.scanJavaScript)(source, options.customAssertions);
+            const scan = (0, js_ast_1.scanJavaScript)(source, options.customAssertions, options.lenientAssertNames);
             for (const testCase of scan.testCases) {
+                const isNew = file.addedLines.has(testCase.line);
+                if (options.newTestsOnly && !isNew) {
+                    continue;
+                }
                 if (testCase.emptyBody || testCase.returnOnly) {
                     findings.push({
                         detector: exports.emptyAssertionsDetector.id,
@@ -647,7 +1253,6 @@ exports.emptyAssertionsDetector = {
                     continue;
                 }
                 if (testCase.assertionCount === 0) {
-                    const isNew = file.addedLines.has(testCase.line);
                     findings.push({
                         detector: exports.emptyAssertionsDetector.id,
                         severity: options.noAssertSeverity,
@@ -667,9 +1272,417 @@ exports.emptyAssertionsDetector = {
 
 /***/ }),
 
+/***/ 9920:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.envMissingDetector = void 0;
+const globs_1 = __nccwpck_require__(8879);
+const envrefs_1 = __nccwpck_require__(7003);
+exports.envMissingDetector = {
+    id: "env-missing",
+    async run(ctx) {
+        const options = ctx.config.detectors.envMissing;
+        if (!options.enabled) {
+            return [];
+        }
+        const findings = [];
+        const declaredKeys = await readDeclaredEnvKeys(ctx, options.exampleFiles);
+        const providedKeys = new Set([...ctx.ciEnvKeys, ...options.knownProvided]);
+        const requiredKeys = new Set(options.required);
+        const optionalKeys = new Set(options.optional);
+        for (const key of requiredKeys) {
+            if (isIgnoredKey(key, options.ignore) || providedKeys.has(key)) {
+                continue;
+            }
+            findings.push({
+                detector: exports.envMissingDetector.id,
+                severity: "error",
+                ruleId: "false-clean-pass/env-required-missing",
+                message: `Required env key ${key} is not listed in ci-env-keys.`
+            });
+        }
+        const changedSourceFiles = ctx.diff.filter((file) => file.status !== "removed" && ((0, globs_1.isJavaScriptLikeFile)(file.filename) || (0, globs_1.isPythonFile)(file.filename)));
+        const seen = new Set();
+        for (const file of changedSourceFiles) {
+            const references = (0, envrefs_1.extractEnvReferences)(file.filename, await ctx.readFile(file.filename));
+            for (const reference of references) {
+                if (reference.dynamic) {
+                    findings.push({
+                        detector: exports.envMissingDetector.id,
+                        severity: options.dynamicAccessSeverity,
+                        ruleId: "false-clean-pass/env-dynamic-access",
+                        file: file.filename,
+                        line: reference.line,
+                        evidence: reference.evidence,
+                        message: "Dynamic env access cannot be checked against CI-provided key names."
+                    });
+                    continue;
+                }
+                const key = reference.key;
+                if (!key || isIgnoredKey(key, options.ignore) || providedKeys.has(key) || requiredKeys.has(key)) {
+                    continue;
+                }
+                const dedupeKey = `${file.filename}:${key}`;
+                if (seen.has(dedupeKey)) {
+                    continue;
+                }
+                seen.add(dedupeKey);
+                const declared = declaredKeys.has(key);
+                findings.push({
+                    detector: exports.envMissingDetector.id,
+                    severity: severityForKey(key, declared, requiredKeys, optionalKeys, options),
+                    ruleId: declared ? "false-clean-pass/env-example-not-in-ci" : "false-clean-pass/env-missing",
+                    file: file.filename,
+                    line: reference.line,
+                    evidence: reference.evidence,
+                    message: declared
+                        ? `Env key ${key} is declared in an example file but is not listed in ci-env-keys.`
+                        : `Env key ${key} is referenced by code but is not declared in env examples or ci-env-keys.`
+                });
+            }
+        }
+        return findings;
+    }
+};
+async function readDeclaredEnvKeys(ctx, exampleFiles) {
+    const keys = new Set();
+    for (const file of exampleFiles) {
+        if (!(await ctx.fileExists(file))) {
+            continue;
+        }
+        const source = await ctx.readFile(file);
+        for (const line of source.split(/\r?\n/)) {
+            const match = line.match(/^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/);
+            if (match) {
+                keys.add(match[1] ?? "");
+            }
+        }
+    }
+    keys.delete("");
+    return keys;
+}
+function severityForKey(key, declared, requiredKeys, optionalKeys, options) {
+    if (requiredKeys.has(key)) {
+        return "error";
+    }
+    if (optionalKeys.has(key)) {
+        return options.optionalSeverity;
+    }
+    return declared ? options.exampleMissingCiSeverity : options.missingSeverity;
+}
+function isIgnoredKey(key, ignore) {
+    return ignore.some((pattern) => {
+        if (!pattern.includes("*")) {
+            return pattern === key;
+        }
+        const source = `^${pattern.replace(/[|\\{}()[\]^$+?.]/g, "\\$&").replace(/\*/g, ".*")}$`;
+        return new RegExp(source).test(key);
+    });
+}
+
+
+/***/ }),
+
+/***/ 974:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ignoredFailuresDetector = void 0;
+const globs_1 = __nccwpck_require__(8879);
+const yaml_scan_1 = __nccwpck_require__(8029);
+const failOnRank = {
+    error: 0,
+    warning: 1,
+    never: 2
+};
+exports.ignoredFailuresDetector = {
+    id: "ignored-failures",
+    async run(ctx) {
+        const options = ctx.config.detectors.ignoredFailures;
+        if (!options.enabled) {
+            return [];
+        }
+        const findings = [];
+        if (options.selfAttestation && ctx.checkRunAttestationVerifier) {
+            const attestation = await ctx.checkRunAttestationVerifier();
+            if (!attestation.ok) {
+                findings.push({
+                    detector: exports.ignoredFailuresDetector.id,
+                    severity: options.guardWeakeningSeverity,
+                    ruleId: attestation.reason === "sha-mismatch"
+                        ? "false-clean-pass/checkrun-sha-mismatch"
+                        : "false-clean-pass/checkrun-marker-missing",
+                    message: attestation.message ?? "false-clean-pass Check Run self-attestation could not be verified."
+                });
+            }
+        }
+        const guardExistsInHead = await hasGuardStepInHeadWorkflows(ctx);
+        for (const file of ctx.diff) {
+            if (file.status === "removed") {
+                continue;
+            }
+            findings.push(...scanFailureIgnorePatterns(file, options));
+            findings.push(...scanGuardWeakeningDiff(file, options.guardWeakeningSeverity, options.guardStepNames, guardExistsInHead));
+            findings.push(...scanConfigWeakeningDiff(file, options.guardWeakeningSeverity));
+        }
+        return dedupeFindings(findings);
+    }
+};
+function scanFailureIgnorePatterns(file, options) {
+    if (!isFailureIgnoreTarget(file.filename)) {
+        return [];
+    }
+    const findings = [];
+    for (const [line, content] of file.addedLineContent.entries()) {
+        const trimmed = content.trim();
+        const rule = failureIgnoreRule(trimmed, options.allowCleanupCommands);
+        if (!rule) {
+            continue;
+        }
+        findings.push({
+            detector: exports.ignoredFailuresDetector.id,
+            severity: options.newSeverity,
+            ruleId: rule.ruleId,
+            file: file.filename,
+            line,
+            evidence: trimmed,
+            message: rule.message
+        });
+    }
+    return findings;
+}
+function failureIgnoreRule(content, allowCleanupCommands) {
+    if (/continue-on-error\s*:\s*true\b/i.test(content)) {
+        return {
+            ruleId: "false-clean-pass/continue-on-error",
+            message: "New continue-on-error: true can hide a failing CI step."
+        };
+    }
+    if (/\|\|\s*true\b/.test(content) || /;\s*true\s*$/.test(content)) {
+        if (allowCleanupCommands && /\b(cleanup|teardown)\b/i.test(content)) {
+            return undefined;
+        }
+        return {
+            ruleId: "false-clean-pass/ignore-failure-shell",
+            message: "New shell success fallback can hide a failing command."
+        };
+    }
+    if (/--pass(?:WithNoTests|-with-no-tests)\b/.test(content)) {
+        return {
+            ruleId: "false-clean-pass/pass-with-no-tests",
+            message: "New pass-with-no-tests flag can make an empty test run pass."
+        };
+    }
+    if (/^\s*exit\s+0\s*$/.test(content)) {
+        return {
+            ruleId: "false-clean-pass/exit-zero",
+            message: "New unconditional exit 0 can hide a failing command."
+        };
+    }
+    return undefined;
+}
+function scanGuardWeakeningDiff(file, severity, guardStepNames, guardExistsInHead) {
+    const findings = [];
+    if (!(0, yaml_scan_1.isWorkflowFile)(file.filename)) {
+        return findings;
+    }
+    const removedLines = [...file.removedLineContent.entries()];
+    const addedLines = [...file.addedLineContent.entries()];
+    if (!guardExistsInHead &&
+        removedLines.some(([, content]) => lineMentionsGuardStep(content, guardStepNames))) {
+        findings.push({
+            detector: exports.ignoredFailuresDetector.id,
+            severity,
+            ruleId: "false-clean-pass/guard-step-removed",
+            file: file.filename,
+            message: "false-clean-pass guard step was removed and no replacement guard step exists in workflow files."
+        });
+    }
+    const removedFailOn = removedLines.map(([line, content]) => ({ line, value: parseFailOnLine(content) })).filter(hasValue);
+    const addedFailOn = addedLines.map(([line, content]) => ({ line, value: parseFailOnLine(content), content })).filter(hasValue);
+    for (const added of addedFailOn) {
+        if (removedFailOn.some((removed) => failOnRank[added.value] > failOnRank[removed.value])) {
+            findings.push({
+                detector: exports.ignoredFailuresDetector.id,
+                severity,
+                ruleId: "false-clean-pass/fail-on-weakened",
+                file: file.filename,
+                line: added.line,
+                evidence: added.content.trim(),
+                message: "false-clean-pass fail-on threshold was weakened."
+            });
+        }
+    }
+    if (removedLines.some(([, content]) => /test-results-glob\s*:\s*\S+/i.test(content)) &&
+        !addedLines.some(([, content]) => /test-results-glob\s*:\s*\S+/i.test(content))) {
+        findings.push({
+            detector: exports.ignoredFailuresDetector.id,
+            severity,
+            ruleId: "false-clean-pass/test-results-glob-removed",
+            file: file.filename,
+            message: "false-clean-pass test-results-glob was removed or blanked."
+        });
+    }
+    findings.push(...scanTriggerWeakening(file, severity));
+    findings.push(...scanIfWeakening(file, severity));
+    findings.push(...scanJobNameWeakening(file, severity, guardStepNames));
+    return findings;
+}
+function scanTriggerWeakening(file, severity) {
+    const removedPullRequest = [...file.removedLineContent.values()].some((content) => /\bpull_request\b/.test(content));
+    const addedPullRequest = [...file.addedLineContent.values()].some((content) => /\bpull_request\b/.test(content));
+    const addedWeakOn = [...file.addedLineContent.entries()].find(([, content]) => /^\s*on\s*:\s*(push|workflow_dispatch)\s*$/i.test(content.trim()));
+    if (!removedPullRequest || addedPullRequest) {
+        return [];
+    }
+    const line = addedWeakOn?.[0];
+    return [
+        {
+            detector: exports.ignoredFailuresDetector.id,
+            severity,
+            ruleId: "false-clean-pass/workflow-trigger-weakened",
+            file: file.filename,
+            line,
+            evidence: addedWeakOn?.[1].trim(),
+            message: "Workflow pull_request trigger was removed or weakened for the guard."
+        }
+    ];
+}
+function scanIfWeakening(file, severity) {
+    const findings = [];
+    for (const [line, content] of file.addedLineContent.entries()) {
+        const trimmed = content.trim();
+        if (!/^if\s*:/.test(trimmed)) {
+            continue;
+        }
+        if (/\bfalse\b/.test(trimmed) || /\$\{\{\s*!/.test(trimmed) || /github\.event_name\s*==\s*['"]never['"]/.test(trimmed)) {
+            findings.push({
+                detector: exports.ignoredFailuresDetector.id,
+                severity,
+                ruleId: "false-clean-pass/guard-if-weakened",
+                file: file.filename,
+                line,
+                evidence: trimmed,
+                message: "Workflow if condition can skip the required false-clean-pass guard."
+            });
+        }
+    }
+    return findings;
+}
+function scanJobNameWeakening(file, severity, guardStepNames) {
+    const removedGuardName = [...file.removedLineContent.values()].some((content) => /^\s*name\s*:/.test(content) && lineMentionsGuardStep(content, guardStepNames));
+    const addedNonGuardName = [...file.addedLineContent.entries()].find(([, content]) => /^\s*name\s*:/.test(content) && !lineMentionsGuardStep(content, guardStepNames));
+    if (!removedGuardName || !addedNonGuardName) {
+        return [];
+    }
+    return [
+        {
+            detector: exports.ignoredFailuresDetector.id,
+            severity,
+            ruleId: "false-clean-pass/guard-job-name-weakened",
+            file: file.filename,
+            line: addedNonGuardName[0],
+            evidence: addedNonGuardName[1].trim(),
+            message: "false-clean-pass workflow or job name was changed, which can bypass a required check."
+        }
+    ];
+}
+function scanConfigWeakeningDiff(file, severity) {
+    if (file.filename !== ".github/false-clean-pass.yml" && file.filename !== ".github/false-clean-pass.yaml") {
+        return [];
+    }
+    const findings = [];
+    for (const [line, content] of file.addedLineContent.entries()) {
+        const trimmed = content.trim();
+        if (/^enabled\s*:\s*false\b/i.test(trimmed)) {
+            findings.push({
+                detector: exports.ignoredFailuresDetector.id,
+                severity,
+                ruleId: "false-clean-pass/detector-disabled",
+                file: file.filename,
+                line,
+                evidence: trimmed,
+                message: "Detector enabled flag was disabled in false-clean-pass config."
+            });
+        }
+        if (/^required\s*:\s*\[\s*\]\s*$/i.test(trimmed)) {
+            findings.push({
+                detector: exports.ignoredFailuresDetector.id,
+                severity,
+                ruleId: "false-clean-pass/required-list-weakened",
+                file: file.filename,
+                line,
+                evidence: trimmed,
+                message: "Required guard list was emptied in false-clean-pass config."
+            });
+        }
+    }
+    if ([...file.removedLineContent.values()].some((content) => /^\s*required\s*:\s*\[?\s*\S/.test(content))) {
+        findings.push({
+            detector: exports.ignoredFailuresDetector.id,
+            severity,
+            ruleId: "false-clean-pass/required-list-weakened",
+            file: file.filename,
+            message: "Required guard list entries were removed in false-clean-pass config."
+        });
+    }
+    return findings;
+}
+async function hasGuardStepInHeadWorkflows(ctx) {
+    const files = await ctx.listFiles();
+    const workflowFiles = files.filter(yaml_scan_1.isWorkflowFile);
+    for (const file of workflowFiles) {
+        try {
+            if ((0, yaml_scan_1.workflowHasGuardStep)(await ctx.readFile(file), ctx.config.detectors.ignoredFailures.guardStepNames)) {
+                return true;
+            }
+        }
+        catch {
+            continue;
+        }
+    }
+    return false;
+}
+function isFailureIgnoreTarget(file) {
+    return ((0, yaml_scan_1.isWorkflowFile)(file) ||
+        file === "package.json" ||
+        file === "Makefile" ||
+        (0, globs_1.matchesAnyGlob)(file, ["**/*.sh", "**/*.bash", "**/*.zsh"]));
+}
+function lineMentionsGuardStep(content, guardStepNames) {
+    return guardStepNames.some((guardName) => content.toLowerCase().includes(guardName.toLowerCase()));
+}
+function parseFailOnLine(content) {
+    const match = content.match(/fail-on\s*:\s*["']?(error|warning|never)["']?/i);
+    return match?.[1]?.toLowerCase();
+}
+function hasValue(entry) {
+    return Boolean(entry.value);
+}
+function dedupeFindings(findings) {
+    const seen = new Set();
+    return findings.filter((finding) => {
+        const key = `${finding.ruleId}:${finding.file ?? ""}:${finding.line ?? 0}:${finding.message}`;
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
+    });
+}
+
+
+/***/ }),
+
 /***/ 9610:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.skippedTestsDetector = void 0;
@@ -683,9 +1696,16 @@ exports.skippedTestsDetector = {
             return [];
         }
         const findings = [];
-        const changedTestFiles = ctx.diff.filter((file) => file.status !== "removed" && (0, globs_1.isTestFile)(file.filename, ctx.config.testGlobs));
+        const changedTestFiles = ctx.diff.filter((file) => file.status !== "removed" && (0, globs_1.isConfiguredTestFile)(file.filename, ctx.config.testGlobs));
         for (const file of changedTestFiles) {
             const source = await ctx.readFile(file.filename);
+            if ((0, globs_1.isPythonFile)(file.filename)) {
+                findings.push(...scanPythonSkips(source, file.filename, file.addedLines, options));
+                continue;
+            }
+            if (!(0, globs_1.isJavaScriptLikeFile)(file.filename)) {
+                continue;
+            }
             const scan = (0, js_ast_1.scanJavaScript)(source);
             for (const signal of scan.testControls) {
                 const isNew = file.addedLines.has(signal.line);
@@ -704,16 +1724,50 @@ exports.skippedTestsDetector = {
         return findings;
     }
 };
+function scanPythonSkips(source, filename, addedLines, options) {
+    const findings = [];
+    const lines = source.split(/\r?\n/);
+    lines.forEach((line, index) => {
+        const lineNumber = index + 1;
+        const trimmed = line.trim();
+        const isSkip = /@(?:pytest\.mark\.)?skip(?:\(|$)|@unittest\.skip\(/.test(trimmed);
+        const skipif = trimmed.match(/@(?:pytest\.mark\.)?skipif\((.*)\)/);
+        if (!isSkip && !skipif) {
+            return;
+        }
+        if (skipif && !options.pythonSkipifSilent && !hasPythonSkipReason(skipif[1] ?? "")) {
+            return;
+        }
+        const isNew = addedLines.has(lineNumber);
+        findings.push({
+            detector: exports.skippedTestsDetector.id,
+            severity: isNew ? options.newSkipSeverity : options.legacySkipSeverity,
+            ruleId: "false-clean-pass/skipped-tests",
+            file: filename,
+            line: lineNumber,
+            evidence: trimmed,
+            message: skipif && !hasPythonSkipReason(skipif[1] ?? "")
+                ? "Python skipif has no reason and can silently hide tests."
+                : `Python skip marker ${isNew ? "was added in this diff" : "is present in a changed test file"}.`
+        });
+    });
+    return findings;
+}
+function hasPythonSkipReason(argumentText) {
+    return /\breason\s*=/.test(argumentText);
+}
 
 
 /***/ }),
 
 /***/ 1373:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.suppressionRatchetDetector = void 0;
+const globs_1 = __nccwpck_require__(8879);
 const suppressionPatterns = [
     /\beslint-disable(?:-(?:next-line|line))?\b/,
     /@ts-ignore\b/,
@@ -730,30 +1784,43 @@ exports.suppressionRatchetDetector = {
             return [];
         }
         const newSuppressions = collectNewSuppressions(ctx);
-        if (newSuppressions.length <= options.maxNewPerPR) {
-            return [];
+        const findings = newSuppressions.length > options.maxNewPerPR
+            ? newSuppressions.map((hit) => ({
+                detector: exports.suppressionRatchetDetector.id,
+                severity: "error",
+                ruleId: "false-clean-pass/new-suppression",
+                file: hit.file,
+                line: hit.line,
+                evidence: hit.evidence.trim(),
+                message: `New suppression comment exceeds maxNewPerPR=${options.maxNewPerPR} (${newSuppressions.length} added).`
+            }))
+            : [];
+        const baselineTotal = await readSuppressionBaseline(ctx, options.baselineFile);
+        if (baselineTotal !== undefined) {
+            const currentTotal = await countRepositorySuppressions(ctx);
+            if (currentTotal > baselineTotal) {
+                findings.push({
+                    detector: exports.suppressionRatchetDetector.id,
+                    severity: options.totalIncreaseSeverity,
+                    ruleId: "false-clean-pass/suppression-total-increase",
+                    file: options.baselineFile,
+                    message: `Suppression comment total increased from baseline ${baselineTotal} to ${currentTotal}.`
+                });
+            }
         }
-        // Milestone 1 intentionally stops at diff-added suppressions. Repository-wide
-        // suppression totals, baselines, and ratchets are milestone 2 scope.
-        return newSuppressions.map((hit) => ({
-            detector: exports.suppressionRatchetDetector.id,
-            severity: "error",
-            ruleId: "false-clean-pass/new-suppression",
-            file: hit.file,
-            line: hit.line,
-            evidence: hit.evidence.trim(),
-            message: `New suppression comment exceeds maxNewPerPR=${options.maxNewPerPR} (${newSuppressions.length} added).`
-        }));
+        return findings;
     }
 };
 function collectNewSuppressions(ctx) {
     const hits = [];
+    const options = ctx.config.detectors.suppressionRatchet;
     for (const file of ctx.diff) {
         if (file.status === "removed") {
             continue;
         }
         for (const [line, content] of file.addedLineContent.entries()) {
-            if (suppressionPatterns.some((pattern) => pattern.test(content))) {
+            if (suppressionPatterns.some((pattern) => pattern.test(content)) &&
+                !(options.requireReason && suppressionHasReason(content))) {
                 hits.push({
                     file: file.filename,
                     line,
@@ -764,6 +1831,357 @@ function collectNewSuppressions(ctx) {
     }
     return hits;
 }
+async function countRepositorySuppressions(ctx) {
+    const options = ctx.config.detectors.suppressionRatchet;
+    const files = (await ctx.listFiles()).filter((file) => !(0, globs_1.matchesAnyGlob)(file, options.excludePaths));
+    let total = 0;
+    for (const file of files) {
+        if (!isSuppressionScanFile(file)) {
+            continue;
+        }
+        let source;
+        try {
+            source = await ctx.readFile(file);
+        }
+        catch {
+            continue;
+        }
+        for (const line of source.split(/\r?\n/)) {
+            if (suppressionPatterns.some((pattern) => pattern.test(line))) {
+                total += 1;
+            }
+        }
+    }
+    return total;
+}
+async function readSuppressionBaseline(ctx, file) {
+    if (!(await ctx.fileExists(file))) {
+        return undefined;
+    }
+    try {
+        const json = JSON.parse(await ctx.readFile(file));
+        return extractBaselineTotal(json);
+    }
+    catch {
+        return undefined;
+    }
+}
+function extractBaselineTotal(value) {
+    if (typeof value === "number") {
+        return value;
+    }
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+        return undefined;
+    }
+    const record = value;
+    for (const key of ["total", "count", "suppressions"]) {
+        const parsed = numberFromUnknown(record[key]);
+        if (parsed !== undefined) {
+            return parsed;
+        }
+    }
+    const nested = record.suppressions;
+    if (nested && typeof nested === "object" && !Array.isArray(nested)) {
+        return numberFromUnknown(nested.total);
+    }
+    return undefined;
+}
+function numberFromUnknown(value) {
+    if (typeof value === "number" && Number.isFinite(value)) {
+        return value;
+    }
+    if (typeof value === "string") {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : undefined;
+    }
+    return undefined;
+}
+function suppressionHasReason(line) {
+    return /\s--\s+\S/.test(line) || /@ts-expect-error\s+\S/.test(line) || /@ts-ignore\s+\S/.test(line) || /#\s*noqa:.+\S/.test(line);
+}
+function isSuppressionScanFile(file) {
+    return /\.(?:[cm]?[jt]sx?|py|mjs|cjs|ts|tsx)$/.test(file);
+}
+
+
+/***/ }),
+
+/***/ 1578:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.testCountRatchetDetector = void 0;
+const globs_1 = __nccwpck_require__(8879);
+const junit_1 = __nccwpck_require__(6930);
+exports.testCountRatchetDetector = {
+    id: "test-count-ratchet",
+    async run(ctx) {
+        const options = ctx.config.testCountRatchet;
+        if (!options.enabled || !ctx.testResultsGlob) {
+            return [];
+        }
+        const findings = [];
+        const current = await readTestResults(ctx, ctx.testResultsGlob);
+        findings.push(...parseErrorFindings(current.parseErrors));
+        if (!current.summary) {
+            if (current.parseErrors.length > 0) {
+                return findings;
+            }
+            return [
+                {
+                    detector: exports.testCountRatchetDetector.id,
+                    severity: "warning",
+                    ruleId: "false-clean-pass/test-results-missing",
+                    message: `No test result files matched test-results-glob=${ctx.testResultsGlob}.`
+                }
+            ];
+        }
+        const currentSummary = current.summary;
+        if (currentSummary.executed === 0) {
+            findings.push({
+                detector: exports.testCountRatchetDetector.id,
+                severity: "error",
+                ruleId: "false-clean-pass/zero-tests",
+                message: "JUnit results report 0 executed tests; a green CI run with no executed tests is blocked."
+            });
+            return findings;
+        }
+        if (currentSummary.tests > 0 && currentSummary.skipped / currentSummary.tests > options.skipRatioMax) {
+            findings.push({
+                detector: exports.testCountRatchetDetector.id,
+                severity: "warning",
+                ruleId: "false-clean-pass/high-skip-ratio",
+                message: `JUnit results skipped ${currentSummary.skipped}/${currentSummary.tests} tests, above skipRatioMax=${options.skipRatioMax}.`
+            });
+        }
+        let base;
+        if (ctx.baseTestResultsGlob) {
+            const baseResults = await readTestResults(ctx, ctx.baseTestResultsGlob);
+            findings.push(...parseErrorFindings(baseResults.parseErrors));
+            base = baseResults.summary;
+        }
+        else {
+            base = await readBaselineTestCount(ctx, options.baselineFile);
+        }
+        if (base?.executed && base.executed > 0) {
+            const dropPercent = ((base.executed - currentSummary.executed) / base.executed) * 100;
+            if (dropPercent > options.maxDropPercent) {
+                findings.push({
+                    detector: exports.testCountRatchetDetector.id,
+                    severity: "error",
+                    ruleId: "false-clean-pass/test-count-drop",
+                    file: ctx.testResultsGlob,
+                    message: `Executed test count dropped from ${base.executed} to ${currentSummary.executed} (${dropPercent.toFixed(1)}%), above maxDropPercent=${options.maxDropPercent}.`
+                });
+            }
+        }
+        return findings;
+    }
+};
+async function readTestResults(ctx, glob) {
+    const patterns = glob
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean);
+    const files = (await ctx.listFiles()).filter((file) => (0, globs_1.matchesAnyGlob)(file, patterns));
+    if (files.length === 0) {
+        return { parseErrors: [] };
+    }
+    const summaries = [];
+    const parseErrors = [];
+    for (const file of files) {
+        try {
+            const source = await ctx.readFile(file);
+            summaries.push((0, junit_1.parseJUnitXml)(source));
+        }
+        catch (error) {
+            parseErrors.push({
+                file,
+                message: error instanceof Error ? error.message : String(error)
+            });
+        }
+    }
+    return {
+        summary: summaries.length > 0 ? (0, junit_1.addTestCountSummaries)(summaries) : undefined,
+        parseErrors
+    };
+}
+function parseErrorFindings(parseErrors) {
+    return parseErrors.map((error) => ({
+        detector: exports.testCountRatchetDetector.id,
+        severity: "error",
+        ruleId: "false-clean-pass/test-results-invalid",
+        file: error.file,
+        message: `Test result file exists but could not be parsed as JUnit XML: ${error.message}`
+    }));
+}
+async function readBaselineTestCount(ctx, file) {
+    if (!(await ctx.fileExists(file))) {
+        return undefined;
+    }
+    try {
+        const parsed = JSON.parse(await ctx.readFile(file));
+        const executed = extractExecuted(parsed);
+        return executed === undefined
+            ? undefined
+            : {
+                tests: executed,
+                skipped: 0,
+                failures: 0,
+                errors: 0,
+                executed
+            };
+    }
+    catch {
+        return undefined;
+    }
+}
+function extractExecuted(value) {
+    if (typeof value === "number" && Number.isFinite(value)) {
+        return value;
+    }
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+        return undefined;
+    }
+    const record = value;
+    for (const key of ["executed", "testCount", "count", "tests"]) {
+        const raw = record[key];
+        if (typeof raw === "number" && Number.isFinite(raw)) {
+            return raw;
+        }
+    }
+    return undefined;
+}
+
+
+/***/ }),
+
+/***/ 9459:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FALSE_CLEAN_PASS_CHECK_NAME = void 0;
+exports.formatCheckRunShaMarker = formatCheckRunShaMarker;
+exports.emitCheckRunShaMarker = emitCheckRunShaMarker;
+exports.createCheckRunAttestationVerifier = createCheckRunAttestationVerifier;
+exports.FALSE_CLEAN_PASS_CHECK_NAME = "false-clean-pass";
+function formatCheckRunShaMarker(headSha) {
+    return `<!-- false-clean-pass:self-attestation:${headSha} -->`;
+}
+async function emitCheckRunShaMarker(runtime) {
+    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+    const octokit = github.getOctokit(runtime.token);
+    const response = await octokit.rest.checks.create({
+        owner: runtime.owner,
+        repo: runtime.repo,
+        name: exports.FALSE_CLEAN_PASS_CHECK_NAME,
+        head_sha: runtime.headSha,
+        status: "in_progress",
+        output: {
+            title: exports.FALSE_CLEAN_PASS_CHECK_NAME,
+            summary: formatCheckRunShaMarker(runtime.headSha)
+        }
+    });
+    return response.data.id;
+}
+function createCheckRunAttestationVerifier(runtime) {
+    return async () => {
+        try {
+            const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+            const octokit = github.getOctokit(runtime.token);
+            const response = await octokit.rest.checks.listForRef({
+                owner: runtime.owner,
+                repo: runtime.repo,
+                ref: runtime.headSha,
+                check_name: exports.FALSE_CLEAN_PASS_CHECK_NAME,
+                per_page: 100
+            });
+            const marker = formatCheckRunShaMarker(runtime.headSha);
+            const matching = response.data.check_runs.find((checkRun) => {
+                const summary = checkRun.output?.summary ?? "";
+                const text = checkRun.output?.text ?? "";
+                return summary.includes(marker) || text.includes(marker);
+            });
+            if (!matching) {
+                return {
+                    ok: false,
+                    reason: "missing",
+                    message: "false-clean-pass Check Run self-attestation marker was not found for this commit."
+                };
+            }
+            if (matching.head_sha !== runtime.headSha) {
+                return {
+                    ok: false,
+                    reason: "sha-mismatch",
+                    message: `false-clean-pass Check Run marker was found on ${matching.head_sha}, expected ${runtime.headSha}.`
+                };
+            }
+            return { ok: true };
+        }
+        catch (error) {
+            return {
+                ok: false,
+                reason: "api-failed",
+                message: error instanceof Error ? error.message : String(error)
+            };
+        }
+    };
+}
+
+
+/***/ }),
+
+/***/ 8325:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createGitHubReviewProvider = createGitHubReviewProvider;
+function createGitHubReviewProvider(runtime) {
+    const pullNumber = runtime.pullNumber;
+    if (!pullNumber) {
+        return undefined;
+    }
+    return {
+        async listReviews() {
+            const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+            const octokit = github.getOctokit(runtime.token);
+            const reviews = (await octokit.paginate(octokit.rest.pulls.listReviews, {
+                owner: runtime.owner,
+                repo: runtime.repo,
+                pull_number: pullNumber,
+                per_page: 100
+            }));
+            return reviews
+                .filter((review) => review.user?.login)
+                .map((review) => ({
+                user: review.user?.login ?? "",
+                state: review.state ?? "",
+                submittedAt: review.submitted_at ?? undefined
+            }));
+        },
+        async isTeamMember(teamOwner, teamSlug, username) {
+            const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+            const octokit = github.getOctokit(runtime.token);
+            try {
+                const response = await octokit.rest.teams.getMembershipForUserInOrg({
+                    org: teamOwner,
+                    team_slug: teamSlug,
+                    username
+                });
+                return response.data.state === "active";
+            }
+            catch {
+                return undefined;
+            }
+        }
+    };
+}
 
 
 /***/ }),
@@ -771,6 +2189,7 @@ function collectNewSuppressions(ctx) {
 /***/ 4346:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getGitHubDiff = getGitHubDiff;
@@ -854,6 +2273,7 @@ function parsePatch(filename, patch) {
     const addedLines = new Set();
     const removedLines = new Set();
     const addedLineContent = new Map();
+    const removedLineContent = new Map();
     const lines = patch.split(/\r?\n/);
     let oldLine = 0;
     let newLine = 0;
@@ -875,6 +2295,7 @@ function parsePatch(filename, patch) {
         }
         if (line.startsWith("-")) {
             removedLines.add(oldLine);
+            removedLineContent.set(oldLine, line.slice(1));
             oldLine += 1;
             continue;
         }
@@ -889,7 +2310,8 @@ function parsePatch(filename, patch) {
         patch,
         addedLines,
         removedLines,
-        addedLineContent
+        addedLineContent,
+        removedLineContent
     };
 }
 function getChangedFile(diff, filename) {
@@ -911,14 +2333,238 @@ function stripDiffPrefix(path) {
 
 /***/ }),
 
+/***/ 786:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseCodeowners = parseCodeowners;
+exports.findCodeOwnersForFile = findCodeOwnersForFile;
+const globs_1 = __nccwpck_require__(8879);
+function parseCodeowners(source) {
+    const entries = [];
+    const lines = source.split(/\r?\n/);
+    lines.forEach((line, index) => {
+        const stripped = stripInlineComment(line).trim();
+        if (!stripped) {
+            return;
+        }
+        const [pattern, ...owners] = stripped.split(/\s+/);
+        if (!pattern || owners.length === 0) {
+            return;
+        }
+        entries.push({
+            pattern,
+            owners: owners.filter((owner) => owner.startsWith("@")),
+            line: index + 1
+        });
+    });
+    return entries;
+}
+function findCodeOwnersForFile(source, file) {
+    let owners = [];
+    for (const entry of parseCodeowners(source)) {
+        if (matchesCodeownersPattern(entry.pattern, file)) {
+            owners = entry.owners;
+        }
+    }
+    return owners;
+}
+function matchesCodeownersPattern(pattern, file) {
+    const normalized = pattern.replace(/\\/g, "/").replace(/^\/+/, "");
+    if (!normalized) {
+        return false;
+    }
+    if (normalized.endsWith("/")) {
+        return file.startsWith(normalized);
+    }
+    if (normalized.includes("/")) {
+        return (0, globs_1.matchesAnyGlob)(file, [normalized]);
+    }
+    return (0, globs_1.matchesAnyGlob)(file, [normalized, `**/${normalized}`]);
+}
+function stripInlineComment(line) {
+    const commentIndex = line.search(/\s#/);
+    return commentIndex >= 0 ? line.slice(0, commentIndex) : line;
+}
+
+
+/***/ }),
+
+/***/ 7003:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.extractEnvReferences = extractEnvReferences;
+const parser_1 = __nccwpck_require__(5429);
+const globs_1 = __nccwpck_require__(8879);
+function extractEnvReferences(filename, source) {
+    if ((0, globs_1.isJavaScriptLikeFile)(filename)) {
+        return extractJavaScriptEnvReferences(source);
+    }
+    if ((0, globs_1.isPythonFile)(filename)) {
+        return extractPythonEnvReferences(source);
+    }
+    return [];
+}
+function extractJavaScriptEnvReferences(source) {
+    let ast;
+    try {
+        ast = (0, parser_1.parse)(source, {
+            sourceType: "unambiguous",
+            errorRecovery: true,
+            plugins: ["typescript", "jsx", "decorators-legacy", "classProperties", "importMeta"]
+        });
+    }
+    catch {
+        return extractJavaScriptEnvReferencesByRegex(source);
+    }
+    const lines = source.split(/\r?\n/);
+    const references = [];
+    traverse(ast.program, (node) => {
+        if (node.type !== "MemberExpression" && node.type !== "OptionalMemberExpression") {
+            return;
+        }
+        const envRoot = getEnvRoot(node);
+        if (!envRoot) {
+            return;
+        }
+        const key = getStaticPropertyName(node);
+        const line = node.loc?.start.line ?? 1;
+        references.push({
+            key,
+            dynamic: !key,
+            line,
+            evidence: lines[line - 1]?.trim() ?? ""
+        });
+    });
+    return references;
+}
+function getEnvRoot(node) {
+    const object = node.object;
+    if (object.type === "MemberExpression" || object.type === "OptionalMemberExpression") {
+        const property = getStaticPropertyName(object);
+        if (property !== "env") {
+            return undefined;
+        }
+        if (isProcessIdentifier(object.object)) {
+            return "process";
+        }
+        if (isImportMeta(object.object)) {
+            return "import.meta";
+        }
+    }
+    return undefined;
+}
+function isProcessIdentifier(node) {
+    return node.type === "Identifier" && node.name === "process";
+}
+function isImportMeta(node) {
+    return node.type === "MetaProperty" && node.meta.name === "import" && node.property.name === "meta";
+}
+function getStaticPropertyName(node) {
+    const property = node.property;
+    if (!node.computed && property.type === "Identifier") {
+        return property.name;
+    }
+    if (property.type === "StringLiteral") {
+        return property.value;
+    }
+    return undefined;
+}
+function extractJavaScriptEnvReferencesByRegex(source) {
+    const references = [];
+    const lines = source.split(/\r?\n/);
+    lines.forEach((line, index) => {
+        const lineNumber = index + 1;
+        for (const match of line.matchAll(/\b(?:process|import\.meta)\.env\.([A-Z_][A-Z0-9_]*)\b/g)) {
+            references.push({
+                key: match[1],
+                dynamic: false,
+                line: lineNumber,
+                evidence: line.trim()
+            });
+        }
+        if (/\b(?:process|import\.meta)\.env\[[^\]"']+\]/.test(line)) {
+            references.push({
+                dynamic: true,
+                line: lineNumber,
+                evidence: line.trim()
+            });
+        }
+    });
+    return references;
+}
+function extractPythonEnvReferences(source) {
+    const references = [];
+    const lines = source.split(/\r?\n/);
+    lines.forEach((line, index) => {
+        const lineNumber = index + 1;
+        const patterns = [
+            /\bos\.environ\[\s*["']([A-Z_][A-Z0-9_]*)["']\s*\]/g,
+            /\bos\.environ\.get\(\s*["']([A-Z_][A-Z0-9_]*)["']\s*[,)]/g,
+            /\bos\.getenv\(\s*["']([A-Z_][A-Z0-9_]*)["']\s*[,)]/g
+        ];
+        for (const pattern of patterns) {
+            for (const match of line.matchAll(pattern)) {
+                references.push({
+                    key: match[1],
+                    dynamic: false,
+                    line: lineNumber,
+                    evidence: line.trim()
+                });
+            }
+        }
+        if (/\bos\.environ\[[^\]"']+\]/.test(line) || /\bos\.getenv\([^"']/.test(line)) {
+            references.push({
+                dynamic: true,
+                line: lineNumber,
+                evidence: line.trim()
+            });
+        }
+    });
+    return references;
+}
+function traverse(node, visitor) {
+    visitor(node);
+    const record = node;
+    for (const key of Object.keys(record)) {
+        if (key === "loc" || key === "start" || key === "end" || key === "leadingComments" || key === "trailingComments") {
+            continue;
+        }
+        const value = record[key];
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                if (isNode(item)) {
+                    traverse(item, visitor);
+                }
+            }
+            continue;
+        }
+        if (isNode(value)) {
+            traverse(value, visitor);
+        }
+    }
+}
+function isNode(value) {
+    return Boolean(value && typeof value === "object" && "type" in value);
+}
+
+
+/***/ }),
+
 /***/ 9526:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.scanJavaScript = scanJavaScript;
 const parser_1 = __nccwpck_require__(5429);
-function scanJavaScript(source, customAssertions = []) {
+function scanJavaScript(source, customAssertions = [], lenientAssertNames = true) {
     let ast;
     try {
         ast = (0, parser_1.parse)(source, {
@@ -945,7 +2591,7 @@ function scanJavaScript(source, customAssertions = []) {
                 evidence: lineEvidence(lines, getNodeLine(node))
             });
         }
-        const testCase = getTestCaseSignal(node, lines, customAssertions);
+        const testCase = getTestCaseSignal(node, lines, customAssertions, lenientAssertNames);
         if (testCase) {
             testCases.push(testCase);
         }
@@ -982,7 +2628,7 @@ function getTestControlSignal(node) {
     }
     return undefined;
 }
-function getTestCaseSignal(node, lines, customAssertions) {
+function getTestCaseSignal(node, lines, customAssertions, lenientAssertNames) {
     if (!isExecutableTestCall(node)) {
         return undefined;
     }
@@ -996,7 +2642,7 @@ function getTestCaseSignal(node, lines, customAssertions) {
         evidence: lineEvidence(lines, line),
         emptyBody: isEmptyFunction(callback),
         returnOnly: isReturnOnlyFunction(callback),
-        assertionCount: countAssertions(callback.body, customAssertions)
+        assertionCount: countAssertions(callback.body, customAssertions, lenientAssertNames)
     };
 }
 function isExecutableTestCall(node) {
@@ -1014,13 +2660,13 @@ function isExecutableTestCall(node) {
     const propertyName = getMemberPropertyName(callee);
     return propertyName !== "skip" && propertyName !== "todo";
 }
-function countAssertions(node, customAssertions) {
+function countAssertions(node, customAssertions, lenientAssertNames) {
     if (!node) {
         return 0;
     }
     let count = 0;
     traverse(node, (current, parent) => {
-        if (current.type === "CallExpression" && isAssertionCall(current, customAssertions)) {
+        if (current.type === "CallExpression" && isAssertionCall(current, customAssertions, lenientAssertNames)) {
             count += 1;
             return;
         }
@@ -1031,10 +2677,13 @@ function countAssertions(node, customAssertions) {
     });
     return count;
 }
-function isAssertionCall(node, customAssertions) {
+function isAssertionCall(node, customAssertions, lenientAssertNames) {
     const callee = node.callee;
     if (callee.type === "Identifier") {
-        return callee.name === "expect" || callee.name === "assert" || customAssertions.includes(callee.name);
+        return (callee.name === "expect" ||
+            callee.name === "assert" ||
+            customAssertions.includes(callee.name) ||
+            (lenientAssertNames && looksLikeAssertionName(callee.name)));
     }
     if (callee.type !== "MemberExpression" && callee.type !== "OptionalMemberExpression") {
         return false;
@@ -1050,7 +2699,14 @@ function isAssertionCall(node, customAssertions) {
     if (rootName && customAssertions.includes(rootName)) {
         return true;
     }
+    if (lenientAssertNames &&
+        ((rootName && looksLikeAssertionName(rootName)) || (propertyName && looksLikeAssertionName(propertyName)))) {
+        return true;
+    }
     return hasMemberProperty(callee, "should") || hasMemberProperty(callee, "to");
+}
+function looksLikeAssertionName(name) {
+    return /(?:^|[A-Z_])(assert|expect|should|verify)(?:$|[A-Z_])/i.test(name);
 }
 function isAssertionPropertyAccess(node, parent) {
     if (parent?.type !== "ExpressionStatement") {
@@ -1168,9 +2824,191 @@ function isMetadataKey(key) {
 
 /***/ }),
 
+/***/ 6930:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseJUnitXml = parseJUnitXml;
+exports.addTestCountSummaries = addTestCountSummaries;
+const fast_xml_parser_1 = __nccwpck_require__(591);
+const parser = new fast_xml_parser_1.XMLParser({
+    ignoreAttributes: false,
+    attributeNamePrefix: "",
+    parseAttributeValue: true
+});
+function parseJUnitXml(source) {
+    const validation = fast_xml_parser_1.XMLValidator.validate(source);
+    if (validation !== true) {
+        throw new Error(`Invalid JUnit XML: ${validation.err.msg}`);
+    }
+    const document = parser.parse(source);
+    const suites = collectSuites(document);
+    const totals = suites.reduce((acc, suite) => {
+        acc.tests += numericAttribute(suite.tests);
+        acc.skipped += numericAttribute(suite.skipped);
+        acc.failures += numericAttribute(suite.failures);
+        acc.errors += numericAttribute(suite.errors);
+        return acc;
+    }, { tests: 0, skipped: 0, failures: 0, errors: 0 });
+    return {
+        ...totals,
+        executed: Math.max(0, totals.tests - totals.skipped)
+    };
+}
+function addTestCountSummaries(summaries) {
+    const totals = summaries.reduce((acc, summary) => {
+        acc.tests += summary.tests;
+        acc.skipped += summary.skipped;
+        acc.failures += summary.failures;
+        acc.errors += summary.errors;
+        acc.executed += summary.executed;
+        return acc;
+    }, { tests: 0, skipped: 0, failures: 0, errors: 0, executed: 0 });
+    return totals;
+}
+function collectSuites(value) {
+    const suites = [];
+    visit(value, (node, key) => {
+        if (key === "testsuite" && isRecord(node)) {
+            suites.push(node);
+        }
+    });
+    if (suites.length === 0 && isRecord(value)) {
+        const rootSuite = isRecord(value.testsuites) ? value.testsuites : undefined;
+        if (rootSuite && numericAttribute(rootSuite.tests) > 0) {
+            suites.push(rootSuite);
+        }
+    }
+    return suites;
+}
+function visit(value, visitor, key) {
+    visitor(value, key);
+    if (Array.isArray(value)) {
+        for (const item of value) {
+            visit(item, visitor, key);
+        }
+        return;
+    }
+    if (!isRecord(value)) {
+        return;
+    }
+    for (const [childKey, childValue] of Object.entries(value)) {
+        visit(childValue, visitor, childKey);
+    }
+}
+function numericAttribute(value) {
+    if (typeof value === "number" && Number.isFinite(value)) {
+        return value;
+    }
+    if (typeof value === "string") {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : 0;
+    }
+    return 0;
+}
+function isRecord(value) {
+    return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
+
+/***/ }),
+
+/***/ 8029:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isWorkflowFile = isWorkflowFile;
+exports.findGuardStepsInWorkflow = findGuardStepsInWorkflow;
+exports.workflowHasGuardStep = workflowHasGuardStep;
+const yaml_1 = __nccwpck_require__(8815);
+function isWorkflowFile(file) {
+    return /^\.github\/workflows\/.+\.ya?ml$/.test(file);
+}
+function findGuardStepsInWorkflow(source, guardStepNames) {
+    const document = parseWorkflow(source);
+    const jobs = asRecord(document.jobs);
+    if (!jobs) {
+        return [];
+    }
+    const steps = [];
+    for (const [jobId, rawJob] of Object.entries(jobs)) {
+        const job = asRecord(rawJob);
+        if (!job) {
+            continue;
+        }
+        const rawSteps = Array.isArray(job.steps) ? job.steps : [];
+        for (const rawStep of rawSteps) {
+            const step = asRecord(rawStep);
+            if (!step) {
+                continue;
+            }
+            const uses = typeof step.uses === "string" ? step.uses : undefined;
+            const stepName = typeof step.name === "string" ? step.name : undefined;
+            if (!matchesGuard(uses, stepName, guardStepNames)) {
+                continue;
+            }
+            steps.push({
+                jobId,
+                jobName: typeof job.name === "string" ? job.name : undefined,
+                stepName,
+                uses,
+                with: stringifyRecord(asRecord(step.with))
+            });
+        }
+    }
+    return steps;
+}
+function workflowHasGuardStep(source, guardStepNames) {
+    return findGuardStepsInWorkflow(source, guardStepNames).length > 0;
+}
+function parseWorkflow(source) {
+    try {
+        return asRecord((0, yaml_1.parse)(source)) ?? {};
+    }
+    catch {
+        return {};
+    }
+}
+function matchesGuard(uses, stepName, guardStepNames) {
+    const candidates = [uses, stepName].filter((value) => Boolean(value));
+    return candidates.some((candidate) => guardStepNames.some((guardName) => candidate.toLowerCase().includes(guardName.toLowerCase())));
+}
+function asRecord(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+        return undefined;
+    }
+    return value;
+}
+function stringifyRecord(value) {
+    const result = {};
+    if (!value) {
+        return result;
+    }
+    for (const [key, raw] of Object.entries(value)) {
+        if (raw === null || raw === undefined) {
+            result[key] = "";
+        }
+        else if (typeof raw === "string") {
+            result[key] = raw;
+        }
+        else {
+            result[key] = String(raw);
+        }
+    }
+    return result;
+}
+
+
+/***/ }),
+
 /***/ 6891:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.emitAnnotations = emitAnnotations;
@@ -1204,15 +3042,19 @@ async function emitAnnotations(findings) {
 /***/ 8028:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.formatCheckRunSummary = formatCheckRunSummary;
 exports.createCheckRun = createCheckRun;
-function formatCheckRunSummary(result) {
+const checkrun_1 = __nccwpck_require__(9459);
+function formatCheckRunSummary(result, headSha) {
+    const marker = headSha ? `${(0, checkrun_1.formatCheckRunShaMarker)(headSha)}\n\n` : "";
     if (result.findings.length === 0) {
-        return "No milestone 1 false-clean-pass findings were detected.";
+        return `${marker}No false-clean-pass findings were detected.`;
     }
     const lines = [
+        marker.trimEnd(),
         `Result: ${result.result}`,
         `Errors: ${result.errorCount}`,
         `Warnings: ${result.warningCount}`,
@@ -1224,21 +3066,19 @@ function formatCheckRunSummary(result) {
         const location = finding.file ? `${finding.file}${finding.line ? `:${finding.line}` : ""}` : "";
         lines.push(`| ${finding.severity} | ${finding.ruleId} | ${location} | ${escapeMarkdownCell(finding.message)} |`);
     }
-    return lines.join("\n");
+    return lines.filter((line, index) => index !== 0 || line.length > 0).join("\n");
 }
 async function createCheckRun(options) {
     const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
     const octokit = github.getOctokit(options.token);
-    await octokit.rest.checks.create({
+    const payload = {
         owner: options.owner,
         repo: options.repo,
-        name: "false-clean-pass",
-        head_sha: options.headSha,
         status: "completed",
-        conclusion: options.result.result === "pass" ? "success" : "failure",
+        conclusion: (options.result.result === "pass" ? "success" : "failure"),
         output: {
-            title: "false-clean-pass",
-            summary: formatCheckRunSummary(options.result),
+            title: checkrun_1.FALSE_CLEAN_PASS_CHECK_NAME,
+            summary: formatCheckRunSummary(options.result, options.headSha),
             annotations: options.result.findings
                 .filter((finding) => finding.file && finding.line)
                 .slice(0, 50)
@@ -1246,14 +3086,32 @@ async function createCheckRun(options) {
                 path: finding.file,
                 start_line: finding.line,
                 end_line: finding.line,
-                annotation_level: finding.severity === "error" ? "failure" : finding.severity === "warning" ? "warning" : "notice",
+                annotation_level: annotationLevel(finding.severity),
                 message: finding.message
             }))
         }
+    };
+    if (options.checkRunId) {
+        await octokit.rest.checks.update({
+            ...payload,
+            check_run_id: options.checkRunId
+        });
+        return;
+    }
+    await octokit.rest.checks.create({
+        ...payload,
+        name: checkrun_1.FALSE_CLEAN_PASS_CHECK_NAME,
+        head_sha: options.headSha
     });
 }
 function escapeMarkdownCell(value) {
     return value.replace(/\|/g, "\\|");
+}
+function annotationLevel(severity) {
+    if (severity === "error") {
+        return "failure";
+    }
+    return severity === "warning" ? "warning" : "notice";
 }
 
 
@@ -1262,6 +3120,7 @@ function escapeMarkdownCell(value) {
 /***/ 5429:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -15868,6 +17727,7 @@ exports.tokTypes = tokTypes;
 /***/ 7349:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -15965,6 +17825,7 @@ exports.composeCollection = composeCollection;
 /***/ 3683:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Document = __nccwpck_require__(3021);
@@ -16017,6 +17878,7 @@ exports.composeDoc = composeDoc;
 /***/ 5937:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Alias = __nccwpck_require__(4065);
@@ -16136,6 +17998,7 @@ exports.composeNode = composeNode;
 /***/ 5413:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -16231,6 +18094,7 @@ exports.composeScalar = composeScalar;
 /***/ 9984:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var node_process = __nccwpck_require__(932);
@@ -16462,6 +18326,7 @@ exports.Composer = Composer;
 /***/ 7103:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Pair = __nccwpck_require__(7165);
@@ -16586,6 +18451,7 @@ exports.resolveBlockMap = resolveBlockMap;
 /***/ 8913:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -16793,6 +18659,7 @@ exports.resolveBlockScalar = resolveBlockScalar;
 /***/ 334:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var YAMLSeq = __nccwpck_require__(2223);
@@ -16851,6 +18718,7 @@ exports.resolveBlockSeq = resolveBlockSeq;
 /***/ 7788:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 function resolveEnd(end, offset, reqSpace, onError) {
@@ -16897,6 +18765,7 @@ exports.resolveEnd = resolveEnd;
 /***/ 3142:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -17113,6 +18982,7 @@ exports.resolveFlowCollection = resolveFlowCollection;
 /***/ 6842:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -17347,6 +19217,7 @@ exports.resolveFlowScalar = resolveFlowScalar;
 /***/ 4631:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 function resolveProps(tokens, { flow, indicator, next, offset, onError, parentIndent, startOnNewline }) {
@@ -17502,6 +19373,7 @@ exports.resolveProps = resolveProps;
 /***/ 9499:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 function containsNewline(key) {
@@ -17545,6 +19417,7 @@ exports.containsNewline = containsNewline;
 /***/ 2599:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 function emptyScalarPosition(offset, before, pos) {
@@ -17580,6 +19453,7 @@ exports.emptyScalarPosition = emptyScalarPosition;
 /***/ 4051:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var utilContainsNewline = __nccwpck_require__(9499);
@@ -17604,6 +19478,7 @@ exports.flowIndentCheck = flowIndentCheck;
 /***/ 1187:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -17626,6 +19501,7 @@ exports.mapIncludes = mapIncludes;
 /***/ 3021:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Alias = __nccwpck_require__(4065);
@@ -17970,6 +19846,7 @@ exports.Document = Document;
 /***/ 1596:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -18053,6 +19930,7 @@ exports.findNewAnchor = findNewAnchor;
 /***/ 3661:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 /**
@@ -18117,6 +19995,7 @@ exports.applyReviver = applyReviver;
 /***/ 2404:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Alias = __nccwpck_require__(4065);
@@ -18214,6 +20093,7 @@ exports.createNode = createNode;
 /***/ 1342:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -18399,6 +20279,7 @@ exports.Directives = Directives;
 /***/ 1464:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 class YAMLError extends Error {
@@ -18468,6 +20349,7 @@ exports.prettifyError = prettifyError;
 /***/ 8815:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var composer = __nccwpck_require__(9984);
@@ -18525,6 +20407,7 @@ exports.visitAsync = visit.visitAsync;
 /***/ 7249:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var node_process = __nccwpck_require__(932);
@@ -18551,6 +20434,7 @@ exports.warn = warn;
 /***/ 4065:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var anchors = __nccwpck_require__(1596);
@@ -18676,6 +20560,7 @@ exports.Alias = Alias;
 /***/ 101:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var createNode = __nccwpck_require__(2404);
@@ -18834,6 +20719,7 @@ exports.isEmptyPath = isEmptyPath;
 /***/ 6673:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var applyReviver = __nccwpck_require__(3661);
@@ -18881,6 +20767,7 @@ exports.NodeBase = NodeBase;
 /***/ 7165:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var createNode = __nccwpck_require__(2404);
@@ -18927,6 +20814,7 @@ exports.createPair = createPair;
 /***/ 3301:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -18961,6 +20849,7 @@ exports.isScalarValue = isScalarValue;
 /***/ 4454:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var stringifyCollection = __nccwpck_require__(1212);
@@ -19115,6 +21004,7 @@ exports.findPair = findPair;
 /***/ 2223:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var createNode = __nccwpck_require__(2404);
@@ -19237,6 +21127,7 @@ exports.YAMLSeq = YAMLSeq;
 /***/ 7104:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var log = __nccwpck_require__(7249);
@@ -19309,6 +21200,7 @@ exports.addPairToJSMap = addPairToJSMap;
 /***/ 1127:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 const ALIAS = Symbol.for('yaml.alias');
@@ -19369,6 +21261,7 @@ exports.isSeq = isSeq;
 /***/ 4043:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -19415,6 +21308,7 @@ exports.toJS = toJS;
 /***/ 110:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var resolveBlockScalar = __nccwpck_require__(8913);
@@ -19640,6 +21534,7 @@ exports.setScalarValue = setScalarValue;
 /***/ 1733:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 /**
@@ -19710,6 +21605,7 @@ exports.stringify = stringify;
 /***/ 7715:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 const BREAK = Symbol('break visit');
@@ -19816,6 +21712,7 @@ exports.visit = visit;
 /***/ 3461:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var cstScalar = __nccwpck_require__(110);
@@ -19935,6 +21832,7 @@ exports.tokenType = tokenType;
 /***/ 361:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var cst = __nccwpck_require__(3461);
@@ -20665,6 +22563,7 @@ exports.Lexer = Lexer;
 /***/ 6628:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 /**
@@ -20713,6 +22612,7 @@ exports.LineCounter = LineCounter;
 /***/ 3456:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var node_process = __nccwpck_require__(932);
@@ -21700,6 +23600,7 @@ exports.Parser = Parser;
 /***/ 4047:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var composer = __nccwpck_require__(9984);
@@ -21814,6 +23715,7 @@ exports.stringify = stringify;
 /***/ 5840:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -21860,6 +23762,7 @@ exports.Schema = Schema;
 /***/ 7451:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -21886,6 +23789,7 @@ exports.map = map;
 /***/ 3632:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -21910,6 +23814,7 @@ exports.nullTag = nullTag;
 /***/ 1706:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -21936,6 +23841,7 @@ exports.seq = seq;
 /***/ 6464:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var stringifyString = __nccwpck_require__(3069);
@@ -21959,6 +23865,7 @@ exports.string = string;
 /***/ 3959:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -21987,6 +23894,7 @@ exports.boolTag = boolTag;
 /***/ 8405:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -22041,6 +23949,7 @@ exports.floatNaN = floatNaN;
 /***/ 9874:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var stringifyNumber = __nccwpck_require__(8689);
@@ -22090,6 +23999,7 @@ exports.intOct = intOct;
 /***/ 896:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var map = __nccwpck_require__(7451);
@@ -22122,6 +24032,7 @@ exports.schema = schema;
 /***/ 3559:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -22193,6 +24104,7 @@ exports.schema = schema;
 /***/ 18:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var map = __nccwpck_require__(7451);
@@ -22299,6 +24211,7 @@ exports.getTags = getTags;
 /***/ 6083:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var node_buffer = __nccwpck_require__(181);
@@ -22376,6 +24289,7 @@ exports.binary = binary;
 /***/ 8398:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -22412,6 +24326,7 @@ exports.trueTag = trueTag;
 /***/ 5782:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -22469,6 +24384,7 @@ exports.floatNaN = floatNaN;
 /***/ 873:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var stringifyNumber = __nccwpck_require__(8689);
@@ -22552,6 +24468,7 @@ exports.intOct = intOct;
 /***/ 452:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -22630,6 +24547,7 @@ exports.merge = merge;
 /***/ 303:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -22714,6 +24632,7 @@ exports.omap = omap;
 /***/ 8385:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -22803,6 +24722,7 @@ exports.resolvePairs = resolvePairs;
 /***/ 5913:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var map = __nccwpck_require__(7451);
@@ -22851,6 +24771,7 @@ exports.schema = schema;
 /***/ 1528:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -22954,6 +24875,7 @@ exports.set = set;
 /***/ 6752:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var stringifyNumber = __nccwpck_require__(8689);
@@ -23066,6 +24988,7 @@ exports.timestamp = timestamp;
 /***/ 4475:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 const FOLD_FLOW = 'flow';
@@ -23224,6 +25147,7 @@ exports.foldFlowLines = foldFlowLines;
 /***/ 2148:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var anchors = __nccwpck_require__(1596);
@@ -23363,6 +25287,7 @@ exports.stringify = stringify;
 /***/ 1212:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -23525,6 +25450,7 @@ exports.stringifyCollection = stringifyCollection;
 /***/ 9799:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 /**
@@ -23556,6 +25482,7 @@ exports.stringifyComment = stringifyComment;
 /***/ 6829:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -23650,6 +25577,7 @@ exports.stringifyDocument = stringifyDocument;
 /***/ 8689:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 
 function stringifyNumber({ format, minFractionDigits, tag, value }) {
@@ -23684,6 +25612,7 @@ exports.stringifyNumber = stringifyNumber;
 /***/ 9748:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -23843,6 +25772,7 @@ exports.stringifyPair = stringifyPair;
 /***/ 3069:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var Scalar = __nccwpck_require__(3301);
@@ -24188,6 +26118,7 @@ exports.stringifyString = stringifyString;
 /***/ 204:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 
 var identity = __nccwpck_require__(1127);
@@ -24428,9 +26359,17 @@ exports.visitAsync = visitAsync;
 
 /***/ }),
 
+/***/ 591:
+/***/ ((module) => {
+
+(()=>{"use strict";var t={d:(e,i)=>{for(var n in i)t.o(i,n)&&!t.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:i[n]})},o:(t,e)=>Object.prototype.hasOwnProperty.call(t,e),r:t=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})}},e={};t.r(e),t.d(e,{XMLBuilder:()=>xe,XMLParser:()=>Jt,XMLValidator:()=>be});const i=":A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD",n=new RegExp("^["+i+"]["+i+"\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040]*$");function r(t,e){const i=[];let n=e.exec(t);for(;n;){const r=[];r.startIndex=e.lastIndex-n[0].length;const s=n.length;for(let t=0;t<s;t++)r.push(n[t]);i.push(r),n=e.exec(t)}return i}const s=function(t){return!(null==n.exec(t))},o=["hasOwnProperty","toString","valueOf","__defineGetter__","__defineSetter__","__lookupGetter__","__lookupSetter__"],a=["__proto__","constructor","prototype"],l={allowBooleanAttributes:!1,unpairedTags:[]};function p(t,e){e=Object.assign({},l,e);const i=[];let n=!1,r=!1;"\ufeff"===t[0]&&(t=t.substr(1));for(let s=0;s<t.length;s++)if("<"===t[s]&&"?"===t[s+1]){if(s+=2,s=h(t,s),s.err)return s}else{if("<"!==t[s]){if(c(t[s]))continue;return y("InvalidChar","char '"+t[s]+"' is not expected.",w(t,s))}{let o=s;if(s++,"!"===t[s]){s=d(t,s);continue}{let a=!1;"/"===t[s]&&(a=!0,s++);let l="";for(;s<t.length&&">"!==t[s]&&" "!==t[s]&&"\t"!==t[s]&&"\n"!==t[s]&&"\r"!==t[s];s++)l+=t[s];if(l=l.trim(),"/"===l[l.length-1]&&(l=l.substring(0,l.length-1),s--),!E(l)){let e;return e=0===l.trim().length?"Invalid space after '<'.":"Tag '"+l+"' is an invalid name.",y("InvalidTag",e,w(t,s))}const p=g(t,s);if(!1===p)return y("InvalidAttr","Attributes for '"+l+"' have open quote.",w(t,s));let u=p.value;if(s=p.index,"/"===u[u.length-1]){const i=s-u.length;u=u.substring(0,u.length-1);const r=x(u,e);if(!0!==r)return y(r.err.code,r.err.msg,w(t,i+r.err.line));n=!0}else if(a){if(!p.tagClosed)return y("InvalidTag","Closing tag '"+l+"' doesn't have proper closing.",w(t,s));if(u.trim().length>0)return y("InvalidTag","Closing tag '"+l+"' can't have attributes or invalid starting.",w(t,o));if(0===i.length)return y("InvalidTag","Closing tag '"+l+"' has not been opened.",w(t,o));{const e=i.pop();if(l!==e.tagName){let i=w(t,e.tagStartPos);return y("InvalidTag","Expected closing tag '"+e.tagName+"' (opened in line "+i.line+", col "+i.col+") instead of closing tag '"+l+"'.",w(t,o))}0==i.length&&(r=!0)}}else{const a=x(u,e);if(!0!==a)return y(a.err.code,a.err.msg,w(t,s-u.length+a.err.line));if(!0===r)return y("InvalidXml","Multiple possible root nodes found.",w(t,s));-1!==e.unpairedTags.indexOf(l)||i.push({tagName:l,tagStartPos:o}),n=!0}for(s++;s<t.length;s++)if("<"===t[s]){if("!"===t[s+1]){s++,s=d(t,s);continue}if("?"!==t[s+1])break;if(s=h(t,++s),s.err)return s}else if("&"===t[s]){const e=b(t,s);if(-1==e)return y("InvalidChar","char '&' is not expected.",w(t,s));s=e}else if(!0===r&&!c(t[s]))return y("InvalidXml","Extra text at the end",w(t,s));"<"===t[s]&&s--}}}return n?1==i.length?y("InvalidTag","Unclosed tag '"+i[0].tagName+"'.",w(t,i[0].tagStartPos)):!(i.length>0)||y("InvalidXml","Invalid '"+JSON.stringify(i.map(t=>t.tagName),null,4).replace(/\r?\n/g,"")+"' found.",{line:1,col:1}):y("InvalidXml","Start tag expected.",1)}function c(t){return" "===t||"\t"===t||"\n"===t||"\r"===t}function h(t,e){const i=e;for(;e<t.length;e++)if("?"==t[e]||" "==t[e]){const n=t.substr(i,e-i);if(e>5&&"xml"===n)return y("InvalidXml","XML declaration allowed only at the start of the document.",w(t,e));if("?"==t[e]&&">"==t[e+1]){e++;break}continue}return e}function d(t,e){if(t.length>e+5&&"-"===t[e+1]&&"-"===t[e+2]){for(e+=3;e<t.length;e++)if("-"===t[e]&&"-"===t[e+1]&&">"===t[e+2]){e+=2;break}}else if(t.length>e+8&&"D"===t[e+1]&&"O"===t[e+2]&&"C"===t[e+3]&&"T"===t[e+4]&&"Y"===t[e+5]&&"P"===t[e+6]&&"E"===t[e+7]){let i=1;for(e+=8;e<t.length;e++)if("<"===t[e])i++;else if(">"===t[e]&&(i--,0===i))break}else if(t.length>e+9&&"["===t[e+1]&&"C"===t[e+2]&&"D"===t[e+3]&&"A"===t[e+4]&&"T"===t[e+5]&&"A"===t[e+6]&&"["===t[e+7])for(e+=8;e<t.length;e++)if("]"===t[e]&&"]"===t[e+1]&&">"===t[e+2]){e+=2;break}return e}const u='"',f="'";function g(t,e){let i="",n="",r=!1;for(;e<t.length;e++){if(t[e]===u||t[e]===f)""===n?n=t[e]:n!==t[e]||(n="");else if(">"===t[e]&&""===n){r=!0;break}i+=t[e]}return""===n&&{value:i,index:e,tagClosed:r}}const m=new RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?","g");function x(t,e){const i=r(t,m),n={};for(let t=0;t<i.length;t++){if(0===i[t][1].length)return y("InvalidAttr","Attribute '"+i[t][2]+"' has no space in starting.",v(i[t]));if(void 0!==i[t][3]&&void 0===i[t][4])return y("InvalidAttr","Attribute '"+i[t][2]+"' is without value.",v(i[t]));if(void 0===i[t][3]&&!e.allowBooleanAttributes)return y("InvalidAttr","boolean attribute '"+i[t][2]+"' is not allowed.",v(i[t]));const r=i[t][2];if(!N(r))return y("InvalidAttr","Attribute '"+r+"' is an invalid name.",v(i[t]));if(Object.prototype.hasOwnProperty.call(n,r))return y("InvalidAttr","Attribute '"+r+"' is repeated.",v(i[t]));n[r]=1}return!0}function b(t,e){if(";"===t[++e])return-1;if("#"===t[e])return function(t,e){let i=/\d/;for("x"===t[e]&&(e++,i=/[\da-fA-F]/);e<t.length;e++){if(";"===t[e])return e;if(!t[e].match(i))break}return-1}(t,++e);let i=0;for(;e<t.length;e++,i++)if(!(t[e].match(/\w/)&&i<20)){if(";"===t[e])break;return-1}return e}function y(t,e,i){return{err:{code:t,msg:e,line:i.line||i,col:i.col}}}function N(t){return s(t)}function E(t){return s(t)}function w(t,e){const i=t.substring(0,e).split(/\r?\n/);return{line:i.length,col:i[i.length-1].length+1}}function v(t){return t.startIndex+t[1].length}const S=t=>o.includes(t)?"__"+t:t,A={preserveOrder:!1,attributeNamePrefix:"@_",attributesGroupName:!1,textNodeName:"#text",ignoreAttributes:!0,removeNSPrefix:!1,allowBooleanAttributes:!1,parseTagValue:!0,parseAttributeValue:!1,trimValues:!0,cdataPropName:!1,numberParseOptions:{hex:!0,leadingZeros:!0,eNotation:!0,unicode:!1},tagValueProcessor:function(t,e){return e},attributeValueProcessor:function(t,e){return e},stopNodes:[],alwaysCreateTextNode:!1,isArray:()=>!1,commentPropName:!1,unpairedTags:[],processEntities:!0,htmlEntities:!1,entityDecoder:null,ignoreDeclaration:!1,ignorePiTags:!1,transformTagName:!1,transformAttributeName:!1,updateTag:function(t,e,i){return t},captureMetaData:!1,maxNestedTags:100,strictReservedNames:!0,jPath:!0,onDangerousProperty:S};function T(t,e){if("string"!=typeof t)return;const i=t.toLowerCase();if(o.some(t=>i===t.toLowerCase()))throw new Error(`[SECURITY] Invalid ${e}: "${t}" is a reserved JavaScript keyword that could cause prototype pollution`);if(a.some(t=>i===t.toLowerCase()))throw new Error(`[SECURITY] Invalid ${e}: "${t}" is a reserved JavaScript keyword that could cause prototype pollution`)}function _(t,e){return"boolean"==typeof t?{enabled:t,maxEntitySize:1e4,maxExpansionDepth:1e4,maxTotalExpansions:1/0,maxExpandedLength:1e5,maxEntityCount:1e3,allowedTags:null,tagFilter:null,appliesTo:"all"}:"object"==typeof t&&null!==t?{enabled:!1!==t.enabled,maxEntitySize:Math.max(1,t.maxEntitySize??1e4),maxExpansionDepth:Math.max(1,t.maxExpansionDepth??1e4),maxTotalExpansions:Math.max(1,t.maxTotalExpansions??1/0),maxExpandedLength:Math.max(1,t.maxExpandedLength??1e5),maxEntityCount:Math.max(1,t.maxEntityCount??1e3),allowedTags:t.allowedTags??null,tagFilter:t.tagFilter??null,appliesTo:t.appliesTo??"all"}:_(!0)}const C=function(t){const e=Object.assign({},A,t),i=[{value:e.attributeNamePrefix,name:"attributeNamePrefix"},{value:e.attributesGroupName,name:"attributesGroupName"},{value:e.textNodeName,name:"textNodeName"},{value:e.cdataPropName,name:"cdataPropName"},{value:e.commentPropName,name:"commentPropName"}];for(const{value:t,name:e}of i)t&&T(t,e);return null===e.onDangerousProperty&&(e.onDangerousProperty=S),e.processEntities=_(e.processEntities,e.htmlEntities),e.unpairedTagsSet=new Set(e.unpairedTags),e.stopNodes&&Array.isArray(e.stopNodes)&&(e.stopNodes=e.stopNodes.map(t=>"string"==typeof t&&t.startsWith("*.")?".."+t.substring(2):t)),e};let $;$="function"!=typeof Symbol?"@@xmlMetadata":Symbol("XML Node Metadata");class O{constructor(t){this.tagname=t,this.child=[],this[":@"]=Object.create(null)}add(t,e){"__proto__"===t&&(t="#__proto__"),this.child.push({[t]:e})}addChild(t,e){"__proto__"===t.tagname&&(t.tagname="#__proto__"),t[":@"]&&Object.keys(t[":@"]).length>0?this.child.push({[t.tagname]:t.child,":@":t[":@"]}):this.child.push({[t.tagname]:t.child}),void 0!==e&&(this.child[this.child.length-1][$]={startIndex:e})}static getMetaDataSymbol(){return $}}const P=":A-Za-z_À-ÖØ-öø-˿Ͱ-ͽͿ-҆҈-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�",j=":A-Za-z_À-˿Ͱ-ͽͿ-҆҈-῿‌-‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�𐀀-󯿿",I=j+"\\-\\.\\d·̀-ͯ҇‿-⁀",k=(t,e,i="")=>{const n=`[${t.replace(":","")}][${e.replace(":","")}]*`;return{name:new RegExp(`^[${t}][${e}]*$`,i),ncName:new RegExp(`^${n}$`,i),qName:new RegExp(`^${n}(?::${n})?$`,i),nmToken:new RegExp(`^[${e}]+$`,i),nmTokens:new RegExp(`^[${e}]+(?:\\s+[${e}]+)*$`,i)}},L=k(P,P+"\\-\\.\\d·̀-ͯ‿-⁀"),D=k(j,I,"u"),R=(t,{xmlVersion:e="1.0"}={})=>((t="1.0")=>"1.1"===t?D:L)(e).qName.test(t);class M{constructor(t,e){this.suppressValidationErr=!t,this.options=t,this.xmlVersion=e||1}setXmlVersion(t=1){this.xmlVersion=t}readDocType(t,e){const i=Object.create(null);let n=0;if("O"!==t[e+3]||"C"!==t[e+4]||"T"!==t[e+5]||"Y"!==t[e+6]||"P"!==t[e+7]||"E"!==t[e+8])throw new Error("Invalid Tag instead of DOCTYPE");{e+=9;let r=1,s=!1,o=!1,a="";for(;e<t.length;e++)if("<"!==t[e]||o)if(">"===t[e]){if(o?"-"===t[e-1]&&"-"===t[e-2]&&(o=!1,r--):r--,0===r)break}else"["===t[e]?s=!0:a+=t[e];else{if(s&&q(t,"!ENTITY",e)){let r,s;if(e+=7,[r,s,e]=this.readEntityExp(t,e+1,this.suppressValidationErr),-1===s.indexOf("&")){if(!1!==this.options.enabled&&null!=this.options.maxEntityCount&&n>=this.options.maxEntityCount)throw new Error(`Entity count (${n+1}) exceeds maximum allowed (${this.options.maxEntityCount})`);i[r]=s,n++}}else if(s&&q(t,"!ELEMENT",e)){e+=8;const{index:i}=this.readElementExp(t,e+1);e=i}else if(s&&q(t,"!ATTLIST",e))e+=8;else if(s&&q(t,"!NOTATION",e)){e+=9;const{index:i}=this.readNotationExp(t,e+1,this.suppressValidationErr);e=i}else{if(!q(t,"!--",e))throw new Error("Invalid DOCTYPE");o=!0}r++,a=""}if(0!==r)throw new Error("Unclosed DOCTYPE")}return{entities:i,i:e}}readEntityExp(t,e){const i=e=V(t,e);for(;e<t.length&&!/\s/.test(t[e])&&'"'!==t[e]&&"'"!==t[e];)e++;let n=t.substring(i,e);if(F(n,{xmlVersion:this.xmlVersion}),e=V(t,e),!this.suppressValidationErr){if("SYSTEM"===t.substring(e,e+6).toUpperCase())throw new Error("External entities are not supported");if("%"===t[e])throw new Error("Parameter entities are not supported")}let r="";if([e,r]=this.readIdentifierVal(t,e,"entity"),!1!==this.options.enabled&&null!=this.options.maxEntitySize&&r.length>this.options.maxEntitySize)throw new Error(`Entity "${n}" size (${r.length}) exceeds maximum allowed size (${this.options.maxEntitySize})`);return[n,r,--e]}readNotationExp(t,e){const i=e=V(t,e);for(;e<t.length&&!/\s/.test(t[e]);)e++;let n=t.substring(i,e);!this.suppressValidationErr&&F(n,{xmlVersion:this.xmlVersion}),e=V(t,e);const r=t.substring(e,e+6).toUpperCase();if(!this.suppressValidationErr&&"SYSTEM"!==r&&"PUBLIC"!==r)throw new Error(`Expected SYSTEM or PUBLIC, found "${r}"`);e+=r.length,e=V(t,e);let s=null,o=null;if("PUBLIC"===r)[e,s]=this.readIdentifierVal(t,e,"publicIdentifier"),'"'!==t[e=V(t,e)]&&"'"!==t[e]||([e,o]=this.readIdentifierVal(t,e,"systemIdentifier"));else if("SYSTEM"===r&&([e,o]=this.readIdentifierVal(t,e,"systemIdentifier"),!this.suppressValidationErr&&!o))throw new Error("Missing mandatory system identifier for SYSTEM notation");return{notationName:n,publicIdentifier:s,systemIdentifier:o,index:--e}}readIdentifierVal(t,e,i){let n="";const r=t[e];if('"'!==r&&"'"!==r)throw new Error(`Expected quoted string, found "${r}"`);const s=++e;for(;e<t.length&&t[e]!==r;)e++;if(n=t.substring(s,e),t[e]!==r)throw new Error(`Unterminated ${i} value`);return[++e,n]}readElementExp(t,e){const i=e=V(t,e);for(;e<t.length&&!/\s/.test(t[e]);)e++;let n=t.substring(i,e);if(!this.suppressValidationErr&&!R(n,{xmlVersion:this.xmlVersion}))throw new Error(`Invalid element name: "${n}"`);let r="";if("E"===t[e=V(t,e)]&&q(t,"MPTY",e))e+=4;else if("A"===t[e]&&q(t,"NY",e))e+=2;else if("("===t[e]){const i=++e;for(;e<t.length&&")"!==t[e];)e++;if(r=t.substring(i,e),")"!==t[e])throw new Error("Unterminated content model")}else if(!this.suppressValidationErr)throw new Error(`Invalid Element Expression, found "${t[e]}"`);return{elementName:n,contentModel:r.trim(),index:e}}readAttlistExp(t,e){let i=e=V(t,e);for(;e<t.length&&!/\s/.test(t[e]);)e++;let n=t.substring(i,e);for(F(n,{xmlVersion:this.xmlVersion}),i=e=V(t,e);e<t.length&&!/\s/.test(t[e]);)e++;let r=t.substring(i,e);if(!F(r,{xmlVersion:this.xmlVersion}))throw new Error(`Invalid attribute name: "${r}"`);e=V(t,e);let s="";if("NOTATION"===t.substring(e,e+8).toUpperCase()){if(s="NOTATION","("!==t[e=V(t,e+=8)])throw new Error(`Expected '(', found "${t[e]}"`);e++;let i=[];for(;e<t.length&&")"!==t[e];){const n=e;for(;e<t.length&&"|"!==t[e]&&")"!==t[e];)e++;let r=t.substring(n,e);if(r=r.trim(),!F(r,{xmlVersion:this.xmlVersion}))throw new Error(`Invalid notation name: "${r}"`);i.push(r),"|"===t[e]&&(e++,e=V(t,e))}if(")"!==t[e])throw new Error("Unterminated list of notations");e++,s+=" ("+i.join("|")+")"}else{const i=e;for(;e<t.length&&!/\s/.test(t[e]);)e++;s+=t.substring(i,e);const n=["CDATA","ID","IDREF","IDREFS","ENTITY","ENTITIES","NMTOKEN","NMTOKENS"];if(!this.suppressValidationErr&&!n.includes(s.toUpperCase()))throw new Error(`Invalid attribute type: "${s}"`)}e=V(t,e);let o="";return"#REQUIRED"===t.substring(e,e+8).toUpperCase()?(o="#REQUIRED",e+=8):"#IMPLIED"===t.substring(e,e+7).toUpperCase()?(o="#IMPLIED",e+=7):[e,o]=this.readIdentifierVal(t,e,"ATTLIST"),{elementName:n,attributeName:r,attributeType:s,defaultValue:o,index:e}}}const V=(t,e)=>{for(;e<t.length&&/\s/.test(t[e]);)e++;return e};function q(t,e,i){for(let n=0;n<e.length;n++)if(e[n]!==t[i+n+1])return!1;return!0}function F(t,e){if(R(t,{xmlVersion:e}))return t;throw new Error(`Invalid entity name ${t}`)}const U=[48,1632,1776,2406,2534,2662,2790,2918,3046,3174,3302,3430,3558,3664,3792,3872,4160,4240,6112,6160,6470,6608,6784,6800,6992,7088,7232,7248,65296,120782,120792,120802,120812,120822,66720,68912,69734,69872,69942,70096,70384,70736,70864,71248,71360,71472,71904,72016,72688,72784,73040,73120,73552,92768,92864,93008,123200,123632,124144,125264,130032],G=new Map,B=1632,W=new Uint8Array(63904).fill(255);for(const t of U)for(let e=0;e<10;e++){const i=t+e;i<=65535?W[i-B]=e:G.set(i,e)}const X=new Set([8722,65293,65123]),Y=/^[-+]?0x[a-fA-F0-9]+$/,z=/^0b[01]+$/,H=/^0o[0-7]+$/,Q=/^([\-\+])?(0*)([0-9]*(\.[0-9]*)?)$/,J={hex:!0,binary:!1,octal:!1,leadingZeros:!0,decimalPoint:".",eNotation:!0,infinity:"original",unicode:!1};function Z(t,e={}){if(e=Object.assign({},J,e),!t||"string"!=typeof t)return t;let i=t.trim();if(0===i.length)return t;if(void 0!==e.skipLike&&e.skipLike.test(i))return t;if("0"===i)return 0;if(e.unicode&&(i=function(t){if("string"!=typeof t)return t;const e=t.length;if(0===e)return t;let i=-1;for(let n=0;n<e;n++){const r=t.charCodeAt(n);if(!(r>=48&&r<=57||45===r))if(r<B){if(X.has(r)){i=n;break}}else if(r>=55296&&r<=56319){if(n+1<e){const e=t.charCodeAt(n+1);if(e>=56320&&e<=57343){const t=65536+(r-55296<<10)+(e-56320);if(G.has(t)){i=n;break}}}}else if(255!==W[r-B]||X.has(r)){i=n;break}}if(-1===i)return t;const n=[];i>0&&n.push(t.slice(0,i));for(let r=i;r<e;r++){const i=t.charCodeAt(r);if(i>=48&&i<=57||45===i){n.push(t[r]);continue}if(i<B){n.push(X.has(i)?"-":t[r]);continue}if(i>=55296&&i<=56319){if(r+1<e){const e=t.charCodeAt(r+1);if(e>=56320&&e<=57343){const t=65536+(i-55296<<10)+(e-56320),s=G.get(t);if(void 0!==s){n.push(String.fromCharCode(s+48)),r++;continue}}}n.push(t[r]);continue}if(X.has(i)){n.push("-");continue}const s=W[i-B];n.push(255!==s?String.fromCharCode(s+48):t[r])}return n.join("")}(i),"0"===i))return 0;if(e.hex&&Y.test(i))return tt(i,16);if(e.binary&&z.test(i))return tt(i,2);if(e.octal&&H.test(i))return tt(i,8);if(isFinite(i)){if(i.includes("e")||i.includes("E"))return function(t,e,i){if(!i.eNotation)return t;const n=e.match(K);if(n){let r=n[1]||"";const s=-1===n[3].indexOf("e")?"E":"e",o=n[2],a=r?t[o.length+1]===s:t[o.length]===s;return o.length>1&&a?t:(1!==o.length||!n[3].startsWith(`.${s}`)&&n[3][0]!==s)&&o.length>0?i.leadingZeros&&!a?(e=(n[1]||"")+n[3],Number(e)):t:Number(e)}return t}(t,i,e);{const r=Q.exec(i);if(r){const s=r[1]||"",o=r[2];let a=(n=r[3])&&-1!==n.indexOf(".")?("."===(n=n.replace(/0+$/,""))?n="0":"."===n[0]?n="0"+n:"."===n[n.length-1]&&(n=n.substring(0,n.length-1)),n):n;const l=s?"."===t[o.length+1]:"."===t[o.length];if(!e.leadingZeros&&(o.length>1||1===o.length&&!l))return t;{const n=Number(i),r=String(n);if(0===n)return n;if(-1!==r.search(/[eE]/))return e.eNotation?n:t;if(-1!==i.indexOf("."))return"0"===r||r===a||r===`${s}${a}`?n:t;let l=o?a:i;return o?l===r||s+l===r?n:t:l===r||l===s+r?n:t}}return t}}var n;return function(t,e,i){const n=e===1/0;switch(i.infinity.toLowerCase()){case"null":return null;case"infinity":return e;case"string":return n?"Infinity":"-Infinity";default:return t}}(t,Number(i),e)}const K=/^([-+])?(0*)(\d*(\.\d*)?[eE][-\+]?\d+)$/;function tt(t,e){const i=t.trim();if(2!==e&&8!==e||(t=i.substring(2)),parseInt)return parseInt(t,e);if(Number.parseInt)return Number.parseInt(t,e);if(window&&window.parseInt)return window.parseInt(t,e);throw new Error("parseInt, Number.parseInt, window.parseInt are not supported")}class et{constructor(t){this._matcher=t}get separator(){return this._matcher.separator}getCurrentTag(){const t=this._matcher.path;return t.length>0?t[t.length-1].tag:void 0}getCurrentNamespace(){const t=this._matcher.path;return t.length>0?t[t.length-1].namespace:void 0}getAttrValue(t){const e=this._matcher.path;if(0!==e.length)return e[e.length-1].values?.[t]}hasAttr(t){const e=this._matcher.path;if(0===e.length)return!1;const i=e[e.length-1];return void 0!==i.values&&t in i.values}getPosition(){const t=this._matcher.path;return 0===t.length?-1:t[t.length-1].position??0}getCounter(){const t=this._matcher.path;return 0===t.length?-1:t[t.length-1].counter??0}getIndex(){return this.getPosition()}getDepth(){return this._matcher.path.length}toString(t,e=!0){return this._matcher.toString(t,e)}toArray(){return this._matcher.path.map(t=>t.tag)}matches(t){return this._matcher.matches(t)}matchesAny(t){return t.matchesAny(this._matcher)}}class it{constructor(t={}){this.separator=t.separator||".",this.path=[],this.siblingStacks=[],this._pathStringCache=null,this._view=new et(this)}push(t,e=null,i=null){this._pathStringCache=null,this.path.length>0&&(this.path[this.path.length-1].values=void 0);const n=this.path.length;this.siblingStacks[n]||(this.siblingStacks[n]=new Map);const r=this.siblingStacks[n],s=i?`${i}:${t}`:t,o=r.get(s)||0;let a=0;for(const t of r.values())a+=t;r.set(s,o+1);const l={tag:t,position:a,counter:o};null!=i&&(l.namespace=i),null!=e&&(l.values=e),this.path.push(l)}pop(){if(0===this.path.length)return;this._pathStringCache=null;const t=this.path.pop();return this.siblingStacks.length>this.path.length+1&&(this.siblingStacks.length=this.path.length+1),t}updateCurrent(t){if(this.path.length>0){const e=this.path[this.path.length-1];null!=t&&(e.values=t)}}getCurrentTag(){return this.path.length>0?this.path[this.path.length-1].tag:void 0}getCurrentNamespace(){return this.path.length>0?this.path[this.path.length-1].namespace:void 0}getAttrValue(t){if(0!==this.path.length)return this.path[this.path.length-1].values?.[t]}hasAttr(t){if(0===this.path.length)return!1;const e=this.path[this.path.length-1];return void 0!==e.values&&t in e.values}getPosition(){return 0===this.path.length?-1:this.path[this.path.length-1].position??0}getCounter(){return 0===this.path.length?-1:this.path[this.path.length-1].counter??0}getIndex(){return this.getPosition()}getDepth(){return this.path.length}toString(t,e=!0){const i=t||this.separator;if(i===this.separator&&!0===e){if(null!==this._pathStringCache)return this._pathStringCache;const t=this.path.map(t=>t.namespace?`${t.namespace}:${t.tag}`:t.tag).join(i);return this._pathStringCache=t,t}return this.path.map(t=>e&&t.namespace?`${t.namespace}:${t.tag}`:t.tag).join(i)}toArray(){return this.path.map(t=>t.tag)}reset(){this._pathStringCache=null,this.path=[],this.siblingStacks=[]}matches(t){const e=t.segments;return 0!==e.length&&(t.hasDeepWildcard()?this._matchWithDeepWildcard(e):this._matchSimple(e))}_matchSimple(t){if(this.path.length!==t.length)return!1;for(let e=0;e<t.length;e++)if(!this._matchSegment(t[e],this.path[e],e===this.path.length-1))return!1;return!0}_matchWithDeepWildcard(t){let e=this.path.length-1,i=t.length-1;for(;i>=0&&e>=0;){const n=t[i];if("deep-wildcard"===n.type){if(i--,i<0)return!0;const n=t[i];let r=!1;for(let t=e;t>=0;t--)if(this._matchSegment(n,this.path[t],t===this.path.length-1)){e=t-1,i--,r=!0;break}if(!r)return!1}else{if(!this._matchSegment(n,this.path[e],e===this.path.length-1))return!1;e--,i--}}return i<0}_matchSegment(t,e,i){if("*"!==t.tag&&t.tag!==e.tag)return!1;if(void 0!==t.namespace&&"*"!==t.namespace&&t.namespace!==e.namespace)return!1;if(void 0!==t.attrName){if(!i)return!1;if(!e.values||!(t.attrName in e.values))return!1;if(void 0!==t.attrValue&&String(e.values[t.attrName])!==String(t.attrValue))return!1}if(void 0!==t.position){if(!i)return!1;const n=e.counter??0;if("first"===t.position&&0!==n)return!1;if("odd"===t.position&&n%2!=1)return!1;if("even"===t.position&&n%2!=0)return!1;if("nth"===t.position&&n!==t.positionValue)return!1}return!0}matchesAny(t){return t.matchesAny(this)}snapshot(){return{path:this.path.map(t=>({...t})),siblingStacks:this.siblingStacks.map(t=>new Map(t))}}restore(t){this._pathStringCache=null,this.path=t.path.map(t=>({...t})),this.siblingStacks=t.siblingStacks.map(t=>new Map(t))}readOnly(){return this._view}}class nt{constructor(t,e={},i){this.pattern=t,this.separator=e.separator||".",this.segments=this._parse(t),this.data=i,this._hasDeepWildcard=this.segments.some(t=>"deep-wildcard"===t.type),this._hasAttributeCondition=this.segments.some(t=>void 0!==t.attrName),this._hasPositionSelector=this.segments.some(t=>void 0!==t.position)}_parse(t){const e=[];let i=0,n="";for(;i<t.length;)t[i]===this.separator?i+1<t.length&&t[i+1]===this.separator?(n.trim()&&(e.push(this._parseSegment(n.trim())),n=""),e.push({type:"deep-wildcard"}),i+=2):(n.trim()&&e.push(this._parseSegment(n.trim())),n="",i++):(n+=t[i],i++);return n.trim()&&e.push(this._parseSegment(n.trim())),e}_parseSegment(t){const e={type:"tag"};let i=null,n=t;const r=t.match(/^([^\[]+)(\[[^\]]*\])(.*)$/);if(r&&(n=r[1]+r[3],r[2])){const t=r[2].slice(1,-1);t&&(i=t)}let s,o,a=n;if(n.includes("::")){const e=n.indexOf("::");if(s=n.substring(0,e).trim(),a=n.substring(e+2).trim(),!s)throw new Error(`Invalid namespace in pattern: ${t}`)}let l=null;if(a.includes(":")){const t=a.lastIndexOf(":"),e=a.substring(0,t).trim(),i=a.substring(t+1).trim();["first","last","odd","even"].includes(i)||/^nth\(\d+\)$/.test(i)?(o=e,l=i):o=a}else o=a;if(!o)throw new Error(`Invalid segment pattern: ${t}`);if(e.tag=o,s&&(e.namespace=s),i)if(i.includes("=")){const t=i.indexOf("=");e.attrName=i.substring(0,t).trim(),e.attrValue=i.substring(t+1).trim()}else e.attrName=i.trim();if(l){const t=l.match(/^nth\((\d+)\)$/);t?(e.position="nth",e.positionValue=parseInt(t[1],10)):e.position=l}return e}get length(){return this.segments.length}hasDeepWildcard(){return this._hasDeepWildcard}hasAttributeCondition(){return this._hasAttributeCondition}hasPositionSelector(){return this._hasPositionSelector}toString(){return this.pattern}}class rt{constructor(){this._byDepthAndTag=new Map,this._wildcardByDepth=new Map,this._deepWildcards=[],this._patterns=new Set,this._sealed=!1}add(t){if(this._sealed)throw new TypeError("ExpressionSet is sealed. Create a new ExpressionSet to add more expressions.");if(this._patterns.has(t.pattern))return this;if(this._patterns.add(t.pattern),t.hasDeepWildcard())return this._deepWildcards.push(t),this;const e=t.length,i=t.segments[t.segments.length-1],n=i?.tag;if(n&&"*"!==n){const i=`${e}:${n}`;this._byDepthAndTag.has(i)||this._byDepthAndTag.set(i,[]),this._byDepthAndTag.get(i).push(t)}else this._wildcardByDepth.has(e)||this._wildcardByDepth.set(e,[]),this._wildcardByDepth.get(e).push(t);return this}addAll(t){for(const e of t)this.add(e);return this}has(t){return this._patterns.has(t.pattern)}get size(){return this._patterns.size}seal(){return this._sealed=!0,this}get isSealed(){return this._sealed}matchesAny(t){return null!==this.findMatch(t)}findMatch(t){const e=t.getDepth(),i=`${e}:${t.getCurrentTag()}`,n=this._byDepthAndTag.get(i);if(n)for(let e=0;e<n.length;e++)if(t.matches(n[e]))return n[e];const r=this._wildcardByDepth.get(e);if(r)for(let e=0;e<r.length;e++)if(t.matches(r[e]))return r[e];for(let e=0;e<this._deepWildcards.length;e++)if(t.matches(this._deepWildcards[e]))return this._deepWildcards[e];return null}}const st={cent:"¢",pound:"£",curren:"¤",yen:"¥",euro:"€",dollar:"$",fnof:"ƒ",inr:"₹",af:"؋",birr:"ብር",peso:"₱",rub:"₽",won:"₩",yuan:"¥",cedil:"¸"},ot={amp:"&",apos:"'",gt:">",lt:"<",quot:'"'},at={nbsp:" ",copy:"©",reg:"®",trade:"™",mdash:"—",ndash:"–",hellip:"…",laquo:"«",raquo:"»",lsquo:"‘",rsquo:"’",ldquo:"“",rdquo:"”",bull:"•",para:"¶",sect:"§",deg:"°",frac12:"½",frac14:"¼",frac34:"¾"},lt=Object.freeze({ALLOW:"allow",BLOCK:"block",THROW:"throw"}),pt=new Set("!?\\\\/[]$%{}^&*()<>|+");function ct(t){if("#"===t[0])throw new Error(`[EntityReplacer] Invalid character '#' in entity name: "${t}"`);for(const e of t)if(pt.has(e))throw new Error(`[EntityReplacer] Invalid character '${e}' in entity name: "${t}"`);return t}function ht(...t){const e=Object.create(null);for(const i of t)if(i)for(const t of Object.keys(i)){const n=i[t];if("string"==typeof n)e[t]=n;else if(n&&"object"==typeof n&&void 0!==n.val){const i=n.val;"string"==typeof i&&(e[t]=i)}}return e}const dt="external",ut="base",ft="all",gt=Object.freeze({allow:0,leave:1,remove:2,throw:3}),mt=new Set([9,10,13]);class xt{constructor(t={}){var e;this._limit=t.limit||{},this._maxTotalExpansions=this._limit.maxTotalExpansions||0,this._maxExpandedLength=this._limit.maxExpandedLength||0,this._postCheck="function"==typeof t.postCheck?t.postCheck:t=>t,this._limitTiers=(e=this._limit.applyLimitsTo??dt)&&e!==dt?e===ft?new Set([ft]):e===ut?new Set([ut]):Array.isArray(e)?new Set(e):new Set([dt]):new Set([dt]),this._numericAllowed=t.numericAllowed??!0,this._baseMap=ht(ot,t.namedEntities||null),this._externalMap=Object.create(null),this._inputMap=Object.create(null),this._totalExpansions=0,this._expandedLength=0,this._removeSet=new Set(t.remove&&Array.isArray(t.remove)?t.remove:[]),this._leaveSet=new Set(t.leave&&Array.isArray(t.leave)?t.leave:[]);const i=function(t){if(!t)return{xmlVersion:1,onLevel:gt.allow,nullLevel:gt.remove};const e=1.1===t.xmlVersion?1.1:1,i=gt[t.onNCR]??gt.allow,n=gt[t.nullNCR]??gt.remove;return{xmlVersion:e,onLevel:i,nullLevel:Math.max(n,gt.remove)}}(t.ncr);this._ncrXmlVersion=i.xmlVersion,this._ncrOnLevel=i.onLevel,this._ncrNullLevel=i.nullLevel,this._onExternalEntity="function"==typeof t.onExternalEntity?t.onExternalEntity:null,this._onInputEntity="function"==typeof t.onInputEntity?t.onInputEntity:null}_applyRegistrationHook(t,e,i,n){if(!t)return!0;const r=t(e,i);if(r===lt.BLOCK)return!1;if(r===lt.THROW)throw new Error(`[EntityDecoder] Registration of ${n} entity "&${e};" was rejected by hook`);return!0}setExternalEntities(t){if(t)for(const e of Object.keys(t))ct(e);if(!this._onExternalEntity)return void(this._externalMap=ht(t));const e=ht(t),i=Object.create(null);for(const[t,n]of Object.entries(e))this._applyRegistrationHook(this._onExternalEntity,t,n,"external")&&(i[t]=n);this._externalMap=i}addExternalEntity(t,e){ct(t),"string"==typeof e&&-1===e.indexOf("&")&&this._applyRegistrationHook(this._onExternalEntity,t,e,"external")&&(this._externalMap[t]=e)}addInputEntities(t){if(this._totalExpansions=0,this._expandedLength=0,!this._onInputEntity)return void(this._inputMap=ht(t));const e=ht(t),i=Object.create(null);for(const[t,n]of Object.entries(e))this._applyRegistrationHook(this._onInputEntity,t,n,"input")&&(i[t]=n);this._inputMap=i}reset(){return this._inputMap=Object.create(null),this._totalExpansions=0,this._expandedLength=0,this}setXmlVersion(t){this._ncrXmlVersion=1.1===t?1.1:1}decode(t){if("string"!=typeof t||0===t.length)return t;if(-1===t.indexOf("&"))return t;const e=t,i=[],n=t.length;let r=0,s=0;const o=this._maxTotalExpansions>0,a=this._maxExpandedLength>0,l=o||a;for(;s<n;){if(38!==t.charCodeAt(s)){s++;continue}let e=s+1;for(;e<n&&59!==t.charCodeAt(e)&&e-s<=32;)e++;if(e>=n||59!==t.charCodeAt(e)){s++;continue}const p=t.slice(s+1,e);if(0===p.length){s++;continue}let c,h;if(this._removeSet.has(p))c="",void 0===h&&(h=dt);else{if(this._leaveSet.has(p)){s++;continue}if(35===p.charCodeAt(0)){const t=this._resolveNCR(p);if(void 0===t){s++;continue}c=t,h=ut}else{const t=this._resolveName(p);c=t?.value,h=t?.tier}}if(void 0!==c){if(s>r&&i.push(t.slice(r,s)),i.push(c),r=e+1,s=r,l&&this._tierCounts(h)){if(o&&(this._totalExpansions++,this._totalExpansions>this._maxTotalExpansions))throw new Error(`[EntityReplacer] Entity expansion count limit exceeded: ${this._totalExpansions} > ${this._maxTotalExpansions}`);if(a){const t=c.length-(p.length+2);if(t>0&&(this._expandedLength+=t,this._expandedLength>this._maxExpandedLength))throw new Error(`[EntityReplacer] Expanded content length limit exceeded: ${this._expandedLength} > ${this._maxExpandedLength}`)}}}else s++}r<n&&i.push(t.slice(r));const p=0===i.length?t:i.join("");return this._postCheck(p,e)}_tierCounts(t){return!!this._limitTiers.has(ft)||this._limitTiers.has(t)}_resolveName(t){return t in this._inputMap?{value:this._inputMap[t],tier:dt}:t in this._externalMap?{value:this._externalMap[t],tier:dt}:t in this._baseMap?{value:this._baseMap[t],tier:ut}:void 0}_classifyNCR(t){return 0===t?this._ncrNullLevel:t>=55296&&t<=57343||1===this._ncrXmlVersion&&t>=1&&t<=31&&!mt.has(t)?gt.remove:-1}_applyNCRAction(t,e,i){switch(t){case gt.allow:return String.fromCodePoint(i);case gt.remove:return"";case gt.leave:return;case gt.throw:throw new Error(`[EntityDecoder] Prohibited numeric character reference &${e}; (U+${i.toString(16).toUpperCase().padStart(4,"0")})`);default:return String.fromCodePoint(i)}}_resolveNCR(t){const e=t.charCodeAt(1);let i;if(i=120===e||88===e?parseInt(t.slice(2),16):parseInt(t.slice(1),10),Number.isNaN(i)||i<0||i>1114111)return;const n=this._classifyNCR(i);if(!this._numericAllowed&&n<gt.remove)return;const r=-1===n?this._ncrOnLevel:Math.max(this._ncrOnLevel,n);return this._applyNCRAction(r,t,i)}}const bt=[{id:"sql-block-comment-open",description:"SQL block comment open: /* ... */ — unusual in legitimate user text",pattern:/\/\*/},{id:"sql-union-select",description:"UNION SELECT — most common SQL injection aggregation attack",pattern:/\bUNION\s{1,20}(?:ALL\s{1,20})?SELECT\b/i},{id:"sql-drop-table",description:"DROP TABLE — destructive DDL injection",pattern:/\bDROP\s{1,20}TABLE\b/i},{id:"sql-drop-database",description:"DROP DATABASE — destructive DDL injection",pattern:/\bDROP\s{1,20}DATABASE\b/i},{id:"sql-insert-into",description:"INSERT INTO — data injection",pattern:/\bINSERT\s{1,20}INTO\b/i},{id:"sql-delete-from",description:"DELETE FROM — data deletion injection",pattern:/\bDELETE\s{1,20}FROM\b/i},{id:"sql-update-set",description:"UPDATE ... SET — data modification injection",pattern:/\bUPDATE\b[\s\S]{1,60}\bSET\b/i},{id:"sql-exec-xp",description:"EXEC xp_ — MSSQL extended stored procedure execution",pattern:/\bEXEC(?:UTE)?\s{1,20}xp_/i},{id:"sql-tautology-string",description:'Classic string tautology: \' OR \'1\'=\'1 or " OR "1"="1"',pattern:/'\s{0,10}OR\s{0,10}'[^']{0,20}'\s*=\s*'[^']{0,20}/i},{id:"sql-tautology-numeric",description:"Numeric tautology: OR 1=1",pattern:/\bOR\s{1,10}1\s*=\s*1\b/i},{id:"sql-always-true-zero",description:"Numeric tautology: OR 0=0",pattern:/\bOR\s{1,10}0\s*=\s*0\b/i},{id:"sql-sleep-benchmark",description:"Time-based blind injection: SLEEP() or BENCHMARK()",pattern:/\b(?:SLEEP|BENCHMARK)\s*\(/i},{id:"sql-waitfor-delay",description:"MSSQL time-based blind injection: WAITFOR DELAY",pattern:/\bWAITFOR\s{1,20}DELAY\b/i},{id:"sql-char-function",description:"CHAR() function — used to obfuscate injected strings",pattern:/\bCHAR\s*\(\s*\d{1,3}/i},{id:"sql-information-schema",description:"INFORMATION_SCHEMA — reconnaissance query for table/column enumeration",pattern:/\bINFORMATION_SCHEMA\b/i}],yt="[\"'\\s]*:",Nt={HTML:[{id:"html-script-open",description:"<script opening tag",pattern:/<script[\s>/]/i},{id:"html-script-close",description:"<\/script closing tag",pattern:/<\/script[\s>]/i},{id:"html-javascript-protocol",description:"javascript: URI scheme (with optional whitespace/encoding)",pattern:/j[\t\n\r ]*a[\t\n\r ]*v[\t\n\r ]*a[\t\n\r ]*s[\t\n\r ]*c[\t\n\r ]*r[\t\n\r ]*i[\t\n\r ]*p[\t\n\r ]*t[\t\n\r ]*:/i},{id:"html-vbscript-protocol",description:"vbscript: URI scheme",pattern:/vbscript[\t\n\r ]*:/i},{id:"html-data-html",description:"data:text/html URI — can execute scripts in browsers",pattern:/data[\t\n\r ]*:[\t\n\r ]*text\/html/i},{id:"html-data-xhtml",description:"data:application/xhtml+xml URI",pattern:/data[\t\n\r ]*:[\t\n\r ]*application\/xhtml/i},{id:"html-data-svg",description:"data:image/svg+xml URI — can execute scripts",pattern:/data[\t\n\r ]*:[\t\n\r ]*image\/svg\+xml/i},{id:"html-inline-event-handler",description:"Inline event handler attributes: onclick=, onerror=, onload=, etc.",pattern:/\bon\w{1,30}\s*=/i},{id:"html-entity-obfuscated-script",description:"HTML-entity-encoded <script (e.g. &#x3C;script or &lt;script)",pattern:/(?:&#x0*3[Cc];?|&#0*60;?|&lt;)\s*script/i},{id:"html-entity-obfuscated-javascript",description:'HTML-entity-encoded javascript: (partial — catches common &#106; or &#x6a; for "j")',pattern:/(?:&#x0*6[Aa];?|&#0*106;?)\s*(?:&#x0*61;?|a)[\s\S]{0,80}script\s*:/i},{id:"html-style-expression",description:"CSS expression() — IE-era code execution in style attributes",pattern:/style[\s\S]{0,20}expression\s*\(/i},{id:"html-object-embed",description:"<object or <embed tags that can load active content",pattern:/<(?:object|embed)[\s>/]/i},{id:"html-base-tag",description:"<base href= — can hijack all relative URLs on a page",pattern:/<base[\s>]/i},{id:"html-meta-refresh",description:'<meta http-equiv="refresh" — can redirect users',pattern:/<meta[\s\S]{0,40}http-equiv[\s\S]{0,20}refresh/i},{id:"html-srcdoc",description:"srcdoc= attribute on iframes — embeds HTML that can run scripts",pattern:/srcdoc\s*=/i},{id:"html-iframe",description:"<iframe tag",pattern:/<iframe[\s>/]/i},{id:"html-form",description:"<form tag — can be used for phishing / credential harvesting injection",pattern:/<form[\s>/]/i}],XML:[{id:"xml-cdata-injection",description:"CDATA section injection: <![CDATA[ breaks out of text node context",pattern:/<!\[CDATA\[/i},{id:"xml-cdata-close",description:"CDATA close sequence: ]]> can terminate an enclosing CDATA section",pattern:/\]\]>/},{id:"xml-processing-instruction",description:"XML processing instruction: <?xml-stylesheet or <?php etc.",pattern:/<\?(?:xml[\- ]|php|asp)/i},{id:"xml-doctype-injection",description:"DOCTYPE declaration embedded in content — can define entities",pattern:/<!DOCTYPE(?:[\s[]|$)/i},{id:"xml-entity-system",description:"SYSTEM keyword — used in external entity declarations (XXE)",pattern:/\bSYSTEM\s+["']/i},{id:"xml-entity-public",description:"PUBLIC keyword — used in external entity declarations (XXE)",pattern:/\bPUBLIC\s+["']/i},{id:"xml-entity-declaration",description:"<!ENTITY declaration — defines entities, potential XXE or entity expansion",pattern:/<!ENTITY[\s%]/i},{id:"xml-billion-laughs",description:"Entity reference chaining / billion laughs: repeated &eX; style references",pattern:/(?:&\w{1,20};){3,}/},{id:"xml-namespace-confusion",description:"xmlns: attribute injection — can redefine namespaces to confuse parsers",pattern:/\bxmlns\s*(?::\w{1,40})?\s*=/i},{id:"xml-comment-injection",description:"\x3c!-- comment injection — can hide content from some parsers",pattern:/<!--/},{id:"xml-comment-close",description:"--\x3e closes an enclosing XML comment",pattern:/-->/},{id:"xml-pi-close",description:"?> closes an enclosing processing instruction",pattern:/\?>/}],SVG:[{id:"svg-script-element",description:"<script element inside SVG executes JavaScript",pattern:/<script[\s>/]/i},{id:"svg-xlink-href-javascript",description:"xlink:href with javascript: — classic SVG XSS via <a> or <use>",pattern:/xlink\s*:\s*href\s*=\s*["']?\s*javascript\s*:/i},{id:"svg-href-javascript",description:"href= with javascript: in SVG context (<a>, <animate>, etc.)",pattern:/href\s*=\s*["']?\s*javascript\s*:/i},{id:"svg-foreignobject",description:"<foreignObject embeds HTML inside SVG — can execute scripts",pattern:/<foreignObject[\s>/]/i},{id:"svg-use-external",description:"<use xlink:href or href pointing to external resource (non-fragment URL)",pattern:/<use[\s\S]{0,60}(?:xlink\s*:\s*)?href\s*=\s*(?:["'][^#]|[^"'#\s>])/i},{id:"svg-animate-href",description:'<animate attributeName="href" — can dynamically change href to javascript:',pattern:/<animate[\s\S]{0,80}attributeName\s*=\s*["'][\s]*href["']/i},{id:"svg-animate-xlinkhref",description:'<animate attributeName="xlink:href"',pattern:/<animate[\s\S]{0,80}attributeName\s*=\s*["'][\s]*xlink\s*:\s*href["']/i},{id:"svg-set-javascript",description:'<set to="javascript:..." — sets an attribute to a javascript: URI',pattern:/<set[\s\S]{0,80}to\s*=\s*["']?\s*javascript\s*:/i},{id:"svg-event-handler",description:"SVG-specific event handler attributes: onload=, onerror=, onactivate=, etc.",pattern:/\bon(?:load|error|activate|begin|end|repeat|focus|blur|click|mouse\w{1,20}|key\w{1,20})\s*=/i},{id:"svg-handler-generic",description:"Generic on* handler catch-all for SVG attributes",pattern:/\bon\w{1,30}\s*=/i},{id:"svg-filter-feimage",description:"<feImage href= — filter primitive that can load external resources",pattern:/<feImage[\s\S]{0,80}(?:xlink\s*:\s*)?href\s*=/i},{id:"svg-image-external",description:"<image xlink:href with http/https or javascript protocol",pattern:/<image[\s\S]{0,80}(?:xlink\s*:\s*)?href\s*=\s*["']?\s*(?:https?|javascript)\s*:/i},{id:"svg-style-javascript",description:"style= attribute containing javascript: (e.g. background:url(javascript:...))",pattern:/style\s*=[\s\S]{0,60}javascript\s*:/i}],SQL:bt,"SQL-STRICT":[...bt,{id:"sql-line-comment",description:"SQL line comment: -- followed by whitespace or end of string",pattern:/--(?:\s|$)/},{id:"sql-stacked-query",description:"Stacked queries: semicolon immediately followed by a SQL keyword",pattern:/;\s{0,10}(?:SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC)\b/i},{id:"sql-hex-encoding",description:"Hex-encoded string injection: 0x41414141 style (MySQL)",pattern:/\b0x[0-9a-f]{4,}/i}],SHELL:[{id:"shell-path-traversal-unix",description:"Unix path traversal: ../  — climbing the directory tree",pattern:/\.\.\//},{id:"shell-path-traversal-windows",description:"Windows path traversal: ..\\ — climbing the directory tree",pattern:/\.\.\\/},{id:"shell-path-traversal-encoded",description:"URL-encoded path traversal: %2e%2e or %2f variants",pattern:/%2e%2e|%2f\.\.|\.\.%2f/i},{id:"shell-null-byte",description:"Null byte injection: \\x00 or %00 — truncates strings in C-backed functions",pattern:/\x00|%00/},{id:"shell-semicolon",description:"Semicolon command separator: cmd1; cmd2",pattern:/;/},{id:"shell-pipe",description:"Pipe operator: cmd1 | cmd2",pattern:/\|/},{id:"shell-and-operator",description:"AND operator: cmd1 && cmd2",pattern:/&&/},{id:"shell-or-operator",description:"OR operator: cmd1 || cmd2",pattern:/\|\|/},{id:"shell-backtick",description:"Backtick command substitution: `cmd`",pattern:/`/},{id:"shell-dollar-paren",description:"Dollar-paren command substitution: $(cmd)",pattern:/\$\(/},{id:"shell-dollar-brace",description:"Dollar-brace variable expansion: ${var} — can be abused for injection",pattern:/\$\{/},{id:"shell-redirect-out",description:"Output redirection: cmd > file or cmd >> file",pattern:/>{1,2}/},{id:"shell-redirect-in",description:"Input redirection: cmd < file",pattern:/</},{id:"shell-newline-injection",description:"Newline injection: \\n or \\r — can inject new shell commands",pattern:/[\n\r]/},{id:"shell-glob-star",description:"Glob expansion: * or ? — can expand to unintended files",pattern:/[/\\][*?]/},{id:"shell-absolute-root",description:"Absolute root path injection: string starting with / or \\ (Windows UNC)",pattern:/^(?:\/|\\\\)/},{id:"shell-windows-drive",description:"Windows drive letter path injection: C:\\ or D:/",pattern:/^[a-zA-Z]:[/\\]/},{id:"shell-curl-wget",description:"curl/wget with URL or flags — can exfiltrate data or download payloads",pattern:/\b(?:curl|wget)\s+(?:https?:\/\/|ftp:\/\/|-)/i}],REDOS:[{id:"redos-nested-quantifier-plus",description:"Nested + quantifier inside a group with outer quantifier: (a+)+, (.+b)*, etc.",pattern:/\([^)]*\+[^)]*\)[+*]/},{id:"redos-nested-quantifier-star",description:"Nested * quantifier: (a*)* or (a*)+ — catastrophic backtracking",pattern:/\([^)]*\*[^)]*\)[*+]/},{id:"redos-nested-groups",description:"Doubly nested quantified groups: ((a+)+) — guaranteed catastrophic",pattern:/\(\([^)]{0,40}\)[+*]\)[+*]/},{id:"redos-alternation-overlap",description:"Overlapping alternation under quantifier: (a|a)+ — ambiguous NFA paths",pattern:/\(([^|()]{1,20})\|(?:\1)(?:\|[^|()]{1,20}){0,5}\)[+*?]{1,2}/},{id:"redos-star-plus-concat",description:"(x*x)+ pattern — triggers super-linear backtracking",pattern:/\([^)]{0,10}\*[^)]{0,10}\)[+*]/},{id:"redos-dot-star-greedy",description:"(.*){n,} or (.+){n,} — repeated greedy dot quantifiers",pattern:/\(\.[*+]\)\{?\d/},{id:"redos-large-repetition",description:"Very large fixed or range repetition count {1000,} or {1000,n} — denial of service via backtracking",pattern:/\{\d{4,}(?:,\d*)?\}/},{id:"redos-catastrophic-alternation",description:"Long alternation with many similar branches — polynomial backtracking risk",pattern:/\([^)]{0,200}(?:\|[^|)]{0,50}){9,}\)/}],NOSQL:[{id:"nosql-where-operator",description:"$where — executes arbitrary JavaScript server-side in MongoDB",pattern:new RegExp(`\\$where${yt}`,"i")},{id:"nosql-ne-operator",description:'$ne — "not equal" operator used to bypass equality checks',pattern:new RegExp(`\\$ne${yt}`,"i")},{id:"nosql-gt-operator",description:'$gt — "greater than" used to bypass password/value checks',pattern:new RegExp(`\\$gte?${yt}`,"i")},{id:"nosql-lt-operator",description:'$lt / $lte — "less than" bypass variants',pattern:new RegExp(`\\$lte?${yt}`,"i")},{id:"nosql-regex-operator",description:"$regex — can be used to extract data character by character (blind injection)",pattern:new RegExp(`\\$regex${yt}`,"i")},{id:"nosql-or-operator",description:"$or — logical OR; used to create always-true conditions",pattern:new RegExp(`\\$or${yt}\\s*\\[`,"i")},{id:"nosql-and-operator",description:"$and — logical AND operator injection",pattern:new RegExp(`\\$and${yt}\\s*\\[`,"i")},{id:"nosql-nor-operator",description:"$nor — logical NOR operator injection",pattern:new RegExp(`\\$nor${yt}\\s*\\[`,"i")},{id:"nosql-exists-operator",description:"$exists — can enumerate fields to determine schema",pattern:new RegExp(`\\$exists${yt}`,"i")},{id:"nosql-in-operator",description:"$in — matches any value in a list; can enumerate values",pattern:new RegExp(`\\$in${yt}\\s*\\[`,"i")},{id:"nosql-expr-operator",description:"$expr — allows aggregation expressions in queries (MongoDB 3.6+)",pattern:new RegExp(`\\$expr${yt}`,"i")},{id:"nosql-function-operator",description:"$function — executes arbitrary JavaScript in MongoDB 4.4+",pattern:new RegExp(`\\$function${yt}`,"i")},{id:"nosql-accumulator-operator",description:"$accumulator — custom aggregation with arbitrary JS execution",pattern:new RegExp(`\\$accumulator${yt}`,"i")},{id:"nosql-proto-pollution",description:"__proto__ — prototype pollution via object key injection",pattern:/__proto__/},{id:"nosql-constructor-prototype",description:"constructor.prototype — alternative prototype pollution vector (dot notation or JSON key)",pattern:/constructor[\s"':.,{\[]*prototype/i},{id:"nosql-proto-bracket",description:'["__proto__"] — bracket-notation prototype pollution',pattern:/\[["']__proto__["']\]/}],LOG:[{id:"log-crlf-injection",description:"CRLF injection: literal \\r or \\n embeds fake log lines",pattern:/[\r\n]/},{id:"log-url-encoded-crlf",description:"URL-encoded CRLF: %0d, %0a, %0D, %0A — decoded by some log parsers",pattern:/%0[dDaA]/},{id:"log-unicode-newline",description:"Unicode newline variants: U+2028 (line separator), U+2029 (paragraph separator)",pattern:/[\u2028\u2029]/},{id:"log-log4shell-jndi",description:"Log4Shell: ${jndi:...} triggers remote code execution in Apache Log4j",pattern:/\$\{jndi\s*:/i},{id:"log-log4shell-obfuscated",description:"Obfuscated Log4Shell: ${::-j}... lookup-bypass prefix used to evade WAF detection",pattern:/\$\{::-/},{id:"log-log4j-lookup",description:"Log4j lookup syntax: ${env:...}, ${sys:...}, ${ctx:...} — data exfiltration",pattern:/\$\{(?:env|sys|ctx|main|map|sd|web|docker|k8s|spring)\s*:/i},{id:"log-ssti-double-brace",description:"SSTI double-brace: {{expression}} — Jinja2, Twig, Handlebars, etc.",pattern:/\{\{[\s\S]{0,80}\}\}/},{id:"log-ssti-hash-brace",description:"SSTI hash-brace: #{expression} — Thymeleaf, Velocity, Ruby ERB",pattern:/#\{[\s\S]{0,80}\}/},{id:"log-ssti-dollar-brace",description:"SSTI/EL injection: ${expression with operators or method calls} — JSP EL, Freemarker, SpEL",pattern:/\$\{[^}]*(?:\.|\(|\*|\+|\bclass\b|\bruntime\b|\bprocess\b|\bexec\b)[^}]{0,80}\}/i},{id:"log-ssti-percent-tag",description:"SSTI ERB/ASP tag: <%= expression %> — Ruby ERB, ASP",pattern:/<%=[\s\S]{0,80}%>/},{id:"log-null-byte",description:"Null byte: \\x00 or %00 — can truncate log entries in C-backed loggers",pattern:/\x00|%00/},{id:"log-ansi-escape",description:"ANSI escape sequence: ESC[ — can manipulate terminal output when logs are tailed",pattern:/\x1b\[/}]},Et=Nt,wt=Object.freeze(Object.fromEntries(Object.keys(Nt).map(t=>[t,t])));function vt(t,e){const i=Et[e];for(const n of i)if(n.pattern.test(t))return{context:e,id:n.id,description:n.description,pattern:n.pattern};return null}function St(t,e){if(function(t){if("string"!=typeof t)throw new TypeError("is-unsafe: first argument must be a string, got "+typeof t)}(t),function(t){if(!(t instanceof RegExp))if("string"!=typeof t){if(!Array.isArray(t))throw new TypeError("is-unsafe: second argument must be a context string, array of context strings, or RegExp. Got: "+typeof t);if(0===t.length)throw new TypeError("is-unsafe: context array must not be empty");for(const e of t)if("string"!=typeof e||!Et[e])throw new TypeError(`is-unsafe: unknown context "${e}" in array. Valid contexts: ${Object.keys(wt).join(", ")}`)}else if(!Et[t])throw new TypeError(`is-unsafe: unknown context "${t}". Valid contexts: ${Object.keys(wt).join(", ")}`)}(e),e instanceof RegExp)return e.test(t);if("string"==typeof e)return null!==vt(t,e);for(const i of e)if(null!==vt(t,i))return!0;return!1}function At(t,e){if(!t)return{};const i=e.attributesGroupName?t[e.attributesGroupName]:t;if(!i)return{};const n={};for(const t in i)t.startsWith(e.attributeNamePrefix)?n[t.substring(e.attributeNamePrefix.length)]=i[t]:n[t]=i[t];return n}function Tt(t){if(!t||"string"!=typeof t)return;const e=t.indexOf(":");if(-1!==e&&e>0){const i=t.substring(0,e);if("xmlns"!==i)return i}}class _t{constructor(t,e){var i;this.options=t,this.currentNode=null,this.tagsNodeStack=[],this.parseXml=jt,this.parseTextData=Ct,this.resolveNameSpace=$t,this.buildAttributesMap=Pt,this.isItStopNode=Dt,this.replaceEntitiesValue=kt,this.readStopNodeData=qt,this.saveTextToParentTag=Lt,this.addChild=It,this.ignoreAttributesFn="function"==typeof(i=this.options.ignoreAttributes)?i:Array.isArray(i)?t=>{for(const e of i){if("string"==typeof e&&t===e)return!0;if(e instanceof RegExp&&e.test(t))return!0}}:()=>!1,this.entityExpansionCount=0,this.currentExpandedLength=0;let n={...ot};this.options.entityDecoder?this.entityDecoder=this.options.entityDecoder:("object"==typeof this.options.htmlEntities?n=this.options.htmlEntities:!0===this.options.htmlEntities&&(n={...at,...st}),this.entityDecoder=new xt({namedEntities:{...n,...e},numericAllowed:this.options.htmlEntities,limit:{maxTotalExpansions:this.options.processEntities.maxTotalExpansions,maxExpandedLength:this.options.processEntities.maxExpandedLength,applyLimitsTo:this.options.processEntities.appliesTo},onInputEntity:(t,e)=>St(e,[wt.HTML,wt.XML])?lt.BLOCK:lt.ALLOW})),this.matcher=new it,this.readonlyMatcher=this.matcher.readOnly(),this.isCurrentNodeStopNode=!1,this.stopNodeExpressionsSet=new rt;const r=this.options.stopNodes;if(r&&r.length>0){for(let t=0;t<r.length;t++){const e=r[t];"string"==typeof e?this.stopNodeExpressionsSet.add(new nt(e)):e instanceof nt&&this.stopNodeExpressionsSet.add(e)}this.stopNodeExpressionsSet.seal()}}}function Ct(t,e,i,n,r,s,o){const a=this.options;if(void 0!==t&&(a.trimValues&&!n&&(t=t.trim()),t.length>0)){o||(t=this.replaceEntitiesValue(t,e,i));const n=a.jPath?i.toString():i,l=a.tagValueProcessor(e,t,n,r,s);return null==l?t:typeof l!=typeof t||l!==t?l:a.trimValues||t.trim()===t?Ft(t,a.parseTagValue,a.numberParseOptions):t}}function $t(t){if(this.options.removeNSPrefix){const e=t.split(":"),i="/"===t.charAt(0)?"/":"";if("xmlns"===e[0])return"";2===e.length&&(t=i+e[1])}return t}const Ot=new RegExp("([^\\s=]+)\\s*(=\\s*(['\"])([\\s\\S]*?)\\3)?","gm");function Pt(t,e,i,n=!1){const s=this.options;if(!0===n||!0!==s.ignoreAttributes&&"string"==typeof t){const n=r(t,Ot),o=n.length,a={},l=new Array(o);let p=!1;const c={};for(let t=0;t<o;t++){const e=this.resolveNameSpace(n[t][1]),r=n[t][4];if(e.length&&void 0!==r){let n=r;s.trimValues&&(n=n.trim()),n=this.replaceEntitiesValue(n,i,this.readonlyMatcher),l[t]=n,c[e]=n,p=!0}}p&&"object"==typeof e&&e.updateCurrent&&e.updateCurrent(c);const h=s.jPath?e.toString():this.readonlyMatcher;let d=!1;for(let t=0;t<o;t++){const e=this.resolveNameSpace(n[t][1]);if(this.ignoreAttributesFn(e,h))continue;let i=s.attributeNamePrefix+e;if(e.length)if(s.transformAttributeName&&(i=s.transformAttributeName(i)),i=Gt(i,s),void 0!==n[t][4]){const n=l[t],r=s.attributeValueProcessor(e,n,h);a[i]=null==r?n:typeof r!=typeof n||r!==n?r:Ft(n,s.parseAttributeValue,s.numberParseOptions),d=!0}else s.allowBooleanAttributes&&(a[i]=!0,d=!0)}if(!d)return;if(s.attributesGroupName&&!s.preserveOrder){const t={};return t[s.attributesGroupName]=a,t}return a}}const jt=function(t){t=t.replace(/\r\n?/g,"\n");const e=new O("!xml");let i=e,n="";this.matcher.reset(),this.entityDecoder.reset(),this.entityExpansionCount=0,this.currentExpandedLength=0;const r=this.options,s=new M(r.processEntities),o=t.length;for(let a=0;a<o;a++)if("<"===t[a]){const l=t.charCodeAt(a+1);if(47===l){const e=Rt(t,">",a,"Closing Tag is not closed.");let s=t.substring(a+2,e).trim();if(r.removeNSPrefix){const t=s.indexOf(":");-1!==t&&(s=s.substr(t+1))}s=Ut(r.transformTagName,s,"",r).tagName,i&&(n=this.saveTextToParentTag(n,i,this.readonlyMatcher));const o=this.matcher.getCurrentTag();if(s&&r.unpairedTagsSet.has(s))throw new Error(`Unpaired tag can not be used as closing tag: </${s}>`);o&&r.unpairedTagsSet.has(o)&&(this.matcher.pop(),this.tagsNodeStack.pop()),this.matcher.pop(),this.isCurrentNodeStopNode=!1,i=this.tagsNodeStack.pop(),n="",a=e}else if(63===l){let e=Vt(t,a,!1,"?>");if(!e)throw new Error("Pi Tag is not closed.");n=this.saveTextToParentTag(n,i,this.readonlyMatcher);const o=this.buildAttributesMap(e.tagExp,this.matcher,e.tagName,!0);if(o){const t=o[this.options.attributeNamePrefix+"version"];this.entityDecoder.setXmlVersion(Number(t)||1),s.setXmlVersion(Number(t)||1)}if(r.ignoreDeclaration&&"?xml"===e.tagName||r.ignorePiTags);else{const t=new O(e.tagName);t.add(r.textNodeName,""),e.tagName!==e.tagExp&&e.attrExpPresent&&!0!==r.ignoreAttributes&&(t[":@"]=o),this.addChild(i,t,this.readonlyMatcher,a)}a=e.closeIndex+1}else if(33===l&&45===t.charCodeAt(a+2)&&45===t.charCodeAt(a+3)){const e=Rt(t,"--\x3e",a+4,"Comment is not closed.");if(r.commentPropName){const s=t.substring(a+4,e-2);n=this.saveTextToParentTag(n,i,this.readonlyMatcher),i.add(r.commentPropName,[{[r.textNodeName]:s}])}a=e}else if(33===l&&68===t.charCodeAt(a+2)){const e=s.readDocType(t,a);this.entityDecoder.addInputEntities(e.entities),a=e.i}else if(33===l&&91===t.charCodeAt(a+2)){const e=Rt(t,"]]>",a,"CDATA is not closed.")-2,s=t.substring(a+9,e);n=this.saveTextToParentTag(n,i,this.readonlyMatcher);let o=this.parseTextData(s,i.tagname,this.readonlyMatcher,!0,!1,!0,!0);null==o&&(o=""),r.cdataPropName?i.add(r.cdataPropName,[{[r.textNodeName]:s}]):i.add(r.textNodeName,o),a=e+2}else{let s=Vt(t,a,r.removeNSPrefix);if(!s){const e=t.substring(Math.max(0,a-50),Math.min(o,a+50));throw new Error(`readTagExp returned undefined at position ${a}. Context: "${e}"`)}let l=s.tagName;const p=s.rawTagName;let c=s.tagExp,h=s.attrExpPresent,d=s.closeIndex;if(({tagName:l,tagExp:c}=Ut(r.transformTagName,l,c,r)),r.strictReservedNames&&(l===r.commentPropName||l===r.cdataPropName||l===r.textNodeName||l===r.attributesGroupName))throw new Error(`Invalid tag name: ${l}`);i&&n&&"!xml"!==i.tagname&&(n=this.saveTextToParentTag(n,i,this.readonlyMatcher,!1));const u=i;u&&r.unpairedTagsSet.has(u.tagname)&&(i=this.tagsNodeStack.pop(),this.matcher.pop());let f=!1;c.length>0&&c.lastIndexOf("/")===c.length-1&&(f=!0,"/"===l[l.length-1]?(l=l.substr(0,l.length-1),c=l):c=c.substr(0,c.length-1),h=l!==c);let g,m=null,x={};g=Tt(p),l!==e.tagname&&this.matcher.push(l,{},g),l!==c&&h&&(m=this.buildAttributesMap(c,this.matcher,l),m&&(x=At(m,r))),l!==e.tagname&&(this.isCurrentNodeStopNode=this.isItStopNode());const b=a;if(this.isCurrentNodeStopNode){let e="";if(f)a=s.closeIndex;else if(r.unpairedTagsSet.has(l))a=s.closeIndex;else{const i=this.readStopNodeData(t,p,d+1);if(!i)throw new Error(`Unexpected end of ${p}`);a=i.i,e=i.tagContent}const n=new O(l);m&&(n[":@"]=m),n.add(r.textNodeName,e),this.matcher.pop(),this.isCurrentNodeStopNode=!1,this.addChild(i,n,this.readonlyMatcher,b)}else{if(f){({tagName:l,tagExp:c}=Ut(r.transformTagName,l,c,r));const t=new O(l);m&&(t[":@"]=m),this.addChild(i,t,this.readonlyMatcher,b),this.matcher.pop(),this.isCurrentNodeStopNode=!1}else{if(r.unpairedTagsSet.has(l)){const t=new O(l);m&&(t[":@"]=m),this.addChild(i,t,this.readonlyMatcher,b),this.matcher.pop(),this.isCurrentNodeStopNode=!1,a=s.closeIndex;continue}{const t=new O(l);if(this.tagsNodeStack.length>r.maxNestedTags)throw new Error("Maximum nested tags exceeded");this.tagsNodeStack.push(i),m&&(t[":@"]=m),this.addChild(i,t,this.readonlyMatcher,b),i=t}}n="",a=d}}}else n+=t[a];return e.child};function It(t,e,i,n){this.options.captureMetaData||(n=void 0);const r=this.options.jPath?i.toString():i,s=this.options.updateTag(e.tagname,r,e[":@"]);!1===s||("string"==typeof s?(e.tagname=s,t.addChild(e,n)):t.addChild(e,n))}function kt(t,e,i){const n=this.options.processEntities;if(!n||!n.enabled)return t;if(n.allowedTags){const r=this.options.jPath?i.toString():i;if(!(Array.isArray(n.allowedTags)?n.allowedTags.includes(e):n.allowedTags(e,r)))return t}if(n.tagFilter){const r=this.options.jPath?i.toString():i;if(!n.tagFilter(e,r))return t}return this.entityDecoder.decode(t)}function Lt(t,e,i,n){return t&&(void 0===n&&(n=0===e.child.length),void 0!==(t=this.parseTextData(t,e.tagname,i,!1,!!e[":@"]&&0!==Object.keys(e[":@"]).length,n))&&""!==t&&e.add(this.options.textNodeName,t),t=""),t}function Dt(){return 0!==this.stopNodeExpressionsSet.size&&this.matcher.matchesAny(this.stopNodeExpressionsSet)}function Rt(t,e,i,n){const r=t.indexOf(e,i);if(-1===r)throw new Error(n);return r+e.length-1}function Mt(t,e,i,n){const r=t.indexOf(e,i);if(-1===r)throw new Error(n);return r}function Vt(t,e,i,n=">"){const r=function(t,e,i=">"){let n=0;const r=t.length,s=i.charCodeAt(0),o=i.length>1?i.charCodeAt(1):-1;let a="",l=e;for(let i=e;i<r;i++){const e=t.charCodeAt(i);if(n)e===n&&(n=0);else if(34===e||39===e)n=e;else if(e===s){if(-1===o)return a+=t.substring(l,i),{data:a,index:i};if(t.charCodeAt(i+1)===o)return a+=t.substring(l,i),{data:a,index:i}}else 9!==e||n||(a+=t.substring(l,i)+" ",l=i+1)}}(t,e+1,n);if(!r)return;let s=r.data;const o=r.index,a=s.search(/\s/);let l=s,p=!0;-1!==a&&(l=s.substring(0,a),s=s.substring(a+1).trimStart());const c=l;if(i){const t=l.indexOf(":");-1!==t&&(l=l.substr(t+1),p=l!==r.data.substr(t+1))}return{tagName:l,tagExp:s,closeIndex:o,attrExpPresent:p,rawTagName:c}}function qt(t,e,i){const n=i;let r=1;const s=t.length;for(;i<s;i++)if("<"===t[i]){const s=t.charCodeAt(i+1);if(47===s){const s=Mt(t,">",i,`${e} is not closed`);if(t.substring(i+2,s).trim()===e&&(r--,0===r))return{tagContent:t.substring(n,i),i:s};i=s}else if(63===s)i=Rt(t,"?>",i+1,"StopNode is not closed.");else if(33===s&&45===t.charCodeAt(i+2)&&45===t.charCodeAt(i+3))i=Rt(t,"--\x3e",i+3,"StopNode is not closed.");else if(33===s&&91===t.charCodeAt(i+2))i=Rt(t,"]]>",i,"StopNode is not closed.")-2;else{const n=Vt(t,i,!1);n&&((n&&n.tagName)===e&&"/"!==n.tagExp[n.tagExp.length-1]&&r++,i=n.closeIndex)}}}function Ft(t,e,i){if(e&&"string"==typeof t){const e=t.trim();return"true"===e||"false"!==e&&Z(t,i)}return void 0!==t?t:""}function Ut(t,e,i,n){if(t){const n=t(e);i===e&&(i=n),e=n}return{tagName:e=Gt(e,n),tagExp:i}}function Gt(t,e){if(a.includes(t))throw new Error(`[SECURITY] Invalid name: "${t}" is a reserved JavaScript keyword that could cause prototype pollution`);return o.includes(t)?e.onDangerousProperty(t):t}const Bt=O.getMetaDataSymbol();function Wt(t,e){if(!t||"object"!=typeof t)return{};if(!e)return t;const i={};for(const n in t)n.startsWith(e)?i[n.substring(e.length)]=t[n]:i[n]=t[n];return i}function Xt(t,e,i,n){return Yt(t,e,i,n)}function Yt(t,e,i,n){let r;const s={};for(let o=0;o<t.length;o++){const a=t[o],l=zt(a);if(void 0!==l&&l!==e.textNodeName){const t=Wt(a[":@"]||{},e.attributeNamePrefix);i.push(l,t)}if(l===e.textNodeName)void 0===r?r=a[l]:r+=""+a[l];else{if(void 0===l)continue;if(a[l]){let t=Yt(a[l],e,i,n);const r=Qt(t,e);if(0===Object.keys(t).length&&e.alwaysCreateTextNode&&(t[e.textNodeName]=""),a[":@"]?Ht(t,a[":@"],n,e):1!==Object.keys(t).length||void 0===t[e.textNodeName]||e.alwaysCreateTextNode?0===Object.keys(t).length&&(e.alwaysCreateTextNode?t[e.textNodeName]="":t=""):t=t[e.textNodeName],void 0!==a[Bt]&&"object"==typeof t&&null!==t&&(t[Bt]=a[Bt]),void 0!==s[l]&&Object.prototype.hasOwnProperty.call(s,l))Array.isArray(s[l])||(s[l]=[s[l]]),s[l].push(t);else{const i=e.jPath?n.toString():n;e.isArray(l,i,r)?s[l]=[t]:s[l]=t}void 0!==l&&l!==e.textNodeName&&i.pop()}}}return"string"==typeof r?r.length>0&&(s[e.textNodeName]=r):void 0!==r&&(s[e.textNodeName]=r),s}function zt(t){const e=Object.keys(t);for(let t=0;t<e.length;t++){const i=e[t];if(":@"!==i)return i}}function Ht(t,e,i,n){if(e){const r=Object.keys(e),s=r.length;for(let o=0;o<s;o++){const s=r[o],a=s.startsWith(n.attributeNamePrefix)?s.substring(n.attributeNamePrefix.length):s,l=n.jPath?i.toString()+"."+a:i;n.isArray(s,l,!0,!0)?t[s]=[e[s]]:t[s]=e[s]}}}function Qt(t,e){const{textNodeName:i}=e,n=Object.keys(t).length;return 0===n||!(1!==n||!t[i]&&"boolean"!=typeof t[i]&&0!==t[i])}class Jt{constructor(t){this.externalEntities={},this.options=C(t)}parse(t,e){if("string"!=typeof t&&t.toString)t=t.toString();else if("string"!=typeof t)throw new Error("XML data is accepted in String or Bytes[] form.");if(e){!0===e&&(e={});const i=p(t,e);if(!0!==i)throw Error(`${i.err.msg}:${i.err.line}:${i.err.col}`)}const i=new _t(this.options,this.externalEntities),n=i.parseXml(t);return this.options.preserveOrder||void 0===n?n:Xt(n,this.options,i.matcher,i.readonlyMatcher)}addEntity(t,e){if(-1!==e.indexOf("&"))throw new Error("Entity value can't have '&'");if(-1!==t.indexOf("&")||-1!==t.indexOf(";"))throw new Error("An entity must be set without '&' and ';'. Eg. use '#xD' for '&#xD;'");if("&"===e)throw new Error("An entity with value '&' is not permitted");this.externalEntities[t]=e}static getMetaDataSymbol(){return O.getMetaDataSymbol()}}function Zt(t){return String(t).replace(/--/g,"- -").replace(/--/g,"- -").replace(/-$/,"- ")}function Kt(t){return String(t).replace(/\]\]>/g,"]]]]><![CDATA[>")}function te(t){return String(t).replace(/"/g,"&quot;").replace(/'/g,"&apos;")}function ee(t,e,i,n,r){return i.sanitizeName?R(t,{xmlVersion:r})?t:i.sanitizeName(t,{isAttribute:e,matcher:n.readOnly()}):t}function ie(t,e){let i="";e.format&&(i="\n");const n=[];if(e.stopNodes&&Array.isArray(e.stopNodes))for(let t=0;t<e.stopNodes.length;t++){const i=e.stopNodes[t];"string"==typeof i?n.push(new nt(i)):i instanceof nt&&n.push(i)}const r=function(t,e){if(!Array.isArray(t)||0===t.length)return"1.0";const i=t[0];if("?xml"===ae(i)){const t=i[":@"];if(t){const i=e.attributeNamePrefix+"version";if(t[i])return t[i]}}return"1.0"}(t,e);return ne(t,e,i,new it,n,r)}function ne(t,e,i,n,r,s){let o="",a=!1;if(e.maxNestedTags&&n.getDepth()>e.maxNestedTags)throw new Error("Maximum nested tags exceeded");if(!Array.isArray(t)){if(null!=t){let i=t.toString();return i=ce(i,e),i}return""}for(let l=0;l<t.length;l++){const p=t[l],c=ae(p);if(void 0===c)continue;const h=c===e.textNodeName||c===e.cdataPropName||c===e.commentPropName||"?"===c[0]?c:ee(c,!1,e,n,s),d=re(p[":@"],e);n.push(h,d);const u=pe(n,r);if(h===e.textNodeName){let t=p[c];u||(t=e.tagValueProcessor(h,t),t=ce(t,e)),a&&(o+=i),o+=t,a=!1,n.pop();continue}if(h===e.cdataPropName){a&&(o+=i),o+=`<![CDATA[${Kt(p[c][0][e.textNodeName])}]]>`,a=!1,n.pop();continue}if(h===e.commentPropName){o+=i+`\x3c!--${Zt(p[c][0][e.textNodeName])}--\x3e`,a=!0,n.pop();continue}if("?"===h[0]){o+=("?xml"===h?"":i)+`<${h}${le(p[":@"],e,u,n,s)}?>`,a=!0,n.pop();continue}let f=i;""!==f&&(f+=e.indentBy);const g=i+`<${h}${le(p[":@"],e,u,n,s)}`;let m;m=u?se(p[c],e):ne(p[c],e,f,n,r,s),-1!==e.unpairedTags.indexOf(h)?e.suppressUnpairedNode?o+=g+">":o+=g+"/>":m&&0!==m.length||!e.suppressEmptyNode?m&&m.endsWith(">")?o+=g+`>${m}${i}</${h}>`:(o+=g+">",m&&""!==i&&(m.includes("/>")||m.includes("</"))?o+=i+e.indentBy+m+i:o+=m,o+=`</${h}>`):o+=g+"/>",a=!0,n.pop()}return o}function re(t,e){if(!t||e.ignoreAttributes)return null;const i={};let n=!1;for(let r in t)Object.prototype.hasOwnProperty.call(t,r)&&(i[r.startsWith(e.attributeNamePrefix)?r.substr(e.attributeNamePrefix.length):r]=te(t[r]),n=!0);return n?i:null}function se(t,e){if(!Array.isArray(t))return null!=t?t.toString():"";let i="";for(let n=0;n<t.length;n++){const r=t[n],s=ae(r);if(s===e.textNodeName)i+=r[s];else if(s===e.cdataPropName)i+=r[s][0][e.textNodeName];else if(s===e.commentPropName)i+=r[s][0][e.textNodeName];else{if(s&&"?"===s[0])continue;if(s){const t=oe(r[":@"],e),n=se(r[s],e);n&&0!==n.length?i+=`<${s}${t}>${n}</${s}>`:i+=`<${s}${t}/>`}}}return i}function oe(t,e){let i="";if(t&&!e.ignoreAttributes)for(let n in t){if(!Object.prototype.hasOwnProperty.call(t,n))continue;let r=t[n];!0===r&&e.suppressBooleanAttributes?i+=` ${n.substr(e.attributeNamePrefix.length)}`:i+=` ${n.substr(e.attributeNamePrefix.length)}="${te(r)}"`}return i}function ae(t){const e=Object.keys(t);for(let i=0;i<e.length;i++){const n=e[i];if(Object.prototype.hasOwnProperty.call(t,n)&&":@"!==n)return n}}function le(t,e,i,n,r){let s="";if(t&&!e.ignoreAttributes)for(let o in t){if(!Object.prototype.hasOwnProperty.call(t,o))continue;const a=o.substr(e.attributeNamePrefix.length),l=i?a:ee(a,!0,e,n,r);let p;i?p=t[o]:(p=e.attributeValueProcessor(o,t[o]),p=ce(p,e)),!0===p&&e.suppressBooleanAttributes?s+=` ${l}`:s+=` ${l}="${te(p)}"`}return s}function pe(t,e){if(!e||0===e.length)return!1;for(let i=0;i<e.length;i++)if(t.matches(e[i]))return!0;return!1}function ce(t,e){if(t&&t.length>0&&e.processEntities)for(let i=0;i<e.entities.length;i++){const n=e.entities[i];t=t.replace(n.regex,n.val)}return t}const he={attributeNamePrefix:"@_",attributesGroupName:!1,textNodeName:"#text",ignoreAttributes:!0,cdataPropName:!1,format:!1,indentBy:"  ",suppressEmptyNode:!1,suppressUnpairedNode:!0,suppressBooleanAttributes:!0,tagValueProcessor:function(t,e){return e},attributeValueProcessor:function(t,e){return e},preserveOrder:!1,commentPropName:!1,unpairedTags:[],entities:[{regex:new RegExp("&","g"),val:"&amp;"},{regex:new RegExp(">","g"),val:"&gt;"},{regex:new RegExp("<","g"),val:"&lt;"},{regex:new RegExp("'","g"),val:"&apos;"},{regex:new RegExp('"',"g"),val:"&quot;"}],processEntities:!0,stopNodes:[],oneListGroup:!1,maxNestedTags:100,jPath:!0,sanitizeName:!1};function de(t){if(this.options=Object.assign({},he,t),this.options.stopNodes&&Array.isArray(this.options.stopNodes)&&(this.options.stopNodes=this.options.stopNodes.map(t=>"string"==typeof t&&t.startsWith("*.")?".."+t.substring(2):t)),this.stopNodeExpressions=[],this.options.stopNodes&&Array.isArray(this.options.stopNodes))for(let t=0;t<this.options.stopNodes.length;t++){const e=this.options.stopNodes[t];"string"==typeof e?this.stopNodeExpressions.push(new nt(e)):e instanceof nt&&this.stopNodeExpressions.push(e)}var e;!0===this.options.ignoreAttributes||this.options.attributesGroupName?this.isAttribute=function(){return!1}:(this.ignoreAttributesFn="function"==typeof(e=this.options.ignoreAttributes)?e:Array.isArray(e)?t=>{for(const i of e){if("string"==typeof i&&t===i)return!0;if(i instanceof RegExp&&i.test(t))return!0}}:()=>!1,this.attrPrefixLen=this.options.attributeNamePrefix.length,this.isAttribute=me),this.processTextOrObjNode=fe,this.options.format?(this.indentate=ge,this.tagEndChar=">\n",this.newLine="\n"):(this.indentate=function(){return""},this.tagEndChar=">",this.newLine="")}function ue(t,e,i,n,r){return i.sanitizeName?R(t,{xmlVersion:r})?t:i.sanitizeName(t,{isAttribute:e,matcher:n.readOnly()}):t}function fe(t,e,i,n,r){const s=this.extractAttributes(t);if(n.push(e,s),this.checkStopNode(n)){const r=this.buildRawContent(t),s=this.buildAttributesForStopNode(t);return n.pop(),this.buildObjectNode(r,e,s,i)}const o=this.j2x(t,i+1,n,r);return n.pop(),"?"===e[0]?this.buildTextValNode("",e,o.attrStr,i,n):void 0!==t[this.options.textNodeName]&&1===Object.keys(t).length?this.buildTextValNode(t[this.options.textNodeName],e,o.attrStr,i,n):this.buildObjectNode(o.val,e,o.attrStr,i)}function ge(t){return this.options.indentBy.repeat(t)}function me(t){return!(!t.startsWith(this.options.attributeNamePrefix)||t===this.options.textNodeName)&&t.substr(this.attrPrefixLen)}de.prototype.build=function(t){if(this.options.preserveOrder)return ie(t,this.options);{Array.isArray(t)&&this.options.arrayNodeName&&this.options.arrayNodeName.length>1&&(t={[this.options.arrayNodeName]:t});const e=new it,i=function(t,e){const i=t["?xml"];if(i&&"object"==typeof i){if(e.attributesGroupName&&i[e.attributesGroupName]){const t=i[e.attributesGroupName][e.attributeNamePrefix+"version"];if(t)return t}const t=i[e.attributeNamePrefix+"version"];if(t)return t}return"1.0"}(t,this.options);return this.j2x(t,0,e,i).val}},de.prototype.j2x=function(t,e,i,n){let r="",s="";if(this.options.maxNestedTags&&i.getDepth()>=this.options.maxNestedTags)throw new Error("Maximum nested tags exceeded");const o=this.options.jPath?i.toString():i,a=this.checkStopNode(i);for(let l in t){if(!Object.prototype.hasOwnProperty.call(t,l))continue;const p=l===this.options.textNodeName||l===this.options.cdataPropName||l===this.options.commentPropName||this.options.attributesGroupName&&l===this.options.attributesGroupName||this.isAttribute(l)||"?"===l[0]?l:ue(l,!1,this.options,i,n);if(void 0===t[l])this.isAttribute(l)&&(s+="");else if(null===t[l])this.isAttribute(l)||p===this.options.cdataPropName||p===this.options.commentPropName?s+="":"?"===p[0]?s+=this.indentate(e)+"<"+p+"?"+this.tagEndChar:s+=this.indentate(e)+"<"+p+"/"+this.tagEndChar;else if(t[l]instanceof Date)s+=this.buildTextValNode(t[l],p,"",e,i);else if("object"!=typeof t[l]){const c=this.isAttribute(l);if(c&&!this.ignoreAttributesFn(c,o)){const e=ue(c,!0,this.options,i,n);r+=this.buildAttrPairStr(e,""+t[l],a)}else if(!c)if(l===this.options.textNodeName){let e=this.options.tagValueProcessor(l,""+t[l]);s+=this.replaceEntitiesValue(e)}else{i.push(p);const n=this.checkStopNode(i);if(i.pop(),n){const i=""+t[l];s+=""===i?this.indentate(e)+"<"+p+this.closeTag(p)+this.tagEndChar:this.indentate(e)+"<"+p+">"+i+"</"+p+this.tagEndChar}else s+=this.buildTextValNode(t[l],p,"",e,i)}}else if(Array.isArray(t[l])){const r=t[l].length;let o="",a="";for(let c=0;c<r;c++){const r=t[l][c];if(void 0===r);else if(null===r)"?"===p[0]?s+=this.indentate(e)+"<"+p+"?"+this.tagEndChar:s+=this.indentate(e)+"<"+p+"/"+this.tagEndChar;else if("object"==typeof r)if(this.options.oneListGroup){i.push(p);const t=this.j2x(r,e+1,i,n);i.pop(),o+=t.val,this.options.attributesGroupName&&r.hasOwnProperty(this.options.attributesGroupName)&&(a+=t.attrStr)}else o+=this.processTextOrObjNode(r,p,e,i,n);else if(this.options.oneListGroup){let t=this.options.tagValueProcessor(p,r);t=this.replaceEntitiesValue(t),o+=t}else{i.push(p);const t=this.checkStopNode(i);if(i.pop(),t){const t=""+r;o+=""===t?this.indentate(e)+"<"+p+this.closeTag(p)+this.tagEndChar:this.indentate(e)+"<"+p+">"+t+"</"+p+this.tagEndChar}else o+=this.buildTextValNode(r,p,"",e,i)}}this.options.oneListGroup&&(o=this.buildObjectNode(o,p,a,e)),s+=o}else if(this.options.attributesGroupName&&l===this.options.attributesGroupName){const e=Object.keys(t[l]),s=e.length;for(let o=0;o<s;o++){const s=ue(e[o],!0,this.options,i,n);r+=this.buildAttrPairStr(s,""+t[l][e[o]],a)}}else s+=this.processTextOrObjNode(t[l],p,e,i,n)}return{attrStr:r,val:s}},de.prototype.buildAttrPairStr=function(t,e,i){return i||(e=this.options.attributeValueProcessor(t,""+e),e=this.replaceEntitiesValue(e)),this.options.suppressBooleanAttributes&&"true"===e?" "+t:" "+t+'="'+te(e)+'"'},de.prototype.extractAttributes=function(t){if(!t||"object"!=typeof t)return null;const e={};let i=!1;if(this.options.attributesGroupName&&t[this.options.attributesGroupName]){const n=t[this.options.attributesGroupName];for(let t in n)Object.prototype.hasOwnProperty.call(n,t)&&(e[t.startsWith(this.options.attributeNamePrefix)?t.substring(this.options.attributeNamePrefix.length):t]=te(n[t]),i=!0)}else for(let n in t){if(!Object.prototype.hasOwnProperty.call(t,n))continue;const r=this.isAttribute(n);r&&(e[r]=te(t[n]),i=!0)}return i?e:null},de.prototype.buildRawContent=function(t){if("string"==typeof t)return t;if("object"!=typeof t||null===t)return String(t);if(void 0!==t[this.options.textNodeName])return t[this.options.textNodeName];let e="";for(let i in t){if(!Object.prototype.hasOwnProperty.call(t,i))continue;if(this.isAttribute(i))continue;if(this.options.attributesGroupName&&i===this.options.attributesGroupName)continue;const n=t[i];if(i===this.options.textNodeName)e+=n;else if(Array.isArray(n)){for(let t of n)if("string"==typeof t||"number"==typeof t)e+=`<${i}>${t}</${i}>`;else if("object"==typeof t&&null!==t){const n=this.buildRawContent(t),r=this.buildAttributesForStopNode(t);e+=""===n?`<${i}${r}/>`:`<${i}${r}>${n}</${i}>`}}else if("object"==typeof n&&null!==n){const t=this.buildRawContent(n),r=this.buildAttributesForStopNode(n);e+=""===t?`<${i}${r}/>`:`<${i}${r}>${t}</${i}>`}else e+=`<${i}>${n}</${i}>`}return e},de.prototype.buildAttributesForStopNode=function(t){if(!t||"object"!=typeof t)return"";let e="";if(this.options.attributesGroupName&&t[this.options.attributesGroupName]){const i=t[this.options.attributesGroupName];for(let t in i){if(!Object.prototype.hasOwnProperty.call(i,t))continue;const n=t.startsWith(this.options.attributeNamePrefix)?t.substring(this.options.attributeNamePrefix.length):t,r=i[t];!0===r&&this.options.suppressBooleanAttributes?e+=" "+n:e+=" "+n+'="'+r+'"'}}else for(let i in t){if(!Object.prototype.hasOwnProperty.call(t,i))continue;const n=this.isAttribute(i);if(n){const r=t[i];!0===r&&this.options.suppressBooleanAttributes?e+=" "+n:e+=" "+n+'="'+r+'"'}}return e},de.prototype.buildObjectNode=function(t,e,i,n){if(""===t)return"?"===e[0]?this.indentate(n)+"<"+e+i+"?"+this.tagEndChar:this.indentate(n)+"<"+e+i+this.closeTag(e)+this.tagEndChar;if("?"===e[0])return this.indentate(n)+"<"+e+i+"?"+this.tagEndChar;{let r="</"+e+this.tagEndChar,s="";return"?"===e[0]&&(s="?",r=""),!i&&""!==i||-1!==t.indexOf("<")?!1!==this.options.commentPropName&&e===this.options.commentPropName&&0===s.length?this.indentate(n)+`\x3c!--${t}--\x3e`+this.newLine:this.indentate(n)+"<"+e+i+s+this.tagEndChar+t+this.indentate(n)+r:this.indentate(n)+"<"+e+i+s+">"+t+r}},de.prototype.closeTag=function(t){let e="";return-1!==this.options.unpairedTags.indexOf(t)?this.options.suppressUnpairedNode||(e="/"):e=this.options.suppressEmptyNode?"/":`></${t}`,e},de.prototype.checkStopNode=function(t){if(!this.stopNodeExpressions||0===this.stopNodeExpressions.length)return!1;for(let e=0;e<this.stopNodeExpressions.length;e++)if(t.matches(this.stopNodeExpressions[e]))return!0;return!1},de.prototype.buildTextValNode=function(t,e,i,n,r){if(!1!==this.options.cdataPropName&&e===this.options.cdataPropName){const e=Kt(t);return this.indentate(n)+`<![CDATA[${e}]]>`+this.newLine}if(!1!==this.options.commentPropName&&e===this.options.commentPropName){const e=Zt(t);return this.indentate(n)+`\x3c!--${e}--\x3e`+this.newLine}if("?"===e[0])return this.indentate(n)+"<"+e+i+"?"+this.tagEndChar;{let r=this.options.tagValueProcessor(e,t);return r=this.replaceEntitiesValue(r),""===r?this.indentate(n)+"<"+e+i+this.closeTag(e)+this.tagEndChar:this.indentate(n)+"<"+e+i+">"+r+"</"+e+this.tagEndChar}},de.prototype.replaceEntitiesValue=function(t){if(t&&t.length>0&&this.options.processEntities)for(let e=0;e<this.options.entities.length;e++){const i=this.options.entities[e];t=t.replace(i.regex,i.val)}return t};const xe=de,be={validate:p};module.exports=e})();
+
+/***/ }),
+
 /***/ 924:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -24471,6 +26410,7 @@ exports["default"] = z;
 /***/ 4937:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.slugify = exports.toUpperCase = exports.toLowerCase = exports.trim = exports.normalize = exports.overwrite = exports.mime = exports.property = exports.endsWith = exports.startsWith = exports.includes = exports.uppercase = exports.lowercase = exports.regex = exports.length = exports.minLength = exports.maxLength = exports.size = exports.minSize = exports.maxSize = exports.multipleOf = exports.nonnegative = exports.nonpositive = exports.negative = exports.positive = exports.gte = exports.gt = exports.lte = exports.lt = void 0;
@@ -24511,6 +26451,7 @@ Object.defineProperty(exports, "slugify", ({ enumerable: true, get: function () 
 /***/ 4133:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -24565,6 +26506,7 @@ function date(params) {
 /***/ 8652:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 // Zod 3 compat layer
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -24633,6 +26575,7 @@ var ZodFirstPartyTypeKind;
 /***/ 9295:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -24714,6 +26657,7 @@ exports.ZodRealError = core.$constructor("ZodError", initializer, {
 /***/ 6179:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -24794,6 +26738,7 @@ exports.coerce = __importStar(__nccwpck_require__(4133));
 /***/ 2283:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -25426,6 +27371,7 @@ function fromJSONSchema(schema, params) {
 /***/ 2081:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -25493,6 +27439,7 @@ function duration(params) {
 /***/ 2463:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -25541,6 +27488,7 @@ exports.safeDecodeAsync = core._safeDecodeAsync(errors_js_1.ZodRealError);
 /***/ 5622:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -27059,6 +29007,7 @@ function preprocess(fn, schema) {
 /***/ 6377:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -28293,6 +30242,7 @@ function _stringFormat(Class, format, fnOrRegex, _params = {}) {
 /***/ 5880:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 // import { $ZodType } from "./schemas.js";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -28901,6 +30851,7 @@ exports.$ZodCheckOverwrite = core.$constructor("$ZodCheckOverwrite", (inst, def)
 /***/ 2990:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -28993,6 +30944,7 @@ function config(newConfig) {
 /***/ 5563:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Doc = void 0;
@@ -29039,6 +30991,7 @@ exports.Doc = Doc;
 /***/ 9686:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -29262,6 +31215,7 @@ function prettifyError(error) {
 /***/ 8117:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -29316,6 +31270,7 @@ exports.JSONSchema = __importStar(__nccwpck_require__(9539));
 /***/ 9131:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JSONSchemaGenerator = void 0;
@@ -29422,6 +31377,7 @@ exports.JSONSchemaGenerator = JSONSchemaGenerator;
 /***/ 9339:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.allProcessors = exports.lazyProcessor = exports.optionalProcessor = exports.promiseProcessor = exports.readonlyProcessor = exports.pipeProcessor = exports.catchProcessor = exports.prefaultProcessor = exports.defaultProcessor = exports.nonoptionalProcessor = exports.nullableProcessor = exports.recordProcessor = exports.tupleProcessor = exports.intersectionProcessor = exports.unionProcessor = exports.objectProcessor = exports.arrayProcessor = exports.setProcessor = exports.mapProcessor = exports.transformProcessor = exports.functionProcessor = exports.customProcessor = exports.successProcessor = exports.fileProcessor = exports.templateLiteralProcessor = exports.nanProcessor = exports.literalProcessor = exports.enumProcessor = exports.dateProcessor = exports.unknownProcessor = exports.anyProcessor = exports.neverProcessor = exports.voidProcessor = exports.undefinedProcessor = exports.nullProcessor = exports.symbolProcessor = exports.bigintProcessor = exports.booleanProcessor = exports.numberProcessor = exports.stringProcessor = void 0;
@@ -30073,6 +32029,7 @@ function toJSONSchema(input, params) {
 /***/ 9539:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
@@ -30082,6 +32039,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 /***/ 7360:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -30220,6 +32178,7 @@ exports.safeDecodeAsync = (0, exports._safeDecodeAsync)(errors.$ZodRealError);
 /***/ 5592:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -30399,6 +32358,7 @@ exports.sha512_base64url = fixedBase64url(86);
 /***/ 1446:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -30462,6 +32422,7 @@ exports.globalRegistry = globalThis.__zod_globalRegistry;
 /***/ 4433:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -32739,6 +34700,7 @@ function handleRefineResult(result, payload, input, inst) {
 /***/ 7633:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createStandardJSONSchemaMethod = exports.createToJSONSchemaMethod = void 0;
@@ -33203,6 +35165,7 @@ exports.createStandardJSONSchemaMethod = createStandardJSONSchemaMethod;
 /***/ 1327:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Class = exports.BIGINT_FORMAT_RANGES = exports.NUMBER_FORMAT_RANGES = exports.primitiveTypes = exports.propertyKeyTypes = exports.getParsedType = exports.allowsEval = exports.captureStackTrace = void 0;
@@ -33944,6 +35907,7 @@ exports.Class = Class;
 /***/ 6864:
 /***/ ((__unused_webpack_module, exports) => {
 
+"use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.version = void 0;
@@ -33959,6 +35923,7 @@ exports.version = {
 /***/ 2284:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -34099,6 +36064,7 @@ module.exports = exports.default;
 /***/ 6964:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -34238,6 +36204,7 @@ module.exports = exports.default;
 /***/ 6302:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -34428,6 +36395,7 @@ module.exports = exports.default;
 /***/ 5228:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -34582,6 +36550,7 @@ module.exports = exports.default;
 /***/ 3561:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -34723,6 +36692,7 @@ module.exports = exports.default;
 /***/ 5747:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -34868,6 +36838,7 @@ module.exports = exports.default;
 /***/ 812:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -35017,6 +36988,7 @@ module.exports = exports.default;
 /***/ 6992:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -35159,6 +37131,7 @@ module.exports = exports.default;
 /***/ 2182:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -35302,6 +37275,7 @@ module.exports = exports.default;
 /***/ 4948:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -35449,6 +37423,7 @@ module.exports = exports.default;
 /***/ 5389:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -35592,6 +37567,7 @@ module.exports = exports.default;
 /***/ 1433:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -35758,6 +37734,7 @@ module.exports = exports.default;
 /***/ 7894:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -35906,6 +37883,7 @@ module.exports = exports.default;
 /***/ 5966:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -36052,6 +38030,7 @@ module.exports = exports.default;
 /***/ 9646:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -36193,6 +38172,7 @@ module.exports = exports.default;
 /***/ 1453:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -36352,6 +38332,7 @@ module.exports = exports.default;
 /***/ 8268:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -36600,6 +38581,7 @@ module.exports = exports.default;
 /***/ 3075:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -36756,6 +38738,7 @@ module.exports = exports.default;
 /***/ 124:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -36898,6 +38881,7 @@ module.exports = exports.default;
 /***/ 968:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -37079,6 +39063,7 @@ module.exports = exports.default;
 /***/ 4602:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -37219,6 +39204,7 @@ module.exports = exports.default;
 /***/ 995:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -37337,6 +39323,7 @@ Object.defineProperty(exports, "yo", ({ enumerable: true, get: function () { ret
 /***/ 6493:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -37480,6 +39467,7 @@ module.exports = exports.default;
 /***/ 8570:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -37622,6 +39610,7 @@ module.exports = exports.default;
 /***/ 986:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -37763,6 +39752,7 @@ module.exports = exports.default;
 /***/ 1665:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -37909,6 +39899,7 @@ module.exports = exports.default;
 /***/ 5968:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -37928,6 +39919,7 @@ module.exports = exports.default;
 /***/ 498:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -38072,6 +40064,7 @@ module.exports = exports.default;
 /***/ 7215:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -38217,6 +40210,7 @@ module.exports = exports.default;
 /***/ 6257:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -38454,6 +40448,7 @@ module.exports = exports.default;
 /***/ 4233:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -38597,6 +40592,7 @@ module.exports = exports.default;
 /***/ 4417:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -38738,6 +40734,7 @@ module.exports = exports.default;
 /***/ 1019:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -38882,6 +40879,7 @@ module.exports = exports.default;
 /***/ 8808:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -39024,6 +41022,7 @@ module.exports = exports.default;
 /***/ 3385:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -39167,6 +41166,7 @@ module.exports = exports.default;
 /***/ 9205:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -39310,6 +41310,7 @@ module.exports = exports.default;
 /***/ 282:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -39458,6 +41459,7 @@ module.exports = exports.default;
 /***/ 8477:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -39600,6 +41602,7 @@ module.exports = exports.default;
 /***/ 8628:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -39753,6 +41756,7 @@ module.exports = exports.default;
 /***/ 1470:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -39943,6 +41947,7 @@ module.exports = exports.default;
 /***/ 7636:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -40086,6 +42091,7 @@ module.exports = exports.default;
 /***/ 8750:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -40230,6 +42236,7 @@ module.exports = exports.default;
 /***/ 3292:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -40374,6 +42381,7 @@ module.exports = exports.default;
 /***/ 5117:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -40518,6 +42526,7 @@ module.exports = exports.default;
 /***/ 847:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -40657,6 +42666,7 @@ module.exports = exports.default;
 /***/ 2723:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -40676,6 +42686,7 @@ module.exports = exports.default;
 /***/ 1825:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -40818,6 +42829,7 @@ module.exports = exports.default;
 /***/ 2144:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -40962,6 +42974,7 @@ module.exports = exports.default;
 /***/ 7464:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -41106,6 +43119,7 @@ module.exports = exports.default;
 /***/ 5390:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -41248,6 +43262,7 @@ module.exports = exports.default;
 /***/ 4857:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -41389,6 +43404,7 @@ module.exports = exports.default;
 /***/ 9331:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -41532,6 +43548,7 @@ module.exports = exports.default;
 /***/ 183:
 /***/ (function(module, exports, __nccwpck_require__) {
 
+"use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -41834,8 +43851,9 @@ module.exports = exports.default;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it uses a non-standard name for the exports (exports).
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
+"use strict";
 var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -41844,8 +43862,10 @@ const schema_1 = __nccwpck_require__(9382);
 const context_1 = __nccwpck_require__(9619);
 const orchestrator_1 = __nccwpck_require__(250);
 const diff_1 = __nccwpck_require__(4346);
+const checkrun_1 = __nccwpck_require__(9459);
+const reviews_1 = __nccwpck_require__(8325);
 const annotations_1 = __nccwpck_require__(6891);
-const checkrun_1 = __nccwpck_require__(8028);
+const checkrun_2 = __nccwpck_require__(8028);
 async function runAction() {
     const core = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421));
     const rootDir = process.cwd();
@@ -41854,12 +43874,15 @@ async function runAction() {
     const token = core.getInput("github-token");
     const config = (0, schema_1.loadConfig)(rootDir, configPath);
     const diff = await getActionDiff(rootDir, token);
-    const result = await (0, orchestrator_1.runGuard)((0, context_1.createDetectorContext)(rootDir, config, diff), failOnInput ?? config.failOn);
+    const runtime = await getGitHubRuntime(token);
+    const markerCheckRunId = runtime ? await tryEmitCheckRunMarker(runtime) : undefined;
+    const contextOptions = await buildContextOptions(core, runtime);
+    const result = await (0, orchestrator_1.runGuard)((0, context_1.createDetectorContext)(rootDir, config, diff, contextOptions), failOnInput ?? config.failOn);
     await (0, annotations_1.emitAnnotations)(result.findings);
     core.setOutput("result", result.result);
     core.setOutput("error-count", String(result.errorCount));
     core.setOutput("warning-count", String(result.warningCount));
-    await tryCreateCheckRun(token, result);
+    await tryCreateCheckRun(token, result, markerCheckRunId);
     if (result.result === "fail") {
         core.setFailed(`false-clean-pass detected ${result.errorCount} errors and ${result.warningCount} warnings.`);
     }
@@ -41888,24 +43911,79 @@ async function getActionDiff(rootDir, token) {
     }
     return (0, diff_1.getLocalGitDiff)(rootDir);
 }
-async function tryCreateCheckRun(token, result) {
+async function tryCreateCheckRun(token, result, checkRunId) {
     const [core, github] = await Promise.all([Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421)), Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157))]);
     if (!token || !github.context.sha) {
         return;
     }
     try {
-        await (0, checkrun_1.createCheckRun)({
+        await (0, checkrun_2.createCheckRun)({
             token,
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
             headSha: github.context.payload.pull_request?.head.sha ?? github.context.sha,
-            result
+            result,
+            checkRunId
         });
     }
     catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         core.warning(`Unable to create false-clean-pass check run: ${message}`);
     }
+}
+async function tryEmitCheckRunMarker(runtime) {
+    const core = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421));
+    try {
+        return await (0, checkrun_1.emitCheckRunShaMarker)(runtime);
+    }
+    catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        core.warning(`Unable to emit false-clean-pass self-attestation marker: ${message}`);
+        return undefined;
+    }
+}
+async function buildContextOptions(core, runtime) {
+    return {
+        ciEnvKeys: splitCommaList(core.getInput("ci-env-keys")),
+        testResultsGlob: core.getInput("test-results-glob") || undefined,
+        coverageSummaryPath: core.getInput("coverage-summary") || undefined,
+        prLabels: await getPullRequestLabels(),
+        github: runtime,
+        codeOwnerReviewProvider: runtime ? (0, reviews_1.createGitHubReviewProvider)(runtime) : undefined,
+        checkRunAttestationVerifier: runtime ? (0, checkrun_1.createCheckRunAttestationVerifier)(runtime) : undefined
+    };
+}
+async function getGitHubRuntime(token) {
+    if (!token) {
+        return undefined;
+    }
+    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+    const pullRequest = github.context.payload.pull_request;
+    const headSha = pullRequest?.head.sha ?? github.context.sha;
+    if (!headSha) {
+        return undefined;
+    }
+    return {
+        token,
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        headSha,
+        pullNumber: pullRequest?.number
+    };
+}
+async function getPullRequestLabels() {
+    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+    const labels = github.context.payload.pull_request?.labels;
+    if (!Array.isArray(labels)) {
+        return [];
+    }
+    return labels.map((label) => label.name).filter((name) => Boolean(name));
+}
+function splitCommaList(value) {
+    return value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
 }
 function parseFailOn(value) {
     if (value === "error" || value === "warning" || value === "never") {

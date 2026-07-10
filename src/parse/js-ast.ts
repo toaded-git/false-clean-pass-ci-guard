@@ -23,7 +23,11 @@ export interface JsScanResult {
   parseError?: string;
 }
 
-export function scanJavaScript(source: string, customAssertions: string[] = []): JsScanResult {
+export function scanJavaScript(
+  source: string,
+  customAssertions: string[] = [],
+  lenientAssertNames = true
+): JsScanResult {
   let ast: ReturnType<typeof parse>;
   try {
     ast = parse(source, {
@@ -53,7 +57,7 @@ export function scanJavaScript(source: string, customAssertions: string[] = []):
       });
     }
 
-    const testCase = getTestCaseSignal(node, lines, customAssertions);
+    const testCase = getTestCaseSignal(node, lines, customAssertions, lenientAssertNames);
     if (testCase) {
       testCases.push(testCase);
     }
@@ -100,7 +104,8 @@ function getTestControlSignal(node: t.CallExpression): Pick<TestControlSignal, "
 function getTestCaseSignal(
   node: t.CallExpression,
   lines: string[],
-  customAssertions: string[]
+  customAssertions: string[],
+  lenientAssertNames: boolean
 ): TestCaseSignal | undefined {
   if (!isExecutableTestCall(node)) {
     return undefined;
@@ -119,7 +124,7 @@ function getTestCaseSignal(
     evidence: lineEvidence(lines, line),
     emptyBody: isEmptyFunction(callback),
     returnOnly: isReturnOnlyFunction(callback),
-    assertionCount: countAssertions(callback.body, customAssertions)
+    assertionCount: countAssertions(callback.body, customAssertions, lenientAssertNames)
   };
 }
 
@@ -142,14 +147,14 @@ function isExecutableTestCall(node: t.CallExpression): boolean {
   return propertyName !== "skip" && propertyName !== "todo";
 }
 
-function countAssertions(node: t.Node | null | undefined, customAssertions: string[]): number {
+function countAssertions(node: t.Node | null | undefined, customAssertions: string[], lenientAssertNames: boolean): number {
   if (!node) {
     return 0;
   }
 
   let count = 0;
   traverse(node, (current, parent) => {
-    if (current.type === "CallExpression" && isAssertionCall(current, customAssertions)) {
+    if (current.type === "CallExpression" && isAssertionCall(current, customAssertions, lenientAssertNames)) {
       count += 1;
       return;
     }
@@ -164,10 +169,15 @@ function countAssertions(node: t.Node | null | undefined, customAssertions: stri
   return count;
 }
 
-function isAssertionCall(node: t.CallExpression, customAssertions: string[]): boolean {
+function isAssertionCall(node: t.CallExpression, customAssertions: string[], lenientAssertNames: boolean): boolean {
   const callee = node.callee;
   if (callee.type === "Identifier") {
-    return callee.name === "expect" || callee.name === "assert" || customAssertions.includes(callee.name);
+    return (
+      callee.name === "expect" ||
+      callee.name === "assert" ||
+      customAssertions.includes(callee.name) ||
+      (lenientAssertNames && looksLikeAssertionName(callee.name))
+    );
   }
 
   if (callee.type !== "MemberExpression" && callee.type !== "OptionalMemberExpression") {
@@ -185,8 +195,18 @@ function isAssertionCall(node: t.CallExpression, customAssertions: string[]): bo
   if (rootName && customAssertions.includes(rootName)) {
     return true;
   }
+  if (
+    lenientAssertNames &&
+    ((rootName && looksLikeAssertionName(rootName)) || (propertyName && looksLikeAssertionName(propertyName)))
+  ) {
+    return true;
+  }
 
   return hasMemberProperty(callee, "should") || hasMemberProperty(callee, "to");
+}
+
+function looksLikeAssertionName(name: string): boolean {
+  return /(?:^|[A-Z_])(assert|expect|should|verify)(?:$|[A-Z_])/i.test(name);
 }
 
 function isAssertionPropertyAccess(

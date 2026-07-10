@@ -7,6 +7,14 @@ export function isJavaScriptLikeFile(file: string): boolean {
   return /\.[cm]?[jt]sx?$/.test(file);
 }
 
+export function isPythonFile(file: string): boolean {
+  return /\.py$/.test(file);
+}
+
+export function isConfiguredTestFile(file: string, globs: string[]): boolean {
+  return matchesAnyGlob(file, globs);
+}
+
 export function isTestFile(file: string, globs: string[]): boolean {
   return isJavaScriptLikeFile(file) && matchesAnyGlob(file, globs);
 }

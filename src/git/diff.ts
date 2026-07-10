@@ -10,6 +10,7 @@ export interface DiffFile {
   addedLines: Set<number>;
   removedLines: Set<number>;
   addedLineContent: Map<number, string>;
+  removedLineContent: Map<number, string>;
 }
 
 export interface GitHubDiffOptions {
@@ -99,6 +100,7 @@ export function parsePatch(filename: string, patch: string): DiffFile {
   const addedLines = new Set<number>();
   const removedLines = new Set<number>();
   const addedLineContent = new Map<number, string>();
+  const removedLineContent = new Map<number, string>();
   const lines = patch.split(/\r?\n/);
   let oldLine = 0;
   let newLine = 0;
@@ -124,6 +126,7 @@ export function parsePatch(filename: string, patch: string): DiffFile {
 
     if (line.startsWith("-")) {
       removedLines.add(oldLine);
+      removedLineContent.set(oldLine, line.slice(1));
       oldLine += 1;
       continue;
     }
@@ -140,7 +143,8 @@ export function parsePatch(filename: string, patch: string): DiffFile {
     patch,
     addedLines,
     removedLines,
-    addedLineContent
+    addedLineContent,
+    removedLineContent
   };
 }
 

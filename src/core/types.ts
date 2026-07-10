@@ -14,11 +14,49 @@ export interface Finding {
   evidence?: string;
 }
 
+export interface GitHubRuntime {
+  token: string;
+  owner: string;
+  repo: string;
+  headSha: string;
+  pullNumber?: number;
+}
+
+export interface PullRequestReview {
+  user: string;
+  state: string;
+  submittedAt?: string;
+}
+
+export interface CodeOwnerReviewProvider {
+  listReviews(): Promise<PullRequestReview[]>;
+  isTeamMember?(teamOwner: string, teamSlug: string, username: string): Promise<boolean | undefined>;
+}
+
+export interface CheckRunAttestationResult {
+  ok: boolean;
+  reason?: "missing" | "sha-mismatch" | "api-failed";
+  message?: string;
+}
+
+export type CheckRunAttestationVerifier = () => Promise<CheckRunAttestationResult>;
+
 export interface DetectorContext {
   rootDir: string;
   config: GuardConfig;
   diff: DiffFile[];
+  ciEnvKeys: Set<string>;
+  testResultsGlob?: string;
+  baseTestResultsGlob?: string;
+  coverageSummaryPath?: string;
+  prLabels: string[];
+  github?: GitHubRuntime;
+  codeOwnerReviewProvider?: CodeOwnerReviewProvider;
+  checkRunAttestationVerifier?: CheckRunAttestationVerifier;
   readFile(file: string): Promise<string>;
+  readBaseFile?(file: string): Promise<string>;
+  fileExists(file: string): Promise<boolean>;
+  listFiles(): Promise<string[]>;
 }
 
 export interface Detector {

@@ -13,6 +13,15 @@ inputs:
     description: Minimum finding severity that fails the check: error, warning, or never.
     required: false
     default: error
+  test-results-glob:
+    description: JUnit XML test result glob used for zero-test and test-count ratchets.
+    required: false
+  coverage-summary:
+    description: Coverage summary JSON path used for coverage ratchet checks.
+    required: false
+  ci-env-keys:
+    description: Comma-separated CI-provided env key names, never values.
+    required: false
 outputs:
   result:
     description: pass or fail.
