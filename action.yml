@@ -1,0 +1,25 @@
+name: false-clean-pass
+description: Detects new false-clean-pass signals in pull request diffs.
+author: false-clean-pass-ci-guard
+inputs:
+  config-path:
+    description: Path to the false-clean-pass config file.
+    required: false
+    default: .github/false-clean-pass.yml
+  github-token:
+    description: GitHub token used for PR diff and optional check run creation.
+    required: false
+  fail-on:
+    description: Minimum finding severity that fails the check: error, warning, or never.
+    required: false
+    default: error
+outputs:
+  result:
+    description: pass or fail.
+  error-count:
+    description: Number of error findings.
+  warning-count:
+    description: Number of warning findings.
+runs:
+  using: node20
+  main: dist/index.js
