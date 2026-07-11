@@ -50,7 +50,7 @@ jobs:
         with:
           name: junit
           path: reports
-      - uses: toaded-git/false-clean-pass-ci-guard@v1
+      - uses: toaded-git/false-clean-pass-ci-guard@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-results-glob: reports/junit.xml
