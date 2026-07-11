@@ -1,0 +1,62 @@
+name: false-clean-pass
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  security-events: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Run tests (JUnit output)
+        run: npm test -- --reporter=junit --outputFile=reports/junit.xml
+      - name: Upload JUnit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit
+          path: reports/junit.xml
+          if-no-files-found: warn
+
+  # verify runs as an independent job with `if: always()` so the guard still runs
+  # even if the test job fails, is skipped, or produces suspicious output.
+  verify:
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download JUnit results
+        uses: actions/download-artifact@v4
+        with:
+          name: junit
+          path: reports
+        continue-on-error: true
+      - uses: toaded-git/false-clean-pass-ci-guard@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-results-glob: reports/junit.xml
+          fail-on: error
+          sarif-path: false-clean-pass.sarif
+      - name: Upload SARIF
+        if: always()
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: false-clean-pass.sarif
