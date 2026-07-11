@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://false-clean-pass.local/schemas/org-evidence-report.schema.json",
+  "title": "false-clean-pass Organization Evidence Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "org",
+    "generatedAt",
+    "period",
+    "reposCovered",
+    "recordCount",
+    "excludedRecordCount",
+    "excludedByRepoCap",
+    "summary",
+    "timeSeries",
+    "repeatActors",
+    "repeatRepos",
+    "compliance",
+    "integrity",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "org": { "type": "string", "minLength": 1 },
+    "generatedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{3})?Z$"
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "to": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+      }
+    },
+    "reposCovered": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "recordCount": { "type": "integer", "minimum": 0 },
+    "excludedRecordCount": { "type": "integer", "minimum": 0 },
+    "excludedByRepoCap": { "type": "integer", "minimum": 0 },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalAttempts", "totalWeakenings", "reposWithAttempts", "byKind"],
+      "properties": {
+        "totalAttempts": { "type": "integer", "minimum": 0 },
+        "totalWeakenings": { "type": "integer", "minimum": 0 },
+        "reposWithAttempts": { "type": "integer", "minimum": 0 },
+        "byKind": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "timeSeries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["week", "attempts", "weakenings"],
+        "properties": {
+          "week": { "type": "string", "pattern": "^\\d{4}-W\\d{2}$" },
+          "attempts": { "type": "integer", "minimum": 0 },
+          "weakenings": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "repeatActors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["actor", "attemptCount", "repos", "firstSeen", "lastSeen"],
+        "properties": {
+          "actor": { "type": "string", "minLength": 1 },
+          "attemptCount": { "type": "integer", "minimum": 1 },
+          "repos": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true
+          },
+          "firstSeen": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "lastSeen": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+        }
+      }
+    },
+    "repeatRepos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["repo", "attemptCount", "distinctActors"],
+        "properties": {
+          "repo": { "type": "string", "minLength": 1 },
+          "attemptCount": { "type": "integer", "minimum": 1 },
+          "distinctActors": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["headline", "note", "mappingHint"],
+      "properties": {
+        "headline": {
+          "type": "string",
+          "pattern": "SELF-ATTESTED.*NOT an independent audit attestation"
+        },
+        "note": {
+          "type": "string",
+          "allOf": [
+            { "pattern": "self-attested" },
+            { "pattern": "NOT an independent audit attestation" },
+            { "pattern": "honor-system" }
+          ]
+        },
+        "mappingHint": {
+          "type": "string",
+          "allOf": [
+            { "pattern": "EVIDENCE INPUT only" },
+            { "pattern": "not proof of control implementation" },
+            { "pattern": "does not replace an auditor's assessment" }
+          ]
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "keyId", "reportSignature", "signedBy", "note"],
+      "properties": {
+        "alg": { "const": "ed25519" },
+        "keyId": { "type": "string", "minLength": 1 },
+        "reportSignature": { "type": "string", "minLength": 1 },
+        "signedBy": { "const": "org-evidence-collection-repo-batch" },
+        "note": {
+          "type": "string",
+          "allOf": [
+            { "pattern": "org's evidence-collection repo batch runner" },
+            { "pattern": "NOT an issuer authenticity guarantee" }
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issuer", "aggregationScope", "sourceRecordHashes"],
+      "properties": {
+        "issuer": { "const": "false-clean-pass evidence pipeline" },
+        "aggregationScope": { "const": "static-batch" },
+        "sourceRecordHashes": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

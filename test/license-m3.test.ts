@@ -213,7 +213,8 @@ describe("M3 C-lite license verification", () => {
     expect(readme).toContain("owner.type");
     expect(readme).toContain("무결성 보조");
     expect(readme).toContain("감사 신뢰");
-    expect(readme).toContain("발급자 집계 파이프라인");
+    expect(readme).toContain("Gitleaks/keygen-style");
+    expect(readme).toContain("organization-scope aggregation");
     expect(readme).toContain("실시간 revocation");
     expect(readme).toContain("릴리스 기반");
   });

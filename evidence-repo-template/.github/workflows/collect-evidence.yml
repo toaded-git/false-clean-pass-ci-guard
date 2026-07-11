@@ -1,0 +1,122 @@
+name: collect false-clean-pass evidence
+
+# This workflow is intentionally batch-only: manual dispatch or schedule.
+# Keep the collection interval shorter than the artifact retention period.
+# GitHub's default artifact retention is usually 90 days, so weekly collection
+# has a wide margin. If your organization shortens retention below 7 days,
+# change this schedule to daily or increase artifact retention, otherwise
+# Evidence Record artifacts can expire before they are committed here.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    env:
+      RECORD_ROOT: evidence-records
+      REPORT_DIR: reports
+      TOOL_REF: v2
+    steps:
+      - name: Checkout evidence repo
+        uses: actions/checkout@v4
+        with:
+          path: evidence-repo
+          fetch-depth: 0
+
+      - name: Checkout false-clean-pass tool
+        uses: actions/checkout@v4
+        with:
+          repository: toaded-git/false-clean-pass-ci-guard
+          ref: ${{ env.TOOL_REF }}
+          path: false-clean-pass-ci-guard
+
+      - name: Build aggregate-report tool
+        working-directory: false-clean-pass-ci-guard
+        run: |
+          npm ci
+          npm run build
+
+      - name: Download and commit original Evidence Records
+        working-directory: evidence-repo
+        env:
+          GH_TOKEN: ${{ secrets.EVIDENCE_COLLECT_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RECORD_ROOT"
+          if [[ ! -f repos.txt ]]; then
+            echo "Create repos.txt with one owner/repo per line." >&2
+            exit 2
+          fi
+
+          while IFS= read -r repo || [[ -n "$repo" ]]; do
+            repo="${repo%%#*}"
+            repo="$(echo "$repo" | xargs)"
+            [[ -z "$repo" ]] && continue
+
+            echo "Collecting fcp-evidence artifacts from $repo"
+            while IFS=$'\t' read -r artifact_id artifact_name; do
+              [[ -z "$artifact_id" ]] && continue
+              tmpdir="$(mktemp -d)"
+              zipfile="$tmpdir/artifact.zip"
+              gh api "repos/$repo/actions/artifacts/$artifact_id/zip" > "$zipfile"
+              unzip -q "$zipfile" -d "$tmpdir/unpacked"
+              find "$tmpdir/unpacked" -type f -name '*.json' -print0 | while IFS= read -r -d '' json_file; do
+                node - "$json_file" "$RECORD_ROOT" <<'NODE'
+const fs = require("node:fs");
+const path = require("node:path");
+
+const [file, root] = process.argv.slice(2);
+const record = JSON.parse(fs.readFileSync(file, "utf8"));
+if (!record.repo || !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(record.repo)) {
+  throw new Error(`Refusing malformed repo in ${file}`);
+}
+const timestamp = new Date(record.timestamp);
+const year = Number.isFinite(timestamp.getTime()) ? String(timestamp.getUTCFullYear()) : "unknown-year";
+const pr = record.prNumber == null ? "no-pr" : String(record.prNumber);
+const headSha = String(record.headSha || "unknown-sha").replace(/[^A-Za-z0-9_.-]/g, "").slice(0, 64);
+const output = path.join(root, record.repo, year, `${pr}-${headSha}.json`);
+fs.mkdirSync(path.dirname(output), { recursive: true });
+fs.copyFileSync(file, output);
+console.log(`preserved ${output}`);
+NODE
+              done
+              rm -rf "$tmpdir"
+            done < <(
+              gh api "repos/$repo/actions/artifacts?per_page=100" \
+                --jq '.artifacts[] | select(.expired == false and (.name | startswith("fcp-evidence-"))) | [.id, .name] | @tsv'
+            )
+          done < repos.txt
+
+      - name: Aggregate committed Evidence Records
+        working-directory: evidence-repo
+        env:
+          FCP_LICENSE: ${{ secrets.FCP_LICENSE }}
+          FCP_REPORT_SIGNING_KEY: ${{ secrets.FCP_REPORT_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$REPORT_DIR"
+          node ../false-clean-pass-ci-guard/tools/aggregate-report.mjs \
+            --input "$RECORD_ROOT" \
+            --output "$REPORT_DIR/org-evidence-report.json" \
+            --markdown "$REPORT_DIR/org-evidence-report.md"
+
+      - name: Commit preserved records and reports
+        working-directory: evidence-repo
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$RECORD_ROOT" "$REPORT_DIR"
+          if git diff --cached --quiet; then
+            echo "No evidence changes to commit."
+          else
+            git commit -m "Collect false-clean-pass evidence"
+            git push
+          fi
