@@ -82,6 +82,11 @@ const testCountRatchetSchema = z.object({
   baselineFile: z.string().optional()
 });
 
+const requiredJobSkipSchema = z.object({
+  enabled: z.boolean().optional(),
+  requiredJobs: z.array(z.string()).optional()
+});
+
 const detectorsSchema = z.object({
   skippedTests: skippedTestsSchema.optional(),
   emptyAssertions: emptyAssertionsSchema.optional(),
@@ -89,7 +94,8 @@ const detectorsSchema = z.object({
   ignoredFailures: ignoredFailuresSchema.optional(),
   coverageRatchet: coverageRatchetSchema.optional(),
   suppressionRatchet: suppressionRatchetSchema.optional(),
-  baselineGuard: baselineGuardSchema.optional()
+  baselineGuard: baselineGuardSchema.optional(),
+  requiredJobSkip: requiredJobSkipSchema.optional()
 });
 
 const configInputSchema = z
@@ -98,6 +104,8 @@ const configInputSchema = z
     preset: z.string().optional(),
     failOn: failOnSchema.optional(),
     testGlobs: z.array(z.string()).optional(),
+    requiredJobs: z.array(z.string()).optional(),
+    evidenceOutput: z.string().optional(),
     detectors: detectorsSchema.optional(),
     baselineGuard: baselineGuardSchema.optional(),
     testCountRatchet: testCountRatchetSchema.optional(),
@@ -112,6 +120,8 @@ export type GuardConfig = {
   preset: string;
   failOn: "error" | "warning" | "never";
   testGlobs: string[];
+  requiredJobs: string[];
+  evidenceOutput: string;
   detectors: {
     skippedTests: {
       enabled: boolean;
@@ -174,6 +184,10 @@ export type GuardConfig = {
       allowInitialCreate: boolean;
       codeownerTeamFallback: boolean;
     };
+    requiredJobSkip: {
+      enabled: boolean;
+      requiredJobs: string[];
+    };
   };
   baselineGuard: {
     enabled: boolean;
@@ -196,6 +210,8 @@ export const defaultConfig: GuardConfig = {
   preset: "node",
   failOn: "error",
   testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}", "tests/**/*_test.py", "**/test_*.py"],
+  requiredJobs: [],
+  evidenceOutput: "fcp-evidence.json",
   detectors: {
     skippedTests: {
       enabled: true,
@@ -257,6 +273,10 @@ export const defaultConfig: GuardConfig = {
       exemptLabel: "baseline-update",
       allowInitialCreate: true,
       codeownerTeamFallback: false
+    },
+    requiredJobSkip: {
+      enabled: true,
+      requiredJobs: []
     }
   },
   baselineGuard: {
@@ -301,6 +321,8 @@ export function mergeConfig(...parts: GuardConfigInput[]): GuardConfig {
     preset: parsed.preset ?? defaultConfig.preset,
     failOn: parsed.failOn ?? defaultConfig.failOn,
     testGlobs: parsed.testGlobs ?? defaultConfig.testGlobs,
+    requiredJobs: parsed.requiredJobs ?? defaultConfig.requiredJobs,
+    evidenceOutput: parsed.evidenceOutput ?? defaultConfig.evidenceOutput,
     detectors: {
       skippedTests: {
         ...defaultConfig.detectors.skippedTests,
@@ -346,6 +368,14 @@ export function mergeConfig(...parts: GuardConfigInput[]): GuardConfig {
         ...defaultConfig.detectors.baselineGuard,
         ...topLevelBaselineGuard,
         paths: topLevelBaselineGuard?.paths ?? defaultConfig.detectors.baselineGuard.paths
+      },
+      requiredJobSkip: {
+        ...defaultConfig.detectors.requiredJobSkip,
+        ...parsed.detectors?.requiredJobSkip,
+        requiredJobs:
+          parsed.detectors?.requiredJobSkip?.requiredJobs ??
+          parsed.requiredJobs ??
+          defaultConfig.detectors.requiredJobSkip.requiredJobs
       }
     },
     baselineGuard: {
@@ -401,6 +431,10 @@ function deepMerge(left: GuardConfigInput, right: GuardConfigInput): GuardConfig
       baselineGuard: {
         ...left.detectors?.baselineGuard,
         ...right.detectors?.baselineGuard
+      },
+      requiredJobSkip: {
+        ...left.detectors?.requiredJobSkip,
+        ...right.detectors?.requiredJobSkip
       }
     },
     baselineGuard: {

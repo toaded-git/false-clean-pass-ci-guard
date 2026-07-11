@@ -453,6 +453,10 @@ const testCountRatchetSchema = zod_1.z.object({
     skipRatioMax: zod_1.z.number().min(0).max(1).optional(),
     baselineFile: zod_1.z.string().optional()
 });
+const requiredJobSkipSchema = zod_1.z.object({
+    enabled: zod_1.z.boolean().optional(),
+    requiredJobs: zod_1.z.array(zod_1.z.string()).optional()
+});
 const detectorsSchema = zod_1.z.object({
     skippedTests: skippedTestsSchema.optional(),
     emptyAssertions: emptyAssertionsSchema.optional(),
@@ -460,7 +464,8 @@ const detectorsSchema = zod_1.z.object({
     ignoredFailures: ignoredFailuresSchema.optional(),
     coverageRatchet: coverageRatchetSchema.optional(),
     suppressionRatchet: suppressionRatchetSchema.optional(),
-    baselineGuard: baselineGuardSchema.optional()
+    baselineGuard: baselineGuardSchema.optional(),
+    requiredJobSkip: requiredJobSkipSchema.optional()
 });
 const configInputSchema = zod_1.z
     .object({
@@ -468,6 +473,8 @@ const configInputSchema = zod_1.z
     preset: zod_1.z.string().optional(),
     failOn: failOnSchema.optional(),
     testGlobs: zod_1.z.array(zod_1.z.string()).optional(),
+    requiredJobs: zod_1.z.array(zod_1.z.string()).optional(),
+    evidenceOutput: zod_1.z.string().optional(),
     detectors: detectorsSchema.optional(),
     baselineGuard: baselineGuardSchema.optional(),
     testCountRatchet: testCountRatchetSchema.optional(),
@@ -479,6 +486,8 @@ exports.defaultConfig = {
     preset: "node",
     failOn: "error",
     testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}", "tests/**/*_test.py", "**/test_*.py"],
+    requiredJobs: [],
+    evidenceOutput: "fcp-evidence.json",
     detectors: {
         skippedTests: {
             enabled: true,
@@ -540,6 +549,10 @@ exports.defaultConfig = {
             exemptLabel: "baseline-update",
             allowInitialCreate: true,
             codeownerTeamFallback: false
+        },
+        requiredJobSkip: {
+            enabled: true,
+            requiredJobs: []
         }
     },
     baselineGuard: {
@@ -579,6 +592,8 @@ function mergeConfig(...parts) {
         preset: parsed.preset ?? exports.defaultConfig.preset,
         failOn: parsed.failOn ?? exports.defaultConfig.failOn,
         testGlobs: parsed.testGlobs ?? exports.defaultConfig.testGlobs,
+        requiredJobs: parsed.requiredJobs ?? exports.defaultConfig.requiredJobs,
+        evidenceOutput: parsed.evidenceOutput ?? exports.defaultConfig.evidenceOutput,
         detectors: {
             skippedTests: {
                 ...exports.defaultConfig.detectors.skippedTests,
@@ -620,6 +635,13 @@ function mergeConfig(...parts) {
                 ...exports.defaultConfig.detectors.baselineGuard,
                 ...topLevelBaselineGuard,
                 paths: topLevelBaselineGuard?.paths ?? exports.defaultConfig.detectors.baselineGuard.paths
+            },
+            requiredJobSkip: {
+                ...exports.defaultConfig.detectors.requiredJobSkip,
+                ...parsed.detectors?.requiredJobSkip,
+                requiredJobs: parsed.detectors?.requiredJobSkip?.requiredJobs ??
+                    parsed.requiredJobs ??
+                    exports.defaultConfig.detectors.requiredJobSkip.requiredJobs
             }
         },
         baselineGuard: {
@@ -672,6 +694,10 @@ function deepMerge(left, right) {
             baselineGuard: {
                 ...left.detectors?.baselineGuard,
                 ...right.detectors?.baselineGuard
+            },
+            requiredJobSkip: {
+                ...left.detectors?.requiredJobSkip,
+                ...right.detectors?.requiredJobSkip
             }
         },
         baselineGuard: {
@@ -802,6 +828,145 @@ function isIgnoredDirectory(relativePath) {
 
 /***/ }),
 
+/***/ 2962:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createEvidenceRecord = createEvidenceRecord;
+exports.writeEvidenceRecord = writeEvidenceRecord;
+const promises_1 = __nccwpck_require__(1455);
+const node_path_1 = __nccwpck_require__(6760);
+function createEvidenceRecord(input) {
+    const attempts = input.result.findings.flatMap((finding) => findingToAttempt(finding));
+    const weakenings = input.result.findings.flatMap((finding) => findingToWeakening(finding));
+    const reviewCount = attempts.filter((attempt) => attempt.severity === "review").length;
+    return {
+        schemaVersion: "1.0",
+        repo: input.repo,
+        prNumber: input.prNumber ?? null,
+        headSha: input.headSha,
+        baseSha: input.baseSha ?? null,
+        actor: input.actor ?? "unknown",
+        runId: input.runId === undefined || input.runId === null ? null : String(input.runId),
+        timestamp: input.timestamp ?? new Date().toISOString(),
+        verdict: input.result.result,
+        attempts,
+        weakenings,
+        detectorSummary: {
+            total: input.result.findings.length,
+            failed: input.result.errorCount,
+            review: reviewCount,
+            passed: 0
+        },
+        license: {
+            org: false,
+            licenseId: null,
+            signaturePresent: false
+        },
+        signature: null
+    };
+}
+async function writeEvidenceRecord(record, outputPath, rootDir = process.cwd()) {
+    const absolutePath = (0, node_path_1.resolve)(rootDir, outputPath);
+    await (0, promises_1.mkdir)((0, node_path_1.dirname)(absolutePath), { recursive: true });
+    await (0, promises_1.writeFile)(absolutePath, `${JSON.stringify(record, null, 2)}\n`, "utf8");
+    return absolutePath;
+}
+function findingToAttempt(finding) {
+    const metadata = evidenceMetadata(finding);
+    if (metadata?.recordSection !== "attempts") {
+        return [];
+    }
+    return [
+        {
+            kind: metadata.kind,
+            severity: metadata.severity === "review" ? "review" : "high",
+            target: metadata.target ?? finding.file ?? finding.ruleId,
+            detail: metadata.detail,
+            file: metadata.file ?? finding.file,
+            line: metadata.line ?? finding.line,
+            baseValue: metadata.baseValue,
+            headValue: metadata.headValue
+        }
+    ];
+}
+function findingToWeakening(finding) {
+    const metadata = evidenceMetadata(finding);
+    if (metadata?.recordSection === "weakenings") {
+        return [
+            {
+                kind: metadata.kind,
+                severity: metadata.severity === "high" || metadata.severity === "low" ? metadata.severity : "medium",
+                target: metadata.target,
+                detail: metadata.detail,
+                file: metadata.file ?? finding.file,
+                line: metadata.line ?? finding.line,
+                delta: metadata.delta,
+                baseline: metadata.baseline,
+                current: metadata.current
+            }
+        ];
+    }
+    if (metadata?.recordSection === "attempts" || finding.severity === "info") {
+        return [];
+    }
+    return [
+        {
+            kind: classifyWeakeningKind(finding),
+            severity: finding.severity === "error" ? "high" : "medium",
+            target: finding.file,
+            detail: finding.message,
+            file: finding.file,
+            line: finding.line
+        }
+    ];
+}
+function evidenceMetadata(finding) {
+    const metadata = finding.metadata?.evidenceRecord;
+    if (!metadata || typeof metadata !== "object") {
+        return undefined;
+    }
+    return metadata;
+}
+function classifyWeakeningKind(finding) {
+    if (finding.ruleId.includes("suppression")) {
+        return "suppression_increase";
+    }
+    if (finding.ruleId.includes("test-count") || finding.ruleId.includes("zero-tests")) {
+        return "run_count_drop";
+    }
+    if (finding.ruleId.includes("guard") || finding.ruleId.includes("required-list") || finding.ruleId.includes("fail-on")) {
+        return "guard_weakening";
+    }
+    if (finding.ruleId.includes("continue-on-error") || finding.ruleId.includes("ignore-failure")) {
+        return "ignored_failure";
+    }
+    if (finding.ruleId.includes("baseline-change")) {
+        return "baseline_change";
+    }
+    if (finding.ruleId.includes("coverage")) {
+        return "coverage_drop";
+    }
+    if (finding.ruleId.includes("env-")) {
+        return "env_missing";
+    }
+    if (finding.ruleId.includes("skipped-tests")) {
+        return "test_skip";
+    }
+    if (finding.ruleId.includes("empty-test") || finding.ruleId.includes("no-assertions")) {
+        return "empty_assertion";
+    }
+    if (finding.ruleId.includes("parse-failed")) {
+        return "parse_failure";
+    }
+    return "other";
+}
+
+
+/***/ }),
+
 /***/ 8879:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -924,6 +1089,7 @@ const coverage_ratchet_1 = __nccwpck_require__(1162);
 const empty_assertions_1 = __nccwpck_require__(9425);
 const env_missing_1 = __nccwpck_require__(9920);
 const ignored_failures_1 = __nccwpck_require__(974);
+const requiredJobSkip_1 = __nccwpck_require__(3457);
 const skipped_tests_1 = __nccwpck_require__(9610);
 const suppression_ratchet_1 = __nccwpck_require__(1373);
 const test_count_ratchet_1 = __nccwpck_require__(1578);
@@ -935,6 +1101,7 @@ exports.milestone1Detectors = [
     suppression_ratchet_1.suppressionRatchetDetector
 ];
 exports.milestone2Detectors = [
+    requiredJobSkip_1.requiredJobSkipDetector,
     env_missing_1.envMissingDetector,
     ignored_failures_1.ignoredFailuresDetector,
     coverage_ratchet_1.coverageRatchetDetector,
@@ -1778,6 +1945,480 @@ function dedupeFindings(findings) {
     const seen = new Set();
     return findings.filter((finding) => {
         const key = `${finding.ruleId}:${finding.file ?? ""}:${finding.line ?? 0}:${finding.message}`;
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
+    });
+}
+
+
+/***/ }),
+
+/***/ 3457:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.requiredJobSkipDetector = void 0;
+const workflow_parser_1 = __nccwpck_require__(9245);
+const detectorId = "required-job-skip";
+exports.requiredJobSkipDetector = {
+    id: detectorId,
+    async run(ctx) {
+        const options = ctx.config.detectors.requiredJobSkip;
+        if (!options.enabled) {
+            return [];
+        }
+        const workflowChanged = ctx.diff.some((file) => (0, workflow_parser_1.isWorkflowFile)(file.filename) || (0, workflow_parser_1.isWorkflowFile)(file.previousFilename ?? ""));
+        const requiredJobs = normalizeList(options.requiredJobs);
+        if (requiredJobs.length === 0 && !workflowChanged) {
+            return [];
+        }
+        const [headState, baseState] = await Promise.all([loadHeadWorkflowState(ctx), loadBaseWorkflowState(ctx)]);
+        const findings = dedupeFindings([
+            ...detectRequiredJobsInputNarrowed(baseState, headState),
+            ...detectRequiredWorkflowTriggerNarrowed(requiredJobs, baseState, headState)
+        ]);
+        if (requiredJobs.length === 0) {
+            findings.push({
+                detector: detectorId,
+                severity: "info",
+                ruleId: "false-clean-pass/required-jobs-unconfigured",
+                message: "requiredJobs is not configured, and branch protection required checks were not available to this run; required job skip detection is informational only."
+            });
+            return dedupeFindings(findings);
+        }
+        findings.push(...(await detectCheckRunSupplement(ctx, requiredJobs)));
+        for (const requiredJob of requiredJobs) {
+            findings.push(...detectRequiredJobMapping(requiredJob, baseState, headState));
+            findings.push(...detectRequiredJobIfChange(requiredJob, baseState, headState));
+        }
+        return dedupeFindings(findings);
+    }
+};
+async function detectCheckRunSupplement(ctx, requiredJobs) {
+    if (!ctx.github || requiredJobs.length === 0) {
+        return [];
+    }
+    try {
+        const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+        const octokit = github.getOctokit(ctx.github.token);
+        const response = await octokit.rest.checks.listForRef({
+            owner: ctx.github.owner,
+            repo: ctx.github.repo,
+            ref: ctx.github.headSha,
+            per_page: 100
+        });
+        const checkRuns = response.data.check_runs ?? [];
+        const findings = [];
+        for (const requiredJob of requiredJobs) {
+            const checkRun = checkRuns.find((run) => run.name === requiredJob);
+            if (!checkRun) {
+                findings.push({
+                    detector: detectorId,
+                    severity: "warning",
+                    ruleId: "false-clean-pass/required_check_run_missing",
+                    message: `Required check '${requiredJob}' was not present in head check-runs; this is a supplementary signal only.`
+                });
+            }
+            else if (checkRun.conclusion === "skipped") {
+                findings.push({
+                    detector: detectorId,
+                    severity: "warning",
+                    ruleId: "false-clean-pass/required_check_run_skipped",
+                    message: `Required check '${requiredJob}' concluded skipped; this is a supplementary signal only.`
+                });
+            }
+        }
+        return findings;
+    }
+    catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return [
+            {
+                detector: detectorId,
+                severity: "info",
+                ruleId: "false-clean-pass/check-runs-unavailable",
+                message: `Check-runs supplementary lookup was unavailable: ${message}`
+            }
+        ];
+    }
+}
+async function loadHeadWorkflowState(ctx) {
+    const files = (await ctx.listFiles()).filter(workflow_parser_1.isWorkflowFile);
+    const sources = {};
+    for (const file of files) {
+        try {
+            sources[file] = await ctx.readFile(file);
+        }
+        catch {
+            // Removed files are represented in the diff and do not exist in head.
+        }
+    }
+    return buildWorkflowState(sources);
+}
+async function loadBaseWorkflowState(ctx) {
+    if (!ctx.readBaseFile) {
+        return buildWorkflowState({});
+    }
+    const headFiles = (await ctx.listFiles()).filter(workflow_parser_1.isWorkflowFile);
+    const diffFiles = ctx.diff.flatMap((file) => [file.filename, file.previousFilename].filter((name) => Boolean(name)));
+    const candidateFiles = [...new Set([...headFiles, ...diffFiles].filter(workflow_parser_1.isWorkflowFile))];
+    const sources = {};
+    for (const file of candidateFiles) {
+        try {
+            sources[file] = await ctx.readBaseFile(file);
+        }
+        catch {
+            // New workflow files have no base version.
+        }
+    }
+    return buildWorkflowState(sources);
+}
+function buildWorkflowState(sources) {
+    const workflows = (0, workflow_parser_1.parseWorkflowFiles)(sources);
+    const mappings = new Map();
+    const unresolved = [];
+    for (const workflow of workflows) {
+        for (const mapping of workflow.checkMappings) {
+            mappings.set(mapping.checkName, [...(mappings.get(mapping.checkName) ?? []), mapping]);
+        }
+        unresolved.push(...workflow.unresolvedCheckMappings);
+    }
+    return {
+        sources,
+        workflows,
+        mappings,
+        unresolved
+    };
+}
+function detectRequiredJobMapping(requiredJob, baseState, headState) {
+    const headMappings = headState.mappings.get(requiredJob) ?? [];
+    if (headMappings.length > 0) {
+        return [];
+    }
+    const unresolved = findPlausibleUnresolved(requiredJob, headState.unresolved);
+    if (unresolved) {
+        const detail = mappingUnresolvedDetail(requiredJob, unresolved);
+        return [
+            {
+                detector: detectorId,
+                severity: "warning",
+                ruleId: "false-clean-pass/mapping_unresolved",
+                file: unresolved.file,
+                line: unresolved.line,
+                message: detail,
+                metadata: {
+                    evidenceRecord: {
+                        recordSection: "weakenings",
+                        kind: "mapping_unresolved",
+                        severity: "medium",
+                        target: requiredJob,
+                        detail,
+                        file: unresolved.file,
+                        line: unresolved.line
+                    }
+                }
+            }
+        ];
+    }
+    const baseMappings = baseState.mappings.get(requiredJob) ?? [];
+    const mapping = baseMappings[0];
+    const detail = baseMappings.length > 0
+        ? `required job '${requiredJob}' existed in base workflow mapping but is missing from head workflow mapping.`
+        : `required job '${requiredJob}' is not produced by any statically mapped head workflow job.`;
+    return [
+        {
+            detector: detectorId,
+            severity: "error",
+            ruleId: "false-clean-pass/required_job_missing",
+            file: mapping?.file,
+            line: mapping?.line,
+            message: detail,
+            metadata: {
+                evidenceRecord: {
+                    recordSection: "attempts",
+                    kind: "required_job_missing",
+                    severity: "high",
+                    target: requiredJob,
+                    detail,
+                    file: mapping?.file,
+                    line: mapping?.line,
+                    baseValue: requiredJob,
+                    headValue: null
+                }
+            }
+        }
+    ];
+}
+function detectRequiredJobIfChange(requiredJob, baseState, headState) {
+    const baseMappings = baseState.mappings.get(requiredJob) ?? [];
+    const headMappings = headState.mappings.get(requiredJob) ?? [];
+    const findings = [];
+    for (const headMapping of headMappings) {
+        const headJob = findWorkflowJob(headState, headMapping);
+        if (!headJob?.if) {
+            continue;
+        }
+        const baseMapping = baseMappings.find((mapping) => mapping.file === headMapping.file && mapping.jobId === headMapping.jobId) ?? baseMappings[0];
+        const baseJob = baseMapping ? findWorkflowJob(baseState, baseMapping) : undefined;
+        if (normalizeIfExpression(baseJob?.if) === normalizeIfExpression(headJob.if)) {
+            continue;
+        }
+        const classification = classifyJobIf(headJob.if);
+        if (classification === "legitimate") {
+            continue;
+        }
+        const kind = classification === "skip-risk" ? "required_job_if_skip_risk" : "required_job_if_added_review";
+        const severity = classification === "skip-risk" ? "error" : "warning";
+        const recordSeverity = classification === "skip-risk" ? "high" : "review";
+        const detail = classification === "skip-risk"
+            ? `job-level if adds a skip-risk condition to required job '${requiredJob}'.`
+            : `ambiguous job-level if added to required job '${requiredJob}' requires manual review.`;
+        findings.push({
+            detector: detectorId,
+            severity,
+            ruleId: `false-clean-pass/${kind}`,
+            file: headMapping.file,
+            line: headJob.ifLine ?? headMapping.line,
+            evidence: headJob.if,
+            message: detail,
+            metadata: {
+                evidenceRecord: {
+                    recordSection: "attempts",
+                    kind,
+                    severity: recordSeverity,
+                    target: requiredJob,
+                    detail,
+                    file: headMapping.file,
+                    line: headJob.ifLine ?? headMapping.line,
+                    baseValue: baseJob?.if ?? null,
+                    headValue: headJob.if
+                }
+            }
+        });
+    }
+    return findings;
+}
+function detectRequiredWorkflowTriggerNarrowed(requiredJobs, baseState, headState) {
+    if (requiredJobs.length === 0) {
+        return [];
+    }
+    const findings = [];
+    const seenFiles = new Set();
+    for (const requiredJob of requiredJobs) {
+        const mappings = [...(baseState.mappings.get(requiredJob) ?? []), ...(headState.mappings.get(requiredJob) ?? [])];
+        for (const mapping of mappings) {
+            if (seenFiles.has(mapping.file)) {
+                continue;
+            }
+            seenFiles.add(mapping.file);
+            const baseWorkflow = baseState.workflows.find((workflow) => workflow.file === mapping.file);
+            const headWorkflow = headState.workflows.find((workflow) => workflow.file === mapping.file);
+            if (!baseWorkflow || !headWorkflow) {
+                continue;
+            }
+            const narrowed = pullRequestTriggerNarrowed(baseWorkflow.on, headWorkflow.on);
+            if (!narrowed) {
+                continue;
+            }
+            const detail = `workflow pull_request trigger for required job '${requiredJob}' was narrowed: ${narrowed}.`;
+            findings.push({
+                detector: detectorId,
+                severity: "error",
+                ruleId: "false-clean-pass/required_workflow_trigger_narrowed",
+                file: mapping.file,
+                line: 1,
+                message: detail,
+                metadata: {
+                    evidenceRecord: {
+                        recordSection: "attempts",
+                        kind: "required_workflow_trigger_narrowed",
+                        severity: "high",
+                        target: requiredJob,
+                        detail,
+                        file: mapping.file,
+                        line: 1,
+                        baseValue: JSON.stringify(baseWorkflow.on.events.pull_request ?? null),
+                        headValue: JSON.stringify(headWorkflow.on.events.pull_request ?? null)
+                    }
+                }
+            });
+        }
+    }
+    return findings;
+}
+function detectRequiredJobsInputNarrowed(baseState, headState) {
+    const baseInputs = extractGuardRequiredJobsInputs(baseState.workflows);
+    if (baseInputs.length === 0) {
+        return [];
+    }
+    const headInputs = extractGuardRequiredJobsInputs(headState.workflows);
+    const baseJobs = new Set(baseInputs.flatMap((input) => input.requiredJobs));
+    const headJobs = new Set(headInputs.flatMap((input) => input.requiredJobs));
+    const removed = [...baseJobs].filter((job) => !headJobs.has(job));
+    if (removed.length === 0) {
+        return [];
+    }
+    const input = baseInputs[0];
+    const detail = `with.requiredJobs was narrowed; removed required job(s): ${removed.join(", ")}.`;
+    return [
+        {
+            detector: detectorId,
+            severity: "error",
+            ruleId: "false-clean-pass/required_config_narrowed",
+            file: input?.file,
+            line: input?.line,
+            message: detail,
+            metadata: {
+                evidenceRecord: {
+                    recordSection: "attempts",
+                    kind: "required_config_narrowed",
+                    severity: "high",
+                    target: removed.join(", "),
+                    detail,
+                    file: input?.file,
+                    line: input?.line,
+                    baseValue: [...baseJobs].join(","),
+                    headValue: [...headJobs].join(",") || null
+                }
+            }
+        }
+    ];
+}
+function extractGuardRequiredJobsInputs(workflows) {
+    const inputs = [];
+    for (const workflow of workflows) {
+        for (const step of workflow.steps) {
+            if (!step.uses || !isFalseCleanPassAction(step.uses)) {
+                continue;
+            }
+            const raw = step.with?.requiredJobs ?? step.with?.["required-jobs"];
+            const requiredJobs = normalizeList(raw);
+            if (requiredJobs.length > 0 || raw !== undefined) {
+                inputs.push({
+                    file: workflow.file,
+                    line: step.line,
+                    requiredJobs
+                });
+            }
+        }
+    }
+    return inputs;
+}
+function pullRequestTriggerNarrowed(base, head) {
+    const basePullRequest = base.events.pull_request;
+    if (!basePullRequest) {
+        return undefined;
+    }
+    const headPullRequest = head.events.pull_request;
+    if (!headPullRequest) {
+        return "pull_request event was removed";
+    }
+    if (hasAddedEntries(basePullRequest.pathsIgnore, headPullRequest.pathsIgnore)) {
+        return "paths-ignore was expanded; manual confirmation is required for boundary globs";
+    }
+    if (hasAddedEntries(basePullRequest.branchesIgnore, headPullRequest.branchesIgnore)) {
+        return "branches-ignore was expanded";
+    }
+    if (positiveFilterNarrowed(basePullRequest.paths, headPullRequest.paths)) {
+        return "paths filter was narrowed or changed; manual confirmation is required for boundary globs";
+    }
+    if (positiveFilterNarrowed(basePullRequest.branches, headPullRequest.branches)) {
+        return "branches filter was narrowed";
+    }
+    return undefined;
+}
+function positiveFilterNarrowed(baseValues, headValues) {
+    if (baseValues.length === 0) {
+        return headValues.length > 0;
+    }
+    if (headValues.length === 0) {
+        return false;
+    }
+    return baseValues.some((value) => !headValues.includes(value));
+}
+function hasAddedEntries(baseValues, headValues) {
+    return headValues.some((value) => !baseValues.includes(value));
+}
+function findWorkflowJob(state, mapping) {
+    return state.workflows.find((workflow) => workflow.file === mapping.file)?.jobs.find((job) => job.id === mapping.jobId);
+}
+function findPlausibleUnresolved(requiredJob, unresolved) {
+    return (unresolved.find((mapping) => {
+        const displayName = mapping.jobName ?? mapping.jobId;
+        return requiredJob === displayName || requiredJob.startsWith(`${displayName} / `);
+    }) ?? unresolved[0]);
+}
+function mappingUnresolvedDetail(requiredJob, unresolved) {
+    if (unresolved.reason === "external-reusable") {
+        return `required '${requiredJob}' maps through an external reusable workflow; static mapping is unresolved.`;
+    }
+    if (unresolved.reason === "dynamic-name") {
+        return `required '${requiredJob}' may map to a job with a dynamic name expression; static mapping is unresolved.`;
+    }
+    return `required '${requiredJob}' maps through a local reusable workflow that could not be parsed; static mapping is unresolved.`;
+}
+function classifyJobIf(value) {
+    const expression = normalizeIfExpression(value);
+    if (isLegitimateIfExpression(expression)) {
+        return "legitimate";
+    }
+    if (isSkipRiskIfExpression(expression)) {
+        return "skip-risk";
+    }
+    return "review";
+}
+function isSkipRiskIfExpression(expression) {
+    if (/^false$/i.test(expression)) {
+        return true;
+    }
+    if (/\bgithub\.(actor|ref|event_name)\s*!=/.test(expression)) {
+        return true;
+    }
+    if (/^(?:!\s*cancelled\(\)|always\(\))\s*&&\s*.+/i.test(expression)) {
+        return true;
+    }
+    return false;
+}
+function isLegitimateIfExpression(expression) {
+    if (/^(?:always\(\)|!\s*cancelled\(\)|success\(\))$/i.test(expression)) {
+        return true;
+    }
+    if (/^github\.ref\s*==\s*['"]refs\/heads\/main['"]$/i.test(expression)) {
+        return true;
+    }
+    if (/^github\.event_name\s*==\s*['"]push['"]$/i.test(expression)) {
+        return true;
+    }
+    const parts = expression.split(/\s*&&\s*/).map((part) => part.trim());
+    return (parts.length > 0 &&
+        parts.every((part) => /^success\(\)$/i.test(part) ||
+            /^needs\.[A-Za-z0-9_-]+\.result\s*==\s*['"]success['"]$/i.test(part) ||
+            /^needs\.\*\.result\s*==\s*['"]success['"]$/i.test(part)));
+}
+function normalizeIfExpression(value) {
+    if (!value) {
+        return "";
+    }
+    const trimmed = value.trim();
+    const expression = trimmed.match(/^\$\{\{\s*([\s\S]*?)\s*\}\}$/)?.[1] ?? trimmed;
+    return expression.replace(/\s+/g, " ").trim();
+}
+function normalizeList(value) {
+    const items = Array.isArray(value) ? value : (value ?? "").split(",");
+    return [...new Set(items.map((item) => item.trim()).filter(Boolean))];
+}
+function isFalseCleanPassAction(uses) {
+    return /(^|\/)false-clean-pass(?:-ci-guard)?(?:@|$)/i.test(uses);
+}
+function dedupeFindings(findings) {
+    const seen = new Set();
+    return findings.filter((finding) => {
+        const key = [finding.ruleId, finding.file, finding.line, finding.message].join("\0");
         if (seen.has(key)) {
             return false;
         }
@@ -3080,7 +3721,8 @@ function parseWorkflow(source, options = {}) {
         const jobId = jobEntry.key;
         const jobNode = jobEntry.value;
         const jobName = stringValue(getMapValue(jobNode, "name"));
-        const jobIf = stringValue(getMapValue(jobNode, "if"));
+        const ifEntry = findMapEntry(jobNode, "if");
+        const jobIf = stringValue(ifEntry?.value);
         const uses = stringValue(getMapValue(jobNode, "uses"));
         const line = nodeStartLine(jobEntry.keyNode, lineOffsets) ?? nodeStartLine(jobNode, lineOffsets) ?? 1;
         const endLine = nodeEndLine(jobNode, lineOffsets) ?? line;
@@ -3090,6 +3732,7 @@ function parseWorkflow(source, options = {}) {
             id: jobId,
             name: jobName,
             if: jobIf,
+            ifLine: ifEntry ? nodeStartLine(ifEntry.keyNode, lineOffsets) : undefined,
             uses,
             line,
             endLine,
@@ -3191,6 +3834,7 @@ function parseSteps(jobNode, jobId, jobName, lineOffsets) {
             stepName: stringValue(getMapValue(item, "name")),
             uses: stringValue(getMapValue(item, "uses")),
             run: stringValue(getMapValue(item, "run")),
+            with: stringRecordValue(getMapValue(item, "with")),
             line: nodeStartLine(item, lineOffsets) ?? 1,
             endLine: nodeEndLine(item, lineOffsets) ?? nodeStartLine(item, lineOffsets) ?? 1,
             continueOnError: booleanValue(continueOnErrorEntry?.value),
@@ -3374,6 +4018,19 @@ function objectArrayValue(node) {
         }
         return Object.keys(record).length > 0 ? [record] : [];
     });
+}
+function stringRecordValue(node) {
+    if (!(0, yaml_1.isMap)(node)) {
+        return undefined;
+    }
+    const record = {};
+    for (const entry of mapEntries(node)) {
+        const value = stringValue(entry.value);
+        if (value !== undefined) {
+            record[entry.key] = value;
+        }
+    }
+    return Object.keys(record).length > 0 ? record : undefined;
 }
 function stringArrayValue(node) {
     if ((0, yaml_1.isSeq)(node)) {
@@ -44644,6 +45301,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runAction = runAction;
 const schema_1 = __nccwpck_require__(9382);
 const context_1 = __nccwpck_require__(9619);
+const evidenceRecord_1 = __nccwpck_require__(2962);
 const orchestrator_1 = __nccwpck_require__(250);
 const diff_1 = __nccwpck_require__(4346);
 const checkrun_1 = __nccwpck_require__(9459);
@@ -44658,25 +45316,38 @@ async function runAction() {
     const configPath = core.getInput("config-path") || ".github/false-clean-pass.yml";
     const failOnInput = parseFailOn(core.getInput("fail-on"));
     const sarifPath = core.getInput("sarif-path") || core.getInput("sarif-output") || "false-clean-pass.sarif";
+    const evidenceOutput = core.getInput("evidenceOutput") || core.getInput("evidence-output") || "fcp-evidence.json";
     const commentMode = parseCommentMode(core.getInput("comment-mode"));
     const attestationMode = parseAttestationMode(core.getInput("attestation-mode"));
     const token = core.getInput("github-token");
     const config = applyInputConfigOverrides((0, schema_1.loadConfig)(rootDir, configPath), {
         testCountBaseline: core.getInput("test-count-baseline"),
         allowContinueOnErrorSteps: splitCommaList(core.getInput("allow-continue-on-error-steps")),
-        codeownerTeamFallback: parseBooleanInput(core.getInput("codeowner-team-fallback"))
+        codeownerTeamFallback: parseBooleanInput(core.getInput("codeowner-team-fallback")),
+        requiredJobs: splitCommaList(core.getInput("requiredJobs") || core.getInput("required-jobs")),
+        evidenceOutput
     });
     const diff = await getActionDiff(rootDir, token);
     const runtime = await getGitHubRuntime(token);
     const markerCheckRunId = runtime && attestationMode === "marker" ? await tryEmitCheckRunMarker(runtime) : undefined;
     const contextOptions = await buildContextOptions(core, runtime, attestationMode);
     const result = await (0, orchestrator_1.runGuard)((0, context_1.createDetectorContext)(rootDir, config, diff, contextOptions), failOnInput ?? config.failOn);
+    const evidencePath = await (0, evidenceRecord_1.writeEvidenceRecord)((0, evidenceRecord_1.createEvidenceRecord)({
+        result,
+        repo: runtime ? `${runtime.owner}/${runtime.repo}` : "local/local",
+        prNumber: runtime?.pullNumber ?? null,
+        headSha: runtime?.headSha ?? "local",
+        baseSha: runtime?.baseSha ?? null,
+        actor: runtime?.actor ?? "local",
+        runId: runtime?.runId ?? null
+    }), config.evidenceOutput, rootDir);
     await (0, sarif_1.writeSarifLogFile)(result, { rootDir, sarifPath });
     await (0, annotations_1.emitAnnotations)(result.findings);
     core.setOutput("result", result.result);
     core.setOutput("error-count", String(result.errorCount));
     core.setOutput("warning-count", String(result.warningCount));
     core.setOutput("sarif-path", sarifPath);
+    core.setOutput("evidence-path", evidencePath);
     await tryCreateCheckRun(token, result, markerCheckRunId);
     await tryUpsertPullRequestComment(token, result, sarifPath, commentMode);
     if (result.result === "fail") {
@@ -44769,6 +45440,7 @@ async function buildContextOptions(core, runtime, attestationMode) {
         prLabels: await getPullRequestLabels(),
         github: runtime,
         codeOwnerReviewProvider: runtime ? (0, reviews_1.createGitHubReviewProvider)(runtime) : undefined,
+        readBaseFile: runtime?.baseSha ? createGitHubBaseFileReader(runtime) : undefined,
         checkRunAttestationVerifier: runtime && attestationMode === "marker" ? (0, checkrun_1.createCheckRunAttestationVerifier)(runtime) : undefined
     };
 }
@@ -44787,7 +45459,38 @@ async function getGitHubRuntime(token) {
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         headSha,
+        baseSha: pullRequest?.base.sha,
+        baseRef: pullRequest?.base.ref,
+        actor: github.context.actor,
+        runId: String(github.context.runId),
         pullNumber: pullRequest?.number
+    };
+}
+function createGitHubBaseFileReader(runtime) {
+    const baseSha = runtime.baseSha;
+    if (!baseSha) {
+        throw new Error("Base SHA is required to read base workflow files.");
+    }
+    return async (file) => {
+        const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+        const octokit = github.getOctokit(runtime.token);
+        const response = await octokit.rest.repos.getContent({
+            owner: runtime.owner,
+            repo: runtime.repo,
+            path: file,
+            ref: baseSha,
+            mediaType: {
+                format: "raw"
+            }
+        });
+        if (typeof response.data === "string") {
+            return response.data;
+        }
+        const content = response.data.content;
+        if (content) {
+            return Buffer.from(content, "base64").toString("utf8");
+        }
+        throw new Error(`Base file is not readable as a file: ${file}`);
     };
 }
 async function getPullRequestLabels() {
@@ -44854,6 +45557,25 @@ function applyInputConfigOverrides(config, options) {
                 ...next.detectors,
                 baselineGuard
             }
+        };
+    }
+    if (options.requiredJobs && options.requiredJobs.length > 0) {
+        next = {
+            ...next,
+            requiredJobs: options.requiredJobs,
+            detectors: {
+                ...next.detectors,
+                requiredJobSkip: {
+                    ...next.detectors.requiredJobSkip,
+                    requiredJobs: options.requiredJobs
+                }
+            }
+        };
+    }
+    if (options.evidenceOutput) {
+        next = {
+            ...next,
+            evidenceOutput: options.evidenceOutput
         };
     }
     return next;

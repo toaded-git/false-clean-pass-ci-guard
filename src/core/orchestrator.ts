@@ -3,6 +3,7 @@ import { coverageRatchetDetector } from "../detectors/coverage-ratchet";
 import { emptyAssertionsDetector } from "../detectors/empty-assertions";
 import { envMissingDetector } from "../detectors/env-missing";
 import { ignoredFailuresDetector } from "../detectors/ignored-failures";
+import { requiredJobSkipDetector } from "../detectors/requiredJobSkip";
 import { skippedTestsDetector } from "../detectors/skipped-tests";
 import { suppressionRatchetDetector } from "../detectors/suppression-ratchet";
 import { testCountRatchetDetector } from "../detectors/test-count-ratchet";
@@ -17,6 +18,7 @@ export const milestone1Detectors: Detector[] = [
 ];
 
 export const milestone2Detectors: Detector[] = [
+  requiredJobSkipDetector,
   envMissingDetector,
   ignoredFailuresDetector,
   coverageRatchetDetector,

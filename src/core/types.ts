@@ -12,6 +12,7 @@ export interface Finding {
   file?: string;
   line?: number;
   evidence?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface GitHubRuntime {
@@ -19,6 +20,10 @@ export interface GitHubRuntime {
   owner: string;
   repo: string;
   headSha: string;
+  baseSha?: string;
+  actor?: string;
+  runId?: string;
+  baseRef?: string;
   pullNumber?: number;
 }
 

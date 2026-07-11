@@ -41,6 +41,7 @@ export interface WorkflowStep {
   stepName?: string;
   uses?: string;
   run?: string;
+  with?: Record<string, string>;
   line: number;
   endLine: number;
   continueOnError?: boolean;
@@ -51,6 +52,7 @@ export interface WorkflowJob {
   id: string;
   name?: string;
   if?: string;
+  ifLine?: number;
   uses?: string;
   line: number;
   endLine: number;
@@ -106,7 +108,8 @@ export function parseWorkflow(source: string, options: ParseWorkflowOptions = {}
     const jobId = jobEntry.key;
     const jobNode = jobEntry.value;
     const jobName = stringValue(getMapValue(jobNode, "name"));
-    const jobIf = stringValue(getMapValue(jobNode, "if"));
+    const ifEntry = findMapEntry(jobNode, "if");
+    const jobIf = stringValue(ifEntry?.value);
     const uses = stringValue(getMapValue(jobNode, "uses"));
     const line = nodeStartLine(jobEntry.keyNode, lineOffsets) ?? nodeStartLine(jobNode, lineOffsets) ?? 1;
     const endLine = nodeEndLine(jobNode, lineOffsets) ?? line;
@@ -116,6 +119,7 @@ export function parseWorkflow(source: string, options: ParseWorkflowOptions = {}
       id: jobId,
       name: jobName,
       if: jobIf,
+      ifLine: ifEntry ? nodeStartLine(ifEntry.keyNode, lineOffsets) : undefined,
       uses,
       line,
       endLine,
@@ -232,6 +236,7 @@ function parseSteps(jobNode: unknown, jobId: string, jobName: string | undefined
       stepName: stringValue(getMapValue(item, "name")),
       uses: stringValue(getMapValue(item, "uses")),
       run: stringValue(getMapValue(item, "run")),
+      with: stringRecordValue(getMapValue(item, "with")),
       line: nodeStartLine(item, lineOffsets) ?? 1,
       endLine: nodeEndLine(item, lineOffsets) ?? nodeStartLine(item, lineOffsets) ?? 1,
       continueOnError: booleanValue(continueOnErrorEntry?.value),
@@ -463,6 +468,21 @@ function objectArrayValue(node: unknown): Array<Record<string, string>> {
     }
     return Object.keys(record).length > 0 ? [record] : [];
   });
+}
+
+function stringRecordValue(node: unknown): Record<string, string> | undefined {
+  if (!isMap(node)) {
+    return undefined;
+  }
+
+  const record: Record<string, string> = {};
+  for (const entry of mapEntries(node)) {
+    const value = stringValue(entry.value);
+    if (value !== undefined) {
+      record[entry.key] = value;
+    }
+  }
+  return Object.keys(record).length > 0 ? record : undefined;
 }
 
 function stringArrayValue(node: unknown): string[] {
