@@ -131,10 +131,12 @@ Operational rule:
 - Baseline paths should be protected by CODEOWNERS, for example:
 
 ```text
-.github/false-clean-pass-*.json @org/security
-.github/false-clean-pass.yml @org/security
-.github/workflows/** @org/security
+.github/false-clean-pass-*.json @toaded-git
+.github/false-clean-pass.yml @toaded-git
+.github/workflows/** @toaded-git
 ```
+
+Prefer an **individual owner** (for example `@toaded-git`) on baseline paths. Approval is verified fail-closed: if it cannot be confirmed, the baseline change is treated as an error. With a **team owner** (for example `@org/security`), the guard cannot reliably resolve team membership through the token's permissions, so legitimate baseline updates can be over-blocked (blocked on every PR even when a real team member approves). Use an individual owner unless you have enabled the optional team-approval fallback.
 
 The current implementation treats CODEOWNER approval as authoritative. The label is a secondary signal and does not downgrade mixed source-code plus baseline changes.
 

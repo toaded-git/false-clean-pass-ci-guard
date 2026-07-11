@@ -29,7 +29,7 @@ AI 코딩 에이전트가 코드를 대량 생성하면서 "CI 초록불(그린)
 | 검출기 3 | env / 시크릿 누락 (`.env.example` ↔ CI env ↔ 코드 참조 대조) | 포함 | #3. **기본 warning**·플랫폼 allowlist·옵셔널 참조 인식(§4.3) |
 | 검출기 4 | 실패 무시(`\|\| true`/`continue-on-error`/`--passWithNoTests`) **+ 4-B: 가드 self-attestation(실행 여부) + `on:`/`if:`/job-name/`fail-on`/`test-results-glob` 약화 감시** | 포함 | #1 + 가드 자기약화 방지 |
 | 검출기 5 | 커버리지 임계치 하락 (ratchet: 커밋된 baseline 대비 숫자 감소) | 포함 | #1. 개별 대체 도구 존재(차별성 낮음) |
-| 검출기 6 | 억제 주석 증가 — **diff 신규(M1) + 총량 ratchet(M2)**, 기본 `maxNewPerPR=3`+`requireReason=true` | 포함 | #1. 오탐 완화(§4.6) |
+| 검출기 6 | 억제 주석 증가 — **diff 신규(마일스톤 1) + 총량 ratchet(마일스톤 2)**, 기본 `maxNewPerPR=3`+`requireReason=true` | 포함 | #1. 오탐 완화(§4.6) |
 | 검출기 7 | **baseline 파일 봉인**: `.github/false-clean-pass-*.json` 변경 시 error, 예외는 **CODEOWNER 승인 실측(fail-closed)** | 포함 | #2 설정 봉인의 일부 |
 | 하드 페일 (#3) | **실행 테스트 수 급감 ratchet**(base 대비 급감 → error, 0건은 특수 케이스) | 포함 | #3 강화 |
 | 출력 | 단일 상태체크(pass/fail) + 어노테이션 + SARIF + PR 코멘트 | 포함 | 강제력은 브랜치 보호 + self-attestation 결합(§9) |
@@ -110,7 +110,7 @@ src/
     env-missing.ts          # 검출기 3
     ignored-failures.ts     # 검출기 4 (실패무시 4-A + 가드 self-attestation/약화 4-B)
     coverage-ratchet.ts     # 검출기 5
-    suppression-ratchet.ts  # 검출기 6 (M1 diff 신규 / M2 총량 ratchet)
+    suppression-ratchet.ts  # 검출기 6 (마일스톤 1 diff 신규 / 마일스톤 2 총량 ratchet)
     baseline-change.ts      # 검출기 7 (baseline 봉인, CODEOWNER fail-closed)
     test-count-ratchet.ts   # #3 하드페일 (실행수 급감 ratchet)
   parse/
@@ -140,12 +140,12 @@ src/
 
 ### 4.2 검출기 2 — 빈 어서션 / no-op (경량 assert-카운트 휴리스틱, 오탐 완화)
 - AST로 각 테스트 콜백 본문의 assert 신호 수를 센다: `expect(...)` 체인, `assert.*`, chai `.should`/`.to.*`, Python `assert`/`self.assert*`.
-- **관대 처리 프리셋(M1 반영, M1 마일스톤 범위에 포함)**: `expect.assertions(n)`/`expect.hasAssertions()`뿐 아니라 **호출 함수 이름이 대문자로 시작하거나 `assert`/`expect`/`check`/`verify`로 시작하면 assert 후보로 관대 처리**. `customAssertions` 설정으로 도메인 헬퍼(`expectUser` 등) 추가. `it.each`/`test.each` 콜백의 공유 헬퍼도 이 관대 규칙으로 커버(m3).
+- **관대 처리 프리셋(마일스톤 1 범위에 포함)**: `expect.assertions(n)`/`expect.hasAssertions()`뿐 아니라 **호출 함수 이름이 대문자로 시작하거나 `assert`/`expect`/`check`/`verify`로 시작하면 assert 후보로 관대 처리**. `customAssertions` 설정으로 도메인 헬퍼(`expectUser` 등) 추가. `it.each`/`test.each` 콜백의 공유 헬퍼도 이 관대 규칙으로 커버한다.
 - 판정: assert 신호 0개면 기본 `warning`, 빈 본문/즉시 `return`은 `error`. **PR 신규 테스트에 한해서만 표면화, 레거시는 침묵**(현 설계보다 보수적). `it.todo`는 제외.
 
 ### 4.3 검출기 3 — env / 시크릿 누락 (교차 대조, 기본 warning)
 - 소스: 코드 참조 키(`process.env.X`/`import.meta.env.X`/`os.environ`/`os.getenv`) ↔ `.env.example` 키 ↔ `ci-env-keys`+`env.knownProvided`.
-- 판정(**M2 반영 — 기본 severity를 error에서 warning으로 낮춤**):
+- 판정(**기본 severity를 error에서 warning으로 낮춤**):
   - 코드 참조인데 어디에도 없음 → **기본 `warning`**.
   - `env.required`(사람이 명시한 필수 키, 예 `JWT_SECRET`)가 CI 주입에 없음 → `error`(사람이 명시한 것만 error).
 - **광범위 allowlist 프리셋 필수 동봉**: 플랫폼 주입 키(`VERCEL_*`, `CF_*`, `GITHUB_*`, `CI`, `NODE_ENV`, `NEXT_PUBLIC_*` 등)를 프리셋별 기본 allowlist로 제공.
@@ -171,13 +171,13 @@ src/
 - 설정 파일 임계치(`coverageThreshold`/`fail_under`) base↔head 감소 시 `error`. 실측 커버리지가 baseline보다 `coverage.tolerance`(기본 0.5%p) 넘게 낮으면 `error`.
 - baseline 파일 자체의 diff는 **검출기 7**이 담당(§4.8). 파싱 실패·부분 결과(모노레포 샤딩: total이 baseline 절반 미만이면 병합 누락 의심)는 error 대신 `info`. 커버리지 병합 전제를 README 명시.
 
-### 4.6 검출기 6 — 억제 주석 (diff 신규[M1] + 총량 ratchet[M2], 오탐 완화)
+### 4.6 검출기 6 — 억제 주석 (diff 신규[마일스톤 1] + 총량 ratchet[마일스톤 2], 오탐 완화)
 - 패턴: `eslint-disable(-*)?`, `@ts-ignore`, `@ts-expect-error`, `# type: ignore`, `# noqa`, `# pylint: disable`.
-- **A. diff 신규(M1)**: PR added 라인의 신규 억제 수를 센다. **기본 `maxNewPerPR=3` + `requireReason=true`**(기본 0은 정당한 억제까지 막을 수 있음). **이유가 달린 억제(`-- 이유`, `@ts-expect-error 이유`)는 카운트 제외가 기본**. error는 "이유 없는 신규 억제가 `maxNewPerPR` 초과"에만.
-- **B. 총량 ratchet(M2)**: 전체 억제 총량이 baseline(`.github/false-clean-pass-suppressions.json`)보다 증가 시 `warning`. baseline 무단 수정 방지는 검출기 7.
+- **A. diff 신규(마일스톤 1)**: PR added 라인의 신규 억제 수를 센다. **기본 `maxNewPerPR=3` + `requireReason=true`**(기본 0은 정당한 억제까지 막을 수 있음). **이유가 달린 억제(`-- 이유`, `@ts-expect-error 이유`)는 카운트 제외가 기본**. error는 "이유 없는 신규 억제가 `maxNewPerPR` 초과"에만.
+- **B. 총량 ratchet(마일스톤 2)**: 전체 억제 총량이 baseline(`.github/false-clean-pass-suppressions.json`)보다 증가 시 `warning`. baseline 무단 수정 방지는 검출기 7.
 - `excludePaths` 기본 `fixtures/`·`__mocks__/`.
 
-### 4.7 하드페일 — 실행 테스트 수 급감 ratchet (#3, M5 강화)
+### 4.7 하드페일 — 실행 테스트 수 급감 ratchet (#3 강화)
 - 조건: `test-results-glob`가 주어졌을 때 활성.
 - 방법: `parse/junit.ts`가 JUnit XML/JSON 요약에서 **총 실행 테스트 수 = tests - skipped**를 집계.
 - **강화**: "0건"만 보는 대신 **base 대비 실행 테스트 수 급감을 ratchet으로 차단**. baseline(`test-count-baseline`, 기본 `.github/false-clean-pass-testcount.json`, 검출기 7 봉인 대상)의 실행수 대비:
@@ -239,14 +239,14 @@ src/
   - `config/schema.ts`(zod), `config/presets.ts`(node 프리셋 + **검출기 2 assert 헬퍼 관대 처리 프리셋 포함**)
   - `git/diff.ts`, `parse/js-ast.ts`
   - `detectors/skipped-tests.ts`(1), `detectors/empty-assertions.ts`(2 — 헬퍼 관대·신규 한정), `detectors/suppression-ratchet.ts`(6 — **diff 신규 A만, 기본 `maxNewPerPR=3`+`requireReason=true`**)
-  - `gh/checkrun.ts`(Check Run 생성; 마커 emit/verify는 M2), `report/annotations.ts`
+  - `gh/checkrun.ts`(Check Run 생성; 마커 emit/verify는 마일스톤 2), `report/annotations.ts`
   - `vitest` 셋업 + `test/fixtures/`
 - **완료 기준(DoD)**:
   1. "나쁜" 픽스처에서 3종 검출기 각각 최소 1건 finding(억제는 이유 없는 신규 4개+ 로 error).
   2. "깨끗한" 픽스처 findings 0건(오탐 없음). **커스텀 assert 헬퍼(`expectUser`)·이유 달린 억제는 오탐 안 남**을 테스트로 검증.
   3. diff 모드 added `.only`=error, 레거시=warning 검증.
   4. 각 검출기당 최소 1개 vitest. `fail-on=error` 시 exit non-zero.
-  5. 검출기 6은 **diff 신규만**(총량 ratchet 미구현이 M1 범위)임을 코드 주석·테스트로 명시. **dogfooding(자기 리포 CI)은 마일스톤 2 완료 후 활성**(마일스톤 1 단독은 오탐 여지) — DoD에 명시.
+  5. 검출기 6은 **diff 신규만**(총량 ratchet 미구현이 마일스톤 1 범위)임을 코드 주석·테스트로 명시. **dogfooding(자기 리포 CI)은 마일스톤 2 완료 후 활성**(마일스톤 1 단독은 오탐 여지) — DoD에 명시.
 
 ### 마일스톤 2 — env(#3) + 실패무시/가드 self-attestation(4-B) + 커버리지·억제 총량 ratchet + baseline CODEOWNER 봉인(7) + 실행수 급감 하드페일(#3)
 - **목표**: 검출기 3·4(A+B)·5·7, 억제 총량(6-B), 실행수 급감 하드페일 완성. self-attestation·CODEOWNER fail-closed·실행수 급감 ratchet을 여기서 구현.
@@ -314,10 +314,10 @@ detectors:
     ignoreTodo: true
   envMissing:
     enabled: true
-    unknownSeverity: warning       # 기본 error→warning (신규, M2)
+    unknownSeverity: warning       # 기본 error→warning
     required: ["JWT_SECRET"]        # 이것만 error (값 아님, 이름만)
     exampleFiles: [".env.example"]
-    allowlist: ["NODE_ENV","CI","PATH","HOME","VERCEL_*","CF_*","GITHUB_*","NEXT_PUBLIC_*"]  # (확장, M2)
+    allowlist: ["NODE_ENV","CI","PATH","HOME","VERCEL_*","CF_*","GITHUB_*","NEXT_PUBLIC_*"]  # 플랫폼 주입 env 확장
     optionalFallbackDemote: true   # `?? default`/`|| ''` 동반 참조는 info로 강등 (신규)
     dynamicAccessSeverity: info
   ignoredFailures:
@@ -339,8 +339,8 @@ detectors:
     partialResultDemote: true           # total이 baseline 절반 미만이면 info
   suppressionRatchet:
     enabled: true
-    maxNewPerPR: 3                       # 기본 0→3 (M3, 변경)
-    requireReason: true                  # 기본 false→true, 이유 달린 억제는 카운트 제외 (M3, 변경)
+    maxNewPerPR: 3                       # 기본 0→3
+    requireReason: true                  # 기본 false→true, 이유 달린 억제는 카운트 제외
     totalIncreaseSeverity: warning
     baselineFile: ".github/false-clean-pass-suppressions.json"
     excludePaths: ["**/fixtures/**", "**/__mocks__/**"]
@@ -353,11 +353,11 @@ detectors:
     exemptLabel: "baseline-update"       # 보조 신호(로그용)만, 단독 완화 불가 (의미 축소)
     allowInitialCreate: true
 
-zeroTests:                # #3 하드페일 (실행수 급감 ratchet, M5)
+zeroTests:                # #3 하드페일 (실행수 급감 ratchet)
   enabled: true
   baselineFile: ".github/false-clean-pass-testcount.json"  # 실행수 baseline (검출기 7 봉인 대상)
-  maxDropPercent: 20      # base 대비 실행수 -20% 초과 감소 시 error (신규, M5)
-  minRatio: null          # 선택: 실행수/baseline < minRatio 이면 error (신규, M5)
+  maxDropPercent: 20      # base 대비 실행수 -20% 초과 감소 시 error
+  minRatio: null          # 선택: 실행수/baseline < minRatio 이면 error
   skipRatioMax: 0.9
 ```
 
@@ -371,7 +371,7 @@ zeroTests:                # #3 하드페일 (실행수 급감 ratchet, M5)
   - `clean/`(위반 0, 오탐 회귀 기준선; **`expectUser` 헬퍼·이유 달린 억제·옵셔널 env 포함해 오탐 안 남 검증**), `skips/`, `empty-assert/`, `env-missing/`(옵셔널·allowlist·required 케이스), `ignored-failures/`, `guard-weakening/`(스텝 제거·`on:` 변경·`if:` 추가·job-name 변경·`fail-on` 완화·`test-results-glob` 제거·**마커 부재/SHA 불일치**·스텝 이동 오탐), `coverage-drop/`(+샤딩 부분결과), `suppressions/`(신규+이유+총량), `baseline-change/`(**CODEOWNER approve 4케이스: 없음/approve+baseline-only/approve+코드동반/확인불가**), `test-count-drop/`(0건·-20%급감·trivial 1개 우회 시나리오).
 - **diff/컨텍스트 주입**: `git/diff.ts`·`gh/reviews.ts`·`gh/checkrun.ts`는 주입 가능한 provider 인터페이스로 설계. 테스트는 before-after 파일 쌍으로 unified diff, PR reviews·Check Run 마커·라벨을 목으로 주입(실 API 불필요).
 - **골든 파일**: findings JSON·SARIF 스냅샷 회귀.
-- **dogfooding**: **M2 완료 후** 자기 리포 CI에 자기 Action을 걸어 `false-clean-pass` 체크 초록 확인. baseline 파일은 검출기 7 대상이므로 CODEOWNER approve 별도 PR로만 갱신.
+- **dogfooding**: **마일스톤 2 완료 후** 자기 리포 CI에 자기 Action을 걸어 `false-clean-pass` 체크 초록 확인. baseline 파일은 검출기 7 대상이므로 CODEOWNER approve 별도 PR로만 갱신.
 - **오탐 회귀 게이트**: `clean` 픽스처 findings 1건이라도 CI fail(오탐 0 유지).
 
 ---
@@ -383,11 +383,11 @@ zeroTests:                # #3 하드페일 (실행수 급감 ratchet, M5)
 | **가드 자기약화 — 트리거/조건 우회** | `pull_request`는 base 워크플로 실행 + skip된 required check는 GitHub이 success 처리 | 4-B를 **self-attestation(마커 존재+head SHA 일치 실측)**으로 재정의 + `on:`/`if:`/job-name 변경 감시. **정직한 경계**: skip-as-success 근본 함정은 Action 혼자 못 막음 → **required status check 지정 + self-attestation 이중 확인**(사람 브랜치 보호 설정)으로만 갭이 좁혀짐. 위조 방지 서명은 v2. |
 | **baseline 봉인 — self-label 우회** | GitHub이 write 봇의 self-label을 강제로 못 막음 | 예외를 **CODEOWNER 승인 실측**으로 전환 + **fail-closed**(확인 불가=차단). 라벨은 보조 신호로만. §10.3에 CODEOWNERS baseline 경로 보호를 **강제 전제**로 승격. |
 | **하드페일 우회 — trivial 1개** | 199개 삭제+`expect(true).toBe(true)` 1개면 실행수=1로 통과 | "0건"에서 **실행수 급감 ratchet**(base 대비 -20% 초과 error)로 강화. 실행수 baseline도 검출기 7 봉인. |
-| **오탐이 개발자를 off로 몬다** (M1·M2·M3) | 공유 헬퍼·플랫폼 env·정당한 억제 | 검출기 2 헬퍼 관대·신규 한정; 검출기 3 기본 warning·allowlist·옵셔널 강등; 검출기 6 `maxNewPerPR=3`+`requireReason`. `clean` 픽스처 오탐 0 게이트. |
+| **오탐이 개발자를 off로 몬다** | 공유 헬퍼·플랫폼 env·정당한 억제 | 검출기 2 헬퍼 관대·신규 한정; 검출기 3 기본 warning·allowlist·옵셔널 강등; 검출기 6 `maxNewPerPR=3`+`requireReason`. `clean` 픽스처 오탐 0 게이트. |
 | **차별성 과대평가** | 조각들은 성숙 도구로 대체 가능 | 차별성 서사를 **오케스트레이션 + 자기약화 방지(4-B/7)**로 정직하게 좁힘. README "왜 통합인가"·"못 잡는 것" 섹션. 4-B/7 실효가 곧 해자. |
 | **정적/diff의 원리적 한계** | babel은 타입체크 안 함; 모킹·런타임 스킵·결과 위조 | README "이 도구가 못 잡는 것"에 정직히 명시. 런타임 false-green·결과 산출 봉인은 v2. |
 | **강제력 부재** | 진짜 차단은 서버측 브랜치 보호 | required status check 지정 + self-attestation 결합 절차 README·§10 명시. |
-| **번들(dist) 표류** | JS Action은 커밋된 dist 사용 | CI에서 `ncc build` 후 diff 없음 검사(M3 DoD 4). |
+| **번들(dist) 표류** | JS Action은 커밋된 dist 사용 | CI에서 `ncc build` 후 diff 없음 검사(마일스톤 3 DoD 4). |
 | **GITHUB_TOKEN 권한** | 코멘트/체크런/reviews API 필요 | `permissions: { pull-requests: write, checks: write, contents: read }` 최소 권한 명시. fork PR 제약 시 어노테이션·SARIF 폴백. |
 
 ---
