@@ -1,0 +1,31 @@
+# false-clean-pass dogfooding config for this repository.
+version: 1
+detectors:
+  envMissing:
+    # `ignore` replaces the default list, so the built-in defaults are repeated here.
+    # The trailing block is vendored-dependency / bundle env references that appear in
+    # the committed dist/*.index.js chunks (standard Node/undici/proxy/test-runner vars,
+    # never this repo's own CI config). env-missing has no path-based exclude, so we
+    # suppress by key name. A proper path-based exclude for build output (dist/**,
+    # build/**) in the env-missing detector is planned for a future release.
+    ignore:
+      - NODE_ENV
+      - CI
+      - PATH
+      - HOME
+      - PWD
+      - SHELL
+      - TMPDIR
+      - "GITHUB_*"
+      - "RUNNER_*"
+      # vendored-bundle env references (dist/*.index.js)
+      - NODE_DEBUG
+      - NODE_V8_COVERAGE
+      - UNDICI_NO_FG
+      - JEST_WORKER_ID
+      - HTTP_PROXY
+      - HTTPS_PROXY
+      - NO_PROXY
+      - http_proxy
+      - https_proxy
+      - no_proxy
