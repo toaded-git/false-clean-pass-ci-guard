@@ -56,7 +56,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: <owner>/false-clean-pass-ci-guard@v1
+      - uses: toaded-git/false-clean-pass-ci-guard@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-results-glob: junit.xml
@@ -70,7 +70,7 @@ jobs:
           sarif_file: false-clean-pass.sarif
 ```
 
-FIX-c is the important shape: keep `verify` as an independent job with `if: always()`. If the test job fails, is skipped, or produces suspicious output, the guard still runs and records the reason.
+The important shape here is running `verify` as an independent job with `if: always()`. If the test job fails, is skipped, or produces suspicious output, the guard still runs and records the reason — a co-located check would be skipped along with the job it is meant to guard.
 
 ## Action Inputs
 
