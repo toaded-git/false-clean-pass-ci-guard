@@ -1,4 +1,4 @@
-import { loadConfig } from "./config/schema";
+import { loadConfig, type GuardConfig } from "./config/schema";
 import { createDetectorContext, type DetectorContextOptions } from "./core/context";
 import { runGuard } from "./core/orchestrator";
 import type { FailOn, GitHubRuntime } from "./core/types";
@@ -7,26 +7,36 @@ import { createCheckRunAttestationVerifier, emitCheckRunShaMarker } from "./gh/c
 import { createGitHubReviewProvider } from "./gh/reviews";
 import { emitAnnotations } from "./report/annotations";
 import { createCheckRun } from "./report/checkrun";
+import { type CommentMode, upsertPullRequestComment } from "./report/comment";
+import { writeSarifLogFile } from "./report/sarif";
 
 export async function runAction(): Promise<void> {
   const core = await import("@actions/core");
   const rootDir = process.cwd();
   const configPath = core.getInput("config-path") || ".github/false-clean-pass.yml";
   const failOnInput = parseFailOn(core.getInput("fail-on"));
+  const sarifPath = core.getInput("sarif-path") || core.getInput("sarif-output") || "false-clean-pass.sarif";
+  const commentMode = parseCommentMode(core.getInput("comment-mode"));
+  const attestationMode = parseAttestationMode(core.getInput("attestation-mode"));
   const token = core.getInput("github-token");
-  const config = loadConfig(rootDir, configPath);
+  const config = applyInputConfigOverrides(loadConfig(rootDir, configPath), {
+    testCountBaseline: core.getInput("test-count-baseline")
+  });
   const diff = await getActionDiff(rootDir, token);
   const runtime = await getGitHubRuntime(token);
-  const markerCheckRunId = runtime ? await tryEmitCheckRunMarker(runtime) : undefined;
-  const contextOptions = await buildContextOptions(core, runtime);
+  const markerCheckRunId = runtime && attestationMode === "marker" ? await tryEmitCheckRunMarker(runtime) : undefined;
+  const contextOptions = await buildContextOptions(core, runtime, attestationMode);
   const result = await runGuard(createDetectorContext(rootDir, config, diff, contextOptions), failOnInput ?? config.failOn);
 
+  await writeSarifLogFile(result, { rootDir, sarifPath });
   await emitAnnotations(result.findings);
   core.setOutput("result", result.result);
   core.setOutput("error-count", String(result.errorCount));
   core.setOutput("warning-count", String(result.warningCount));
+  core.setOutput("sarif-path", sarifPath);
 
   await tryCreateCheckRun(token, result, markerCheckRunId);
+  await tryUpsertPullRequestComment(token, result, sarifPath, commentMode);
 
   if (result.result === "fail") {
     core.setFailed(`false-clean-pass detected ${result.errorCount} errors and ${result.warningCount} warnings.`);
@@ -85,6 +95,34 @@ async function tryCreateCheckRun(
   }
 }
 
+async function tryUpsertPullRequestComment(
+  token: string,
+  result: Awaited<ReturnType<typeof runGuard>>,
+  sarifPath: string,
+  mode: CommentMode
+): Promise<void> {
+  const [core, github] = await Promise.all([import("@actions/core"), import("@actions/github")]);
+  const pullNumber = github.context.payload.pull_request?.number;
+  if (!token || !pullNumber || mode === "off") {
+    return;
+  }
+
+  try {
+    await upsertPullRequestComment({
+      token,
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      pullNumber,
+      result,
+      sarifPath,
+      mode
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    core.warning(`Unable to upsert false-clean-pass PR comment: ${message}`);
+  }
+}
+
 async function tryEmitCheckRunMarker(runtime: GitHubRuntime): Promise<number | undefined> {
   const core = await import("@actions/core");
   try {
@@ -96,15 +134,21 @@ async function tryEmitCheckRunMarker(runtime: GitHubRuntime): Promise<number | u
   }
 }
 
-async function buildContextOptions(core: { getInput(name: string): string }, runtime: GitHubRuntime | undefined): Promise<DetectorContextOptions> {
+async function buildContextOptions(
+  core: { getInput(name: string): string },
+  runtime: GitHubRuntime | undefined,
+  attestationMode: AttestationMode
+): Promise<DetectorContextOptions> {
   return {
     ciEnvKeys: splitCommaList(core.getInput("ci-env-keys")),
     testResultsGlob: core.getInput("test-results-glob") || undefined,
+    baseTestResultsGlob: core.getInput("base-test-results-glob") || undefined,
     coverageSummaryPath: core.getInput("coverage-summary") || undefined,
     prLabels: await getPullRequestLabels(),
     github: runtime,
     codeOwnerReviewProvider: runtime ? createGitHubReviewProvider(runtime) : undefined,
-    checkRunAttestationVerifier: runtime ? createCheckRunAttestationVerifier(runtime) : undefined
+    checkRunAttestationVerifier:
+      runtime && attestationMode === "marker" ? createCheckRunAttestationVerifier(runtime) : undefined
   };
 }
 
@@ -149,6 +193,38 @@ function parseFailOn(value: string): FailOn | undefined {
     return value;
   }
   return undefined;
+}
+
+function parseCommentMode(value: string): CommentMode {
+  if (value === "new" || value === "off") {
+    return value;
+  }
+  return "update";
+}
+
+type AttestationMode = "marker" | "off";
+
+function parseAttestationMode(value: string): AttestationMode {
+  return value === "off" ? "off" : "marker";
+}
+
+function applyInputConfigOverrides(
+  config: GuardConfig,
+  options: {
+    testCountBaseline?: string;
+  }
+): GuardConfig {
+  if (!options.testCountBaseline) {
+    return config;
+  }
+
+  return {
+    ...config,
+    testCountRatchet: {
+      ...config.testCountRatchet,
+      baselineFile: options.testCountBaseline
+    }
+  };
 }
 
 void runAction();

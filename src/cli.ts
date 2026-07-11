@@ -1,9 +1,10 @@
 import { readFileSync } from "node:fs";
-import { loadConfig } from "./config/schema";
+import { loadConfig, type GuardConfig } from "./config/schema";
 import { createDetectorContext } from "./core/context";
 import { runGuard } from "./core/orchestrator";
 import type { FailOn } from "./core/types";
 import { getLocalGitDiff, parseUnifiedDiff } from "./git/diff";
+import { writeSarifLogFile } from "./report/sarif";
 
 export interface CliStreams {
   stdout: Pick<NodeJS.WriteStream, "write">;
@@ -16,7 +17,7 @@ export async function runCli(
 ): Promise<number> {
   const args = parseArgs(argv);
   const rootDir = args.root ?? process.cwd();
-  const config = loadConfig(rootDir, args.config ?? ".github/false-clean-pass.yml");
+  const config = applyCliConfigOverrides(loadConfig(rootDir, args.config ?? ".github/false-clean-pass.yml"), args);
   const diff = args.diffFile
     ? parseUnifiedDiff(readFileSync(args.diffFile, "utf8"))
     : getLocalGitDiff(rootDir, args.base ?? "HEAD~1", args.head ?? "HEAD");
@@ -30,6 +31,10 @@ export async function runCli(
     }),
     args.failOn ?? config.failOn
   );
+
+  if (args.sarifPath) {
+    await writeSarifLogFile(result, { rootDir, sarifPath: args.sarifPath });
+  }
 
   if (args.json) {
     streams.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
@@ -52,7 +57,9 @@ interface CliArgs {
   ciEnvKeys?: string[];
   testResultsGlob?: string;
   baseTestResultsGlob?: string;
+  testCountBaseline?: string;
   coverageSummary?: string;
+  sarifPath?: string;
   prLabels?: string[];
   json: boolean;
 }
@@ -91,8 +98,14 @@ function parseArgs(argv: string[]): CliArgs {
     } else if (arg === "--base-test-results-glob" && value) {
       args.baseTestResultsGlob = value;
       index += 1;
+    } else if (arg === "--test-count-baseline" && value) {
+      args.testCountBaseline = value;
+      index += 1;
     } else if (arg === "--coverage-summary" && value) {
       args.coverageSummary = value;
+      index += 1;
+    } else if (arg === "--sarif-path" && value) {
+      args.sarifPath = value;
       index += 1;
     } else if (arg === "--pr-label" && value) {
       args.prLabels = [...(args.prLabels ?? []), value];
@@ -119,6 +132,20 @@ function parseFailOn(value: string): FailOn {
     return value;
   }
   throw new Error(`Invalid --fail-on value: ${value}`);
+}
+
+function applyCliConfigOverrides(config: GuardConfig, args: CliArgs): GuardConfig {
+  if (!args.testCountBaseline) {
+    return config;
+  }
+
+  return {
+    ...config,
+    testCountRatchet: {
+      ...config.testCountRatchet,
+      baselineFile: args.testCountBaseline
+    }
+  };
 }
 
 if (require.main === module) {

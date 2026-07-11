@@ -1,0 +1,9 @@
+# Stateless static checker: no DB, Redis, queue, or persistent service.
+# Purpose: reproduce CLI/test execution in a Node 20 environment.
+services:
+  dev:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm ci && npm test"

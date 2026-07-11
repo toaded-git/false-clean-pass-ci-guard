@@ -7,21 +7,40 @@ inputs:
     required: false
     default: .github/false-clean-pass.yml
   github-token:
-    description: GitHub token used for PR diff and optional check run creation.
+    description: GitHub token used for PR diff, Check Run creation, and PR comments.
     required: false
   fail-on:
     description: Minimum finding severity that fails the check: error, warning, or never.
     required: false
     default: error
+  sarif-path:
+    description: Path where the SARIF 2.1.0 report is written.
+    required: false
+    default: false-clean-pass.sarif
   test-results-glob:
     description: JUnit XML test result glob used for zero-test and test-count ratchets.
     required: false
+  base-test-results-glob:
+    description: Optional baseline JUnit XML glob used to compare executed test counts.
+    required: false
+  test-count-baseline:
+    description: Optional JSON baseline file for executed test count ratchet.
+    required: false
+    default: .github/false-clean-pass-test-count.json
   coverage-summary:
     description: Coverage summary JSON path used for coverage ratchet checks.
     required: false
   ci-env-keys:
     description: Comma-separated CI-provided env key names, never values.
     required: false
+  comment-mode:
+    description: PR comment behavior: update, new, or off.
+    required: false
+    default: update
+  attestation-mode:
+    description: Self-attestation mode. marker emits and verifies a non-cryptographic Check Run marker; off disables it.
+    required: false
+    default: marker
 outputs:
   result:
     description: pass or fail.
@@ -29,6 +48,8 @@ outputs:
     description: Number of error findings.
   warning-count:
     description: Number of warning findings.
+  sarif-path:
+    description: Path to the generated SARIF file.
 runs:
   using: node20
   main: dist/index.js

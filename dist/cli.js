@@ -17,22 +17,6 @@ module.exports = require("buffer");
 
 /***/ }),
 
-/***/ 5317:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("child_process");
-
-/***/ }),
-
-/***/ 6982:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("crypto");
-
-/***/ }),
-
 /***/ 4434:
 /***/ ((module) => {
 
@@ -273,14 +257,6 @@ module.exports = require("os");
 
 /***/ }),
 
-/***/ 6928:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("path");
-
-/***/ }),
-
 /***/ 932:
 /***/ ((module) => {
 
@@ -294,14 +270,6 @@ module.exports = require("process");
 
 "use strict";
 module.exports = require("string_decoder");
-
-/***/ }),
-
-/***/ 3557:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("timers");
 
 /***/ }),
 
@@ -2058,83 +2026,6 @@ function extractExecuted(value) {
 
 /***/ }),
 
-/***/ 9459:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FALSE_CLEAN_PASS_CHECK_NAME = void 0;
-exports.formatCheckRunShaMarker = formatCheckRunShaMarker;
-exports.emitCheckRunShaMarker = emitCheckRunShaMarker;
-exports.createCheckRunAttestationVerifier = createCheckRunAttestationVerifier;
-exports.FALSE_CLEAN_PASS_CHECK_NAME = "false-clean-pass";
-function formatCheckRunShaMarker(headSha) {
-    return `<!-- false-clean-pass:self-attestation:${headSha} -->`;
-}
-async function emitCheckRunShaMarker(runtime) {
-    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
-    const octokit = github.getOctokit(runtime.token);
-    const response = await octokit.rest.checks.create({
-        owner: runtime.owner,
-        repo: runtime.repo,
-        name: exports.FALSE_CLEAN_PASS_CHECK_NAME,
-        head_sha: runtime.headSha,
-        status: "in_progress",
-        output: {
-            title: exports.FALSE_CLEAN_PASS_CHECK_NAME,
-            summary: formatCheckRunShaMarker(runtime.headSha)
-        }
-    });
-    return response.data.id;
-}
-function createCheckRunAttestationVerifier(runtime) {
-    return async () => {
-        try {
-            const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
-            const octokit = github.getOctokit(runtime.token);
-            const response = await octokit.rest.checks.listForRef({
-                owner: runtime.owner,
-                repo: runtime.repo,
-                ref: runtime.headSha,
-                check_name: exports.FALSE_CLEAN_PASS_CHECK_NAME,
-                per_page: 100
-            });
-            const marker = formatCheckRunShaMarker(runtime.headSha);
-            const matching = response.data.check_runs.find((checkRun) => {
-                const summary = checkRun.output?.summary ?? "";
-                const text = checkRun.output?.text ?? "";
-                return summary.includes(marker) || text.includes(marker);
-            });
-            if (!matching) {
-                return {
-                    ok: false,
-                    reason: "missing",
-                    message: "false-clean-pass Check Run self-attestation marker was not found for this commit."
-                };
-            }
-            if (matching.head_sha !== runtime.headSha) {
-                return {
-                    ok: false,
-                    reason: "sha-mismatch",
-                    message: `false-clean-pass Check Run marker was found on ${matching.head_sha}, expected ${runtime.headSha}.`
-                };
-            }
-            return { ok: true };
-        }
-        catch (error) {
-            return {
-                ok: false,
-                reason: "api-failed",
-                message: error instanceof Error ? error.message : String(error)
-            };
-        }
-    };
-}
-
-
-/***/ }),
-
 /***/ 8325:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -2149,7 +2040,7 @@ function createGitHubReviewProvider(runtime) {
     }
     return {
         async listReviews() {
-            const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+            const github = await __nccwpck_require__.e(/* import() */ 157).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
             const octokit = github.getOctokit(runtime.token);
             const reviews = (await octokit.paginate(octokit.rest.pulls.listReviews, {
                 owner: runtime.owner,
@@ -2166,7 +2057,7 @@ function createGitHubReviewProvider(runtime) {
             }));
         },
         async isTeamMember(teamOwner, teamSlug, username) {
-            const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+            const github = await __nccwpck_require__.e(/* import() */ 157).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
             const octokit = github.getOctokit(runtime.token);
             try {
                 const response = await octokit.rest.teams.getMembershipForUserInOrg({
@@ -2199,7 +2090,7 @@ exports.parsePatch = parsePatch;
 exports.getChangedFile = getChangedFile;
 const node_child_process_1 = __nccwpck_require__(1421);
 async function getGitHubDiff(options) {
-    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+    const github = await __nccwpck_require__.e(/* import() */ 157).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
     const octokit = github.getOctokit(options.token);
     const response = await octokit.rest.repos.compareCommitsWithBasehead({
         owner: options.owner,
@@ -3000,216 +2891,6 @@ function stringifyRecord(value) {
         }
     }
     return result;
-}
-
-
-/***/ }),
-
-/***/ 6891:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.emitAnnotations = emitAnnotations;
-async function emitAnnotations(findings) {
-    const core = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421));
-    for (const finding of findings) {
-        const properties = finding.file && finding.line
-            ? {
-                file: finding.file,
-                startLine: finding.line,
-                title: finding.ruleId
-            }
-            : {
-                title: finding.ruleId
-            };
-        if (finding.severity === "error") {
-            core.error(finding.message, properties);
-        }
-        else if (finding.severity === "warning") {
-            core.warning(finding.message, properties);
-        }
-        else {
-            core.notice(finding.message, properties);
-        }
-    }
-}
-
-
-/***/ }),
-
-/***/ 8028:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.formatCheckRunSummary = formatCheckRunSummary;
-exports.createCheckRun = createCheckRun;
-const checkrun_1 = __nccwpck_require__(9459);
-function formatCheckRunSummary(result, headSha) {
-    const marker = headSha ? `${(0, checkrun_1.formatCheckRunShaMarker)(headSha)}\n\n` : "";
-    if (result.findings.length === 0) {
-        return `${marker}No false-clean-pass findings were detected.`;
-    }
-    const lines = [
-        marker.trimEnd(),
-        `Result: ${result.result}`,
-        `Errors: ${result.errorCount}`,
-        `Warnings: ${result.warningCount}`,
-        "",
-        "| Severity | Rule | Location | Message |",
-        "| --- | --- | --- | --- |"
-    ];
-    for (const finding of result.findings) {
-        const location = finding.file ? `${finding.file}${finding.line ? `:${finding.line}` : ""}` : "";
-        lines.push(`| ${finding.severity} | ${finding.ruleId} | ${location} | ${escapeMarkdownCell(finding.message)} |`);
-    }
-    return lines.filter((line, index) => index !== 0 || line.length > 0).join("\n");
-}
-async function createCheckRun(options) {
-    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
-    const octokit = github.getOctokit(options.token);
-    const payload = {
-        owner: options.owner,
-        repo: options.repo,
-        status: "completed",
-        conclusion: (options.result.result === "pass" ? "success" : "failure"),
-        output: {
-            title: checkrun_1.FALSE_CLEAN_PASS_CHECK_NAME,
-            summary: formatCheckRunSummary(options.result, options.headSha),
-            annotations: options.result.findings
-                .filter((finding) => finding.file && finding.line)
-                .slice(0, 50)
-                .map((finding) => ({
-                path: finding.file,
-                start_line: finding.line,
-                end_line: finding.line,
-                annotation_level: annotationLevel(finding.severity),
-                message: finding.message
-            }))
-        }
-    };
-    if (options.checkRunId) {
-        await octokit.rest.checks.update({
-            ...payload,
-            check_run_id: options.checkRunId
-        });
-        return;
-    }
-    await octokit.rest.checks.create({
-        ...payload,
-        name: checkrun_1.FALSE_CLEAN_PASS_CHECK_NAME,
-        head_sha: options.headSha
-    });
-}
-function escapeMarkdownCell(value) {
-    return value.replace(/\|/g, "\\|");
-}
-function annotationLevel(severity) {
-    if (severity === "error") {
-        return "failure";
-    }
-    return severity === "warning" ? "warning" : "notice";
-}
-
-
-/***/ }),
-
-/***/ 1680:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PR_COMMENT_MARKER = void 0;
-exports.formatPullRequestComment = formatPullRequestComment;
-exports.upsertPullRequestComment = upsertPullRequestComment;
-exports.upsertPullRequestCommentWithClient = upsertPullRequestCommentWithClient;
-exports.PR_COMMENT_MARKER = "<!-- false-clean-pass:pr-comment -->";
-function formatPullRequestComment(result, sarifPath) {
-    const lines = [
-        exports.PR_COMMENT_MARKER,
-        "## false-clean-pass",
-        "",
-        `Result: **${result.result}**`,
-        "",
-        "| Severity | Count |",
-        "| --- | ---: |",
-        `| error | ${result.errorCount} |`,
-        `| warning | ${result.warningCount} |`,
-        `| info | ${result.findings.filter((finding) => finding.severity === "info").length} |`,
-        ""
-    ];
-    if (sarifPath) {
-        lines.push(`SARIF: \`${sarifPath}\``, "");
-    }
-    if (result.findings.length === 0) {
-        lines.push("No findings were detected.");
-        return lines.join("\n");
-    }
-    lines.push("| Severity | Rule | Location | Message |", "| --- | --- | --- | --- |");
-    for (const finding of result.findings.slice(0, 50)) {
-        lines.push(`| ${finding.severity} | \`${finding.ruleId}\` | ${formatLocation(finding)} | ${escapeMarkdownCell(finding.message)} |`);
-    }
-    if (result.findings.length > 50) {
-        lines.push(`| info | \`false-clean-pass/comment-truncated\` |  | ${result.findings.length - 50} more findings omitted. |`);
-    }
-    return lines.join("\n");
-}
-async function upsertPullRequestComment(options) {
-    if (options.mode === "off") {
-        return "skipped";
-    }
-    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
-    return upsertPullRequestCommentWithClient({
-        octokit: github.getOctokit(options.token),
-        owner: options.owner,
-        repo: options.repo,
-        pullNumber: options.pullNumber,
-        body: formatPullRequestComment(options.result, options.sarifPath),
-        mode: options.mode
-    });
-}
-async function upsertPullRequestCommentWithClient(options) {
-    if (options.mode === "off") {
-        return "skipped";
-    }
-    if (options.mode === "update") {
-        const comments = await options.octokit.rest.issues.listComments({
-            owner: options.owner,
-            repo: options.repo,
-            issue_number: options.pullNumber,
-            per_page: 100
-        });
-        const existing = comments.data.find((comment) => comment.body?.includes(exports.PR_COMMENT_MARKER));
-        if (existing) {
-            await options.octokit.rest.issues.updateComment({
-                owner: options.owner,
-                repo: options.repo,
-                comment_id: existing.id,
-                body: options.body
-            });
-            return "updated";
-        }
-    }
-    await options.octokit.rest.issues.createComment({
-        owner: options.owner,
-        repo: options.repo,
-        issue_number: options.pullNumber,
-        body: options.body
-    });
-    return "created";
-}
-function formatLocation(finding) {
-    if (!finding.file) {
-        return "";
-    }
-    return finding.line ? `${finding.file}:${finding.line}` : finding.file;
-}
-function escapeMarkdownCell(value) {
-    return value.replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
 }
 
 
@@ -43990,7 +43671,7 @@ module.exports = exports.default;
 /******/ 		// This function allow to reference async chunks
 /******/ 		__nccwpck_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "" + chunkId + ".index.js";
+/******/ 			return "cli-" + chunkId + ".index.js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -44064,160 +43745,103 @@ var __webpack_exports__ = {};
 var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.runAction = runAction;
+exports.runCli = runCli;
+const node_fs_1 = __nccwpck_require__(3024);
 const schema_1 = __nccwpck_require__(9382);
 const context_1 = __nccwpck_require__(9619);
 const orchestrator_1 = __nccwpck_require__(250);
 const diff_1 = __nccwpck_require__(4346);
-const checkrun_1 = __nccwpck_require__(9459);
-const reviews_1 = __nccwpck_require__(8325);
-const annotations_1 = __nccwpck_require__(6891);
-const checkrun_2 = __nccwpck_require__(8028);
-const comment_1 = __nccwpck_require__(1680);
 const sarif_1 = __nccwpck_require__(8132);
-async function runAction() {
-    const core = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421));
-    const rootDir = process.cwd();
-    const configPath = core.getInput("config-path") || ".github/false-clean-pass.yml";
-    const failOnInput = parseFailOn(core.getInput("fail-on"));
-    const sarifPath = core.getInput("sarif-path") || core.getInput("sarif-output") || "false-clean-pass.sarif";
-    const commentMode = parseCommentMode(core.getInput("comment-mode"));
-    const attestationMode = parseAttestationMode(core.getInput("attestation-mode"));
-    const token = core.getInput("github-token");
-    const config = applyInputConfigOverrides((0, schema_1.loadConfig)(rootDir, configPath), {
-        testCountBaseline: core.getInput("test-count-baseline")
-    });
-    const diff = await getActionDiff(rootDir, token);
-    const runtime = await getGitHubRuntime(token);
-    const markerCheckRunId = runtime && attestationMode === "marker" ? await tryEmitCheckRunMarker(runtime) : undefined;
-    const contextOptions = await buildContextOptions(core, runtime, attestationMode);
-    const result = await (0, orchestrator_1.runGuard)((0, context_1.createDetectorContext)(rootDir, config, diff, contextOptions), failOnInput ?? config.failOn);
-    await (0, sarif_1.writeSarifLogFile)(result, { rootDir, sarifPath });
-    await (0, annotations_1.emitAnnotations)(result.findings);
-    core.setOutput("result", result.result);
-    core.setOutput("error-count", String(result.errorCount));
-    core.setOutput("warning-count", String(result.warningCount));
-    core.setOutput("sarif-path", sarifPath);
-    await tryCreateCheckRun(token, result, markerCheckRunId);
-    await tryUpsertPullRequestComment(token, result, sarifPath, commentMode);
-    if (result.result === "fail") {
-        core.setFailed(`false-clean-pass detected ${result.errorCount} errors and ${result.warningCount} warnings.`);
+async function runCli(argv, streams = { stdout: process.stdout, stderr: process.stderr }) {
+    const args = parseArgs(argv);
+    const rootDir = args.root ?? process.cwd();
+    const config = applyCliConfigOverrides((0, schema_1.loadConfig)(rootDir, args.config ?? ".github/false-clean-pass.yml"), args);
+    const diff = args.diffFile
+        ? (0, diff_1.parseUnifiedDiff)((0, node_fs_1.readFileSync)(args.diffFile, "utf8"))
+        : (0, diff_1.getLocalGitDiff)(rootDir, args.base ?? "HEAD~1", args.head ?? "HEAD");
+    const result = await (0, orchestrator_1.runGuard)((0, context_1.createDetectorContext)(rootDir, config, diff, {
+        ciEnvKeys: args.ciEnvKeys,
+        testResultsGlob: args.testResultsGlob,
+        baseTestResultsGlob: args.baseTestResultsGlob,
+        coverageSummaryPath: args.coverageSummary,
+        prLabels: args.prLabels
+    }), args.failOn ?? config.failOn);
+    if (args.sarifPath) {
+        await (0, sarif_1.writeSarifLogFile)(result, { rootDir, sarifPath: args.sarifPath });
     }
+    if (args.json) {
+        streams.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    }
+    else {
+        streams.stdout.write(`false-clean-pass ${result.result}: ${result.errorCount} errors, ${result.warningCount} warnings, ${result.findings.length} findings\n`);
+    }
+    return result.result === "fail" ? 1 : 0;
 }
-async function getActionDiff(rootDir, token) {
-    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
-    const pullRequest = github.context.payload.pull_request;
-    if (token && pullRequest) {
-        return (0, diff_1.getGitHubDiff)({
-            token,
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            base: pullRequest.base.sha,
-            head: pullRequest.head.sha
-        });
+function parseArgs(argv) {
+    const args = { json: false };
+    for (let index = 0; index < argv.length; index += 1) {
+        const arg = argv[index];
+        const value = argv[index + 1];
+        if (arg === "--root" && value) {
+            args.root = value;
+            index += 1;
+        }
+        else if (arg === "--config" && value) {
+            args.config = value;
+            index += 1;
+        }
+        else if (arg === "--diff-file" && value) {
+            args.diffFile = value;
+            index += 1;
+        }
+        else if (arg === "--base" && value) {
+            args.base = value;
+            index += 1;
+        }
+        else if (arg === "--head" && value) {
+            args.head = value;
+            index += 1;
+        }
+        else if (arg === "--fail-on" && value) {
+            args.failOn = parseFailOn(value);
+            index += 1;
+        }
+        else if (arg === "--ci-env-keys" && value) {
+            args.ciEnvKeys = splitCommaList(value);
+            index += 1;
+        }
+        else if (arg === "--test-results-glob" && value) {
+            args.testResultsGlob = value;
+            index += 1;
+        }
+        else if (arg === "--base-test-results-glob" && value) {
+            args.baseTestResultsGlob = value;
+            index += 1;
+        }
+        else if (arg === "--test-count-baseline" && value) {
+            args.testCountBaseline = value;
+            index += 1;
+        }
+        else if (arg === "--coverage-summary" && value) {
+            args.coverageSummary = value;
+            index += 1;
+        }
+        else if (arg === "--sarif-path" && value) {
+            args.sarifPath = value;
+            index += 1;
+        }
+        else if (arg === "--pr-label" && value) {
+            args.prLabels = [...(args.prLabels ?? []), value];
+            index += 1;
+        }
+        else if (arg === "--json") {
+            args.json = true;
+        }
+        else {
+            throw new Error(`Unknown or incomplete argument: ${arg}`);
+        }
     }
-    const pushPayload = github.context.payload;
-    if (token && pushPayload.before && pushPayload.after) {
-        return (0, diff_1.getGitHubDiff)({
-            token,
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            base: pushPayload.before,
-            head: pushPayload.after
-        });
-    }
-    return (0, diff_1.getLocalGitDiff)(rootDir);
-}
-async function tryCreateCheckRun(token, result, checkRunId) {
-    const [core, github] = await Promise.all([Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421)), Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157))]);
-    if (!token || !github.context.sha) {
-        return;
-    }
-    try {
-        await (0, checkrun_2.createCheckRun)({
-            token,
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            headSha: github.context.payload.pull_request?.head.sha ?? github.context.sha,
-            result,
-            checkRunId
-        });
-    }
-    catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        core.warning(`Unable to create false-clean-pass check run: ${message}`);
-    }
-}
-async function tryUpsertPullRequestComment(token, result, sarifPath, mode) {
-    const [core, github] = await Promise.all([Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421)), Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157))]);
-    const pullNumber = github.context.payload.pull_request?.number;
-    if (!token || !pullNumber || mode === "off") {
-        return;
-    }
-    try {
-        await (0, comment_1.upsertPullRequestComment)({
-            token,
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            pullNumber,
-            result,
-            sarifPath,
-            mode
-        });
-    }
-    catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        core.warning(`Unable to upsert false-clean-pass PR comment: ${message}`);
-    }
-}
-async function tryEmitCheckRunMarker(runtime) {
-    const core = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(421)]).then(__nccwpck_require__.bind(__nccwpck_require__, 6421));
-    try {
-        return await (0, checkrun_1.emitCheckRunShaMarker)(runtime);
-    }
-    catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        core.warning(`Unable to emit false-clean-pass self-attestation marker: ${message}`);
-        return undefined;
-    }
-}
-async function buildContextOptions(core, runtime, attestationMode) {
-    return {
-        ciEnvKeys: splitCommaList(core.getInput("ci-env-keys")),
-        testResultsGlob: core.getInput("test-results-glob") || undefined,
-        baseTestResultsGlob: core.getInput("base-test-results-glob") || undefined,
-        coverageSummaryPath: core.getInput("coverage-summary") || undefined,
-        prLabels: await getPullRequestLabels(),
-        github: runtime,
-        codeOwnerReviewProvider: runtime ? (0, reviews_1.createGitHubReviewProvider)(runtime) : undefined,
-        checkRunAttestationVerifier: runtime && attestationMode === "marker" ? (0, checkrun_1.createCheckRunAttestationVerifier)(runtime) : undefined
-    };
-}
-async function getGitHubRuntime(token) {
-    if (!token) {
-        return undefined;
-    }
-    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
-    const pullRequest = github.context.payload.pull_request;
-    const headSha = pullRequest?.head.sha ?? github.context.sha;
-    if (!headSha) {
-        return undefined;
-    }
-    return {
-        token,
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
-        headSha,
-        pullNumber: pullRequest?.number
-    };
-}
-async function getPullRequestLabels() {
-    const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
-    const labels = github.context.payload.pull_request?.labels;
-    if (!Array.isArray(labels)) {
-        return [];
-    }
-    return labels.map((label) => label.name).filter((name) => Boolean(name));
+    return args;
 }
 function splitCommaList(value) {
     return value
@@ -44229,30 +43853,31 @@ function parseFailOn(value) {
     if (value === "error" || value === "warning" || value === "never") {
         return value;
     }
-    return undefined;
+    throw new Error(`Invalid --fail-on value: ${value}`);
 }
-function parseCommentMode(value) {
-    if (value === "new" || value === "off") {
-        return value;
-    }
-    return "update";
-}
-function parseAttestationMode(value) {
-    return value === "off" ? "off" : "marker";
-}
-function applyInputConfigOverrides(config, options) {
-    if (!options.testCountBaseline) {
+function applyCliConfigOverrides(config, args) {
+    if (!args.testCountBaseline) {
         return config;
     }
     return {
         ...config,
         testCountRatchet: {
             ...config.testCountRatchet,
-            baselineFile: options.testCountBaseline
+            baselineFile: args.testCountBaseline
         }
     };
 }
-void runAction();
+if (require.main === require.cache[eval('__filename')]) {
+    runCli(process.argv.slice(2))
+        .then((code) => {
+        process.exitCode = code;
+    })
+        .catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        process.stderr.write(`${message}\n`);
+        process.exitCode = 2;
+    });
+}
 
 })();
 
