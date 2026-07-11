@@ -337,13 +337,11 @@ function evidenceRecord({
       ? {
           org: true,
           licenseId: license.payload.licenseId,
-          markerPresent: true,
           signaturePresent: true
         }
       : {
           org: false,
           licenseId: null,
-          markerPresent: false,
           signaturePresent: false
         },
     signature: license ? markerFor(license) : null

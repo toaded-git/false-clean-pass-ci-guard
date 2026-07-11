@@ -284,7 +284,7 @@ function markerExclusionReason(record, licenseVerification, options) {
   }
 
   const license = record.license;
-  const markerPresent = license?.markerPresent === true || license?.signaturePresent === true;
+  const markerPresent = license?.signaturePresent === true;
   if (license?.org !== true || !markerPresent || !record.signature) {
     return "missing valid license marker";
   }
