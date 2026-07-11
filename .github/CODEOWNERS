@@ -1,0 +1,4 @@
+# Baseline and guard configuration are trust inputs — individual owner (fail-closed).
+.github/false-clean-pass-*.json  @toaded-git
+.github/false-clean-pass.yml     @toaded-git
+.github/workflows/*              @toaded-git
