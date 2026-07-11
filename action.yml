@@ -10,7 +10,7 @@ inputs:
     description: GitHub token used for PR diff, Check Run creation, and PR comments.
     required: false
   fail-on:
-    description: Minimum finding severity that fails the check: error, warning, or never.
+    description: "Minimum finding severity that fails the check: error, warning, or never."
     required: false
     default: error
   sarif-path:
@@ -34,7 +34,7 @@ inputs:
     description: Comma-separated CI-provided env key names, never values.
     required: false
   comment-mode:
-    description: PR comment behavior: update, new, or off.
+    description: "PR comment behavior: update, new, or off."
     required: false
     default: update
   attestation-mode:
