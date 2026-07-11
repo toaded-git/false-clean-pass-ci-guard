@@ -55,9 +55,12 @@ inputs:
     description: Comma-separated branch-protection required check names to guard against skip-as-success workflow weakening.
     required: false
   evidenceOutput:
-    description: Path where the unsigned Evidence Record JSON is written.
+    description: Path where the Evidence Record JSON is written.
     required: false
     default: fcp-evidence.json
+  license:
+    description: Optional C-lite license string. Prefer env FCP_LICENSE from the organization secret.
+    required: false
 outputs:
   result:
     description: pass or fail.
@@ -68,7 +71,7 @@ outputs:
   sarif-path:
     description: Path to the generated SARIF file.
   evidence-path:
-    description: Path to the generated unsigned Evidence Record JSON file.
+    description: Path to the generated Evidence Record JSON file.
 runs:
   using: node20
   main: dist/index.js

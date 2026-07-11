@@ -809,7 +809,8 @@ const node_path_1 = __nccwpck_require__(6760);
 function createEvidenceRecord(input) {
     const attempts = input.result.findings.flatMap((finding) => findingToAttempt(finding));
     const weakenings = input.result.findings.flatMap((finding) => findingToWeakening(finding));
-    const reviewCount = attempts.filter((attempt) => attempt.severity === "review").length;
+    const detectorSummary = summarizeDetectorResults(input.result);
+    const licenseFields = createLicenseFields(input);
     return {
         schemaVersion: "1.0",
         repo: input.repo,
@@ -822,18 +823,9 @@ function createEvidenceRecord(input) {
         verdict: input.result.result,
         attempts,
         weakenings,
-        detectorSummary: {
-            total: input.result.findings.length,
-            failed: input.result.errorCount,
-            review: reviewCount,
-            passed: 0
-        },
-        license: {
-            org: false,
-            licenseId: null,
-            signaturePresent: false
-        },
-        signature: null
+        detectorSummary,
+        license: licenseFields.license,
+        signature: licenseFields.signature
     };
 }
 async function writeEvidenceRecord(record, outputPath, rootDir = process.cwd()) {
@@ -897,6 +889,52 @@ function evidenceMetadata(finding) {
         return undefined;
     }
     return metadata;
+}
+function summarizeDetectorResults(result) {
+    if (result.detectorResults) {
+        const failed = result.detectorResults.filter((detector) => detector.status === "fail").length;
+        const review = result.detectorResults.filter((detector) => detector.status === "review").length;
+        return {
+            total: result.detectorResults.length,
+            failed,
+            review,
+            passed: result.detectorResults.length - failed - review
+        };
+    }
+    const reviewCount = result.findings.filter((finding) => finding.severity === "warning").length;
+    const total = result.findings.length;
+    return {
+        total,
+        failed: result.errorCount,
+        review: reviewCount,
+        passed: Math.max(0, total - result.errorCount - reviewCount)
+    };
+}
+function createLicenseFields(input) {
+    if (input.ownerType !== "Organization" || !input.licenseVerification?.valid) {
+        return {
+            license: {
+                org: false,
+                licenseId: null,
+                signaturePresent: false
+            },
+            signature: null
+        };
+    }
+    return {
+        license: {
+            org: true,
+            licenseId: input.licenseVerification.payload.licenseId,
+            signaturePresent: true
+        },
+        signature: {
+            alg: "ed25519",
+            keyId: input.licenseVerification.payload.keyId,
+            value: input.licenseVerification.signature,
+            signedFields: ["license.payload"],
+            note: "Integrity helper only; not a source of audit trust."
+        }
+    };
 }
 function classifyWeakeningKind(finding) {
     if (finding.ruleId.includes("suppression")) {
@@ -1078,8 +1116,14 @@ exports.milestone2Detectors = [
 ];
 async function runGuard(ctx, failOn = ctx.config.failOn) {
     const findings = await detectParseFailures(ctx);
+    const detectorResults = [];
     for (const detector of [...exports.milestone1Detectors, ...exports.milestone2Detectors]) {
-        findings.push(...(await detector.run(ctx)));
+        const detectorFindings = await detector.run(ctx);
+        findings.push(...detectorFindings);
+        detectorResults.push({
+            id: detector.id,
+            status: summarizeDetectorRun(detectorFindings)
+        });
     }
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
     const warningCount = findings.filter((finding) => finding.severity === "warning").length;
@@ -1087,8 +1131,18 @@ async function runGuard(ctx, failOn = ctx.config.failOn) {
         findings,
         errorCount,
         warningCount,
-        result: shouldFail(findings, failOn) ? "fail" : "pass"
+        result: shouldFail(findings, failOn) ? "fail" : "pass",
+        detectorResults
     };
+}
+function summarizeDetectorRun(findings) {
+    if (findings.some((finding) => finding.severity === "error")) {
+        return "fail";
+    }
+    if (findings.some((finding) => finding.severity === "warning")) {
+        return "review";
+    }
+    return "pass";
 }
 async function detectParseFailures(ctx) {
     const findings = [];

@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
+import type { LicenseVerificationResult } from "../license/verify";
 import type { Finding, RunResult } from "./types";
 
 export type EvidenceRecordVerdict = "pass" | "fail";
@@ -65,11 +66,19 @@ export interface EvidenceRecord {
     passed: number;
   };
   license: {
-    org: false;
-    licenseId: null;
-    signaturePresent: false;
+    org: boolean;
+    licenseId: string | null;
+    signaturePresent: boolean;
   };
-  signature: null;
+  signature: EvidenceRecordSignature | null;
+}
+
+export interface EvidenceRecordSignature {
+  alg: "ed25519";
+  keyId: string;
+  value: string;
+  signedFields: string[];
+  note: string;
 }
 
 export interface EvidenceRecordInput {
@@ -81,6 +90,8 @@ export interface EvidenceRecordInput {
   actor?: string;
   runId?: string | number | null;
   timestamp?: string;
+  ownerType?: string | null;
+  licenseVerification?: LicenseVerificationResult;
 }
 
 interface EvidenceMetadata {
@@ -101,7 +112,8 @@ interface EvidenceMetadata {
 export function createEvidenceRecord(input: EvidenceRecordInput): EvidenceRecord {
   const attempts = input.result.findings.flatMap((finding) => findingToAttempt(finding));
   const weakenings = input.result.findings.flatMap((finding) => findingToWeakening(finding));
-  const reviewCount = attempts.filter((attempt) => attempt.severity === "review").length;
+  const detectorSummary = summarizeDetectorResults(input.result);
+  const licenseFields = createLicenseFields(input);
 
   return {
     schemaVersion: "1.0",
@@ -115,18 +127,9 @@ export function createEvidenceRecord(input: EvidenceRecordInput): EvidenceRecord
     verdict: input.result.result,
     attempts,
     weakenings,
-    detectorSummary: {
-      total: input.result.findings.length,
-      failed: input.result.errorCount,
-      review: reviewCount,
-      passed: 0
-    },
-    license: {
-      org: false,
-      licenseId: null,
-      signaturePresent: false
-    },
-    signature: null
+    detectorSummary,
+    license: licenseFields.license,
+    signature: licenseFields.signature
   };
 }
 
@@ -197,6 +200,56 @@ function evidenceMetadata(finding: Finding): EvidenceMetadata | undefined {
     return undefined;
   }
   return metadata as EvidenceMetadata;
+}
+
+function summarizeDetectorResults(result: RunResult): EvidenceRecord["detectorSummary"] {
+  if (result.detectorResults) {
+    const failed = result.detectorResults.filter((detector) => detector.status === "fail").length;
+    const review = result.detectorResults.filter((detector) => detector.status === "review").length;
+    return {
+      total: result.detectorResults.length,
+      failed,
+      review,
+      passed: result.detectorResults.length - failed - review
+    };
+  }
+
+  const reviewCount = result.findings.filter((finding) => finding.severity === "warning").length;
+  const total = result.findings.length;
+  return {
+    total,
+    failed: result.errorCount,
+    review: reviewCount,
+    passed: Math.max(0, total - result.errorCount - reviewCount)
+  };
+}
+
+function createLicenseFields(input: EvidenceRecordInput): Pick<EvidenceRecord, "license" | "signature"> {
+  if (input.ownerType !== "Organization" || !input.licenseVerification?.valid) {
+    return {
+      license: {
+        org: false,
+        licenseId: null,
+        signaturePresent: false
+      },
+      signature: null
+    };
+  }
+
+  return {
+    license: {
+      org: true,
+      licenseId: input.licenseVerification.payload.licenseId,
+      signaturePresent: true
+    },
+    signature: {
+      alg: "ed25519",
+      keyId: input.licenseVerification.payload.keyId,
+      value: input.licenseVerification.signature,
+      signedFields: ["license.payload"],
+      note: "Integrity helper only; not a source of audit trust."
+    }
+  };
 }
 
 function classifyWeakeningKind(finding: Finding): EvidenceWeakeningKind {

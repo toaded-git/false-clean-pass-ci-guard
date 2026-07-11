@@ -18,6 +18,7 @@ export interface Finding {
 export interface GitHubRuntime {
   token: string;
   owner: string;
+  ownerType?: string;
   repo: string;
   headSha: string;
   baseSha?: string;
@@ -70,9 +71,15 @@ export interface Detector {
   run(ctx: DetectorContext): Promise<Finding[]>;
 }
 
+export interface DetectorRunSummary {
+  id: string;
+  status: "pass" | "fail" | "review";
+}
+
 export interface RunResult {
   findings: Finding[];
   errorCount: number;
   warningCount: number;
   result: "pass" | "fail";
+  detectorResults?: DetectorRunSummary[];
 }

@@ -759,6 +759,60 @@ function hasInlineAllowComment(source, step) {
 
 /***/ }),
 
+/***/ 8080:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.canonicalJson = canonicalJson;
+function canonicalJson(value) {
+    return serializeJsonValue(value, "$");
+}
+function serializeJsonValue(value, path) {
+    if (value === null) {
+        return "null";
+    }
+    if (Array.isArray(value)) {
+        return `[${value.map((item, index) => serializeJsonValue(item, `${path}[${index}]`)).join(",")}]`;
+    }
+    switch (typeof value) {
+        case "boolean":
+            return value ? "true" : "false";
+        case "number":
+            if (!Number.isFinite(value)) {
+                throw new TypeError(`Cannot canonicalize non-finite number at ${path}.`);
+            }
+            return JSON.stringify(value);
+        case "string":
+            return JSON.stringify(value);
+        case "object": {
+            if (!isPlainObject(value)) {
+                throw new TypeError(`Cannot canonicalize non-plain object at ${path}.`);
+            }
+            const entries = Object.keys(value)
+                .sort()
+                .map((key) => {
+                const item = value[key];
+                if (item === undefined) {
+                    throw new TypeError(`Cannot canonicalize undefined value at ${path}.${key}.`);
+                }
+                return `${JSON.stringify(key)}:${serializeJsonValue(item, `${path}.${key}`)}`;
+            });
+            return `{${entries.join(",")}}`;
+        }
+        default:
+            throw new TypeError(`Cannot canonicalize ${typeof value} at ${path}.`);
+    }
+}
+function isPlainObject(value) {
+    const prototype = Object.getPrototypeOf(value);
+    return prototype === Object.prototype || prototype === null;
+}
+
+
+/***/ }),
+
 /***/ 9619:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -841,7 +895,8 @@ const node_path_1 = __nccwpck_require__(6760);
 function createEvidenceRecord(input) {
     const attempts = input.result.findings.flatMap((finding) => findingToAttempt(finding));
     const weakenings = input.result.findings.flatMap((finding) => findingToWeakening(finding));
-    const reviewCount = attempts.filter((attempt) => attempt.severity === "review").length;
+    const detectorSummary = summarizeDetectorResults(input.result);
+    const licenseFields = createLicenseFields(input);
     return {
         schemaVersion: "1.0",
         repo: input.repo,
@@ -854,18 +909,9 @@ function createEvidenceRecord(input) {
         verdict: input.result.result,
         attempts,
         weakenings,
-        detectorSummary: {
-            total: input.result.findings.length,
-            failed: input.result.errorCount,
-            review: reviewCount,
-            passed: 0
-        },
-        license: {
-            org: false,
-            licenseId: null,
-            signaturePresent: false
-        },
-        signature: null
+        detectorSummary,
+        license: licenseFields.license,
+        signature: licenseFields.signature
     };
 }
 async function writeEvidenceRecord(record, outputPath, rootDir = process.cwd()) {
@@ -929,6 +975,52 @@ function evidenceMetadata(finding) {
         return undefined;
     }
     return metadata;
+}
+function summarizeDetectorResults(result) {
+    if (result.detectorResults) {
+        const failed = result.detectorResults.filter((detector) => detector.status === "fail").length;
+        const review = result.detectorResults.filter((detector) => detector.status === "review").length;
+        return {
+            total: result.detectorResults.length,
+            failed,
+            review,
+            passed: result.detectorResults.length - failed - review
+        };
+    }
+    const reviewCount = result.findings.filter((finding) => finding.severity === "warning").length;
+    const total = result.findings.length;
+    return {
+        total,
+        failed: result.errorCount,
+        review: reviewCount,
+        passed: Math.max(0, total - result.errorCount - reviewCount)
+    };
+}
+function createLicenseFields(input) {
+    if (input.ownerType !== "Organization" || !input.licenseVerification?.valid) {
+        return {
+            license: {
+                org: false,
+                licenseId: null,
+                signaturePresent: false
+            },
+            signature: null
+        };
+    }
+    return {
+        license: {
+            org: true,
+            licenseId: input.licenseVerification.payload.licenseId,
+            signaturePresent: true
+        },
+        signature: {
+            alg: "ed25519",
+            keyId: input.licenseVerification.payload.keyId,
+            value: input.licenseVerification.signature,
+            signedFields: ["license.payload"],
+            note: "Integrity helper only; not a source of audit trust."
+        }
+    };
 }
 function classifyWeakeningKind(finding) {
     if (finding.ruleId.includes("suppression")) {
@@ -1110,8 +1202,14 @@ exports.milestone2Detectors = [
 ];
 async function runGuard(ctx, failOn = ctx.config.failOn) {
     const findings = await detectParseFailures(ctx);
+    const detectorResults = [];
     for (const detector of [...exports.milestone1Detectors, ...exports.milestone2Detectors]) {
-        findings.push(...(await detector.run(ctx)));
+        const detectorFindings = await detector.run(ctx);
+        findings.push(...detectorFindings);
+        detectorResults.push({
+            id: detector.id,
+            status: summarizeDetectorRun(detectorFindings)
+        });
     }
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
     const warningCount = findings.filter((finding) => finding.severity === "warning").length;
@@ -1119,8 +1217,18 @@ async function runGuard(ctx, failOn = ctx.config.failOn) {
         findings,
         errorCount,
         warningCount,
-        result: shouldFail(findings, failOn) ? "fail" : "pass"
+        result: shouldFail(findings, failOn) ? "fail" : "pass",
+        detectorResults
     };
+}
+function summarizeDetectorRun(findings) {
+    if (findings.some((finding) => finding.severity === "error")) {
+        return "fail";
+    }
+    if (findings.some((finding) => finding.severity === "warning")) {
+        return "review";
+    }
+    return "pass";
 }
 async function detectParseFailures(ctx) {
     const findings = [];
@@ -3097,6 +3205,130 @@ function stripDiffPrefix(path) {
         return path.slice(2);
     }
     return path;
+}
+
+
+/***/ }),
+
+/***/ 1652:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.embeddedPublicKeys = void 0;
+exports.embeddedPublicKeys = {
+    // Placeholder only. Before a production release, a human issuer must replace/add
+    // real keyId -> base64(SPKI DER Ed25519 public key) entries here.
+    "release-key-placeholder": "REPLACE_WITH_BASE64_DER_SPKI_ED25519_PUBLIC_KEY"
+};
+
+
+/***/ }),
+
+/***/ 2493:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.verifyLicense = verifyLicense;
+exports.encodeLicenseEnvelope = encodeLicenseEnvelope;
+const node_crypto_1 = __nccwpck_require__(7598);
+const canonicalJson_1 = __nccwpck_require__(8080);
+const embeddedPublicKey_1 = __nccwpck_require__(1652);
+function verifyLicense(licenseText, options) {
+    if (!licenseText || !licenseText.trim()) {
+        return invalid("missing", "FCP_LICENSE is not set.");
+    }
+    const envelope = decodeLicenseEnvelope(licenseText);
+    if (!envelope) {
+        return invalid("malformed", "FCP_LICENSE must be base64 JSON with payload and signature.");
+    }
+    const publicKeyBase64 = (options.publicKeys ?? embeddedPublicKey_1.embeddedPublicKeys)[envelope.payload.keyId];
+    if (!publicKeyBase64) {
+        return invalid("unregistered_key", `License keyId '${envelope.payload.keyId}' is not registered.`, envelope.payload);
+    }
+    const canonicalPayload = (0, canonicalJson_1.canonicalJson)(envelope.payload);
+    const publicKey = createEd25519PublicKey(publicKeyBase64);
+    if (!publicKey) {
+        return invalid("invalid_public_key", `Embedded public key for '${envelope.payload.keyId}' is not usable.`, envelope.payload);
+    }
+    const signature = Buffer.from(envelope.signature, "base64");
+    let verified = false;
+    try {
+        verified = (0, node_crypto_1.verify)(null, Buffer.from(canonicalPayload, "utf8"), publicKey, signature);
+    }
+    catch {
+        verified = false;
+    }
+    if (!verified) {
+        return invalid("invalid_signature", "License signature verification failed.", envelope.payload);
+    }
+    const expiresAt = Date.parse(envelope.payload.expiresAt);
+    if (!Number.isFinite(expiresAt) || expiresAt <= (options.now ?? new Date()).getTime()) {
+        return invalid("expired", "License is expired.", envelope.payload);
+    }
+    if (!sameGitHubOwner(envelope.payload.org, options.org)) {
+        return invalid("org_mismatch", `License org '${envelope.payload.org}' does not match '${options.org}'.`, envelope.payload);
+    }
+    return {
+        valid: true,
+        payload: envelope.payload,
+        signature: envelope.signature,
+        canonicalPayload
+    };
+}
+function encodeLicenseEnvelope(envelope) {
+    return Buffer.from(JSON.stringify(envelope), "utf8").toString("base64");
+}
+function decodeLicenseEnvelope(licenseText) {
+    try {
+        const decoded = Buffer.from(licenseText.trim(), "base64").toString("utf8");
+        const parsed = JSON.parse(decoded);
+        if (!isLicenseEnvelope(parsed)) {
+            return undefined;
+        }
+        return parsed;
+    }
+    catch {
+        return undefined;
+    }
+}
+function isLicenseEnvelope(value) {
+    if (!value || typeof value !== "object") {
+        return false;
+    }
+    const envelope = value;
+    if (!envelope.payload || typeof envelope.payload !== "object" || typeof envelope.signature !== "string") {
+        return false;
+    }
+    const payload = envelope.payload;
+    return (typeof payload.licenseId === "string" &&
+        typeof payload.keyId === "string" &&
+        typeof payload.org === "string" &&
+        typeof payload.plan === "string" &&
+        typeof payload.issuedAt === "string" &&
+        typeof payload.expiresAt === "string" &&
+        typeof payload.maxRepos === "number");
+}
+function createEd25519PublicKey(publicKeyBase64) {
+    try {
+        return (0, node_crypto_1.createPublicKey)({
+            key: Buffer.from(publicKeyBase64, "base64"),
+            format: "der",
+            type: "spki"
+        });
+    }
+    catch {
+        return undefined;
+    }
+}
+function invalid(reason, message, payload) {
+    return payload ? { valid: false, reason, message, payload } : { valid: false, reason, message };
+}
+function sameGitHubOwner(left, right) {
+    return left.trim().toLowerCase() === right.trim().toLowerCase();
 }
 
 
@@ -45306,6 +45538,7 @@ const orchestrator_1 = __nccwpck_require__(250);
 const diff_1 = __nccwpck_require__(4346);
 const checkrun_1 = __nccwpck_require__(9459);
 const reviews_1 = __nccwpck_require__(8325);
+const verify_1 = __nccwpck_require__(2493);
 const annotations_1 = __nccwpck_require__(6891);
 const checkrun_2 = __nccwpck_require__(8028);
 const comment_1 = __nccwpck_require__(1680);
@@ -45317,6 +45550,7 @@ async function runAction() {
     const failOnInput = parseFailOn(core.getInput("fail-on"));
     const sarifPath = core.getInput("sarif-path") || core.getInput("sarif-output") || "false-clean-pass.sarif";
     const evidenceOutput = core.getInput("evidenceOutput") || core.getInput("evidence-output") || "fcp-evidence.json";
+    const licenseText = core.getInput("license") || process.env.FCP_LICENSE;
     const commentMode = parseCommentMode(core.getInput("comment-mode"));
     const attestationMode = parseAttestationMode(core.getInput("attestation-mode"));
     const token = core.getInput("github-token");
@@ -45332,6 +45566,7 @@ async function runAction() {
     const markerCheckRunId = runtime && attestationMode === "marker" ? await tryEmitCheckRunMarker(runtime) : undefined;
     const contextOptions = await buildContextOptions(core, runtime, attestationMode);
     const result = await (0, orchestrator_1.runGuard)((0, context_1.createDetectorContext)(rootDir, config, diff, contextOptions), failOnInput ?? config.failOn);
+    const licenseVerification = resolveLicenseVerification(core, runtime, licenseText);
     const evidencePath = await (0, evidenceRecord_1.writeEvidenceRecord)((0, evidenceRecord_1.createEvidenceRecord)({
         result,
         repo: runtime ? `${runtime.owner}/${runtime.repo}` : "local/local",
@@ -45339,7 +45574,9 @@ async function runAction() {
         headSha: runtime?.headSha ?? "local",
         baseSha: runtime?.baseSha ?? null,
         actor: runtime?.actor ?? "local",
-        runId: runtime?.runId ?? null
+        runId: runtime?.runId ?? null,
+        ownerType: runtime?.ownerType,
+        licenseVerification
     }), config.evidenceOutput, rootDir);
     await (0, sarif_1.writeSarifLogFile)(result, { rootDir, sarifPath });
     await (0, annotations_1.emitAnnotations)(result.findings);
@@ -45457,6 +45694,7 @@ async function getGitHubRuntime(token) {
     return {
         token,
         owner: github.context.repo.owner,
+        ownerType: getRepositoryOwnerType(github.context.payload),
         repo: github.context.repo.repo,
         headSha,
         baseSha: pullRequest?.base.sha,
@@ -45465,6 +45703,20 @@ async function getGitHubRuntime(token) {
         runId: String(github.context.runId),
         pullNumber: pullRequest?.number
     };
+}
+function resolveLicenseVerification(core, runtime, licenseText) {
+    if (runtime?.ownerType !== "Organization") {
+        return undefined;
+    }
+    const result = (0, verify_1.verifyLicense)(licenseText, { org: runtime.owner });
+    if (!result.valid) {
+        core.warning(`Organization Evidence Record signing disabled: ${result.message}`);
+    }
+    return result;
+}
+function getRepositoryOwnerType(payload) {
+    const repository = payload?.repository;
+    return typeof repository?.owner?.type === "string" ? repository.owner.type : undefined;
 }
 function createGitHubBaseFileReader(runtime) {
     const baseSha = runtime.baseSha;

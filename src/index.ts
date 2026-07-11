@@ -6,6 +6,7 @@ import type { FailOn, GitHubRuntime } from "./core/types";
 import { getGitHubDiff, getLocalGitDiff } from "./git/diff";
 import { createCheckRunAttestationVerifier, emitCheckRunShaMarker } from "./gh/checkrun";
 import { createGitHubReviewProvider } from "./gh/reviews";
+import { verifyLicense, type LicenseVerificationResult } from "./license/verify";
 import { emitAnnotations } from "./report/annotations";
 import { createCheckRun } from "./report/checkrun";
 import { type CommentMode, upsertPullRequestComment } from "./report/comment";
@@ -18,6 +19,7 @@ export async function runAction(): Promise<void> {
   const failOnInput = parseFailOn(core.getInput("fail-on"));
   const sarifPath = core.getInput("sarif-path") || core.getInput("sarif-output") || "false-clean-pass.sarif";
   const evidenceOutput = core.getInput("evidenceOutput") || core.getInput("evidence-output") || "fcp-evidence.json";
+  const licenseText = core.getInput("license") || process.env.FCP_LICENSE;
   const commentMode = parseCommentMode(core.getInput("comment-mode"));
   const attestationMode = parseAttestationMode(core.getInput("attestation-mode"));
   const token = core.getInput("github-token");
@@ -33,6 +35,7 @@ export async function runAction(): Promise<void> {
   const markerCheckRunId = runtime && attestationMode === "marker" ? await tryEmitCheckRunMarker(runtime) : undefined;
   const contextOptions = await buildContextOptions(core, runtime, attestationMode);
   const result = await runGuard(createDetectorContext(rootDir, config, diff, contextOptions), failOnInput ?? config.failOn);
+  const licenseVerification = resolveLicenseVerification(core, runtime, licenseText);
   const evidencePath = await writeEvidenceRecord(
     createEvidenceRecord({
       result,
@@ -41,7 +44,9 @@ export async function runAction(): Promise<void> {
       headSha: runtime?.headSha ?? "local",
       baseSha: runtime?.baseSha ?? null,
       actor: runtime?.actor ?? "local",
-      runId: runtime?.runId ?? null
+      runId: runtime?.runId ?? null,
+      ownerType: runtime?.ownerType,
+      licenseVerification
     }),
     config.evidenceOutput,
     rootDir
@@ -187,6 +192,7 @@ async function getGitHubRuntime(token: string): Promise<GitHubRuntime | undefine
   return {
     token,
     owner: github.context.repo.owner,
+    ownerType: getRepositoryOwnerType(github.context.payload),
     repo: github.context.repo.repo,
     headSha,
     baseSha: pullRequest?.base.sha,
@@ -195,6 +201,27 @@ async function getGitHubRuntime(token: string): Promise<GitHubRuntime | undefine
     runId: String(github.context.runId),
     pullNumber: pullRequest?.number
   };
+}
+
+function resolveLicenseVerification(
+  core: { warning(message: string): void },
+  runtime: GitHubRuntime | undefined,
+  licenseText: string | undefined
+): LicenseVerificationResult | undefined {
+  if (runtime?.ownerType !== "Organization") {
+    return undefined;
+  }
+
+  const result = verifyLicense(licenseText, { org: runtime.owner });
+  if (!result.valid) {
+    core.warning(`Organization Evidence Record signing disabled: ${result.message}`);
+  }
+  return result;
+}
+
+function getRepositoryOwnerType(payload: unknown): string | undefined {
+  const repository = (payload as { repository?: { owner?: { type?: unknown } } } | undefined)?.repository;
+  return typeof repository?.owner?.type === "string" ? repository.owner.type : undefined;
 }
 
 function createGitHubBaseFileReader(runtime: GitHubRuntime): (file: string) => Promise<string> {

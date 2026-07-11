@@ -9,7 +9,7 @@ import { suppressionRatchetDetector } from "../detectors/suppression-ratchet";
 import { testCountRatchetDetector } from "../detectors/test-count-ratchet";
 import { scanJavaScript } from "../parse/js-ast";
 import { isTestFile } from "./globs";
-import type { FailOn, Detector, DetectorContext, Finding, RunResult } from "./types";
+import type { FailOn, Detector, DetectorContext, DetectorRunSummary, Finding, RunResult } from "./types";
 
 export const milestone1Detectors: Detector[] = [
   skippedTestsDetector,
@@ -28,9 +28,15 @@ export const milestone2Detectors: Detector[] = [
 
 export async function runGuard(ctx: DetectorContext, failOn: FailOn = ctx.config.failOn): Promise<RunResult> {
   const findings: Finding[] = await detectParseFailures(ctx);
+  const detectorResults: DetectorRunSummary[] = [];
 
   for (const detector of [...milestone1Detectors, ...milestone2Detectors]) {
-    findings.push(...(await detector.run(ctx)));
+    const detectorFindings = await detector.run(ctx);
+    findings.push(...detectorFindings);
+    detectorResults.push({
+      id: detector.id,
+      status: summarizeDetectorRun(detectorFindings)
+    });
   }
 
   const errorCount = findings.filter((finding) => finding.severity === "error").length;
@@ -40,8 +46,19 @@ export async function runGuard(ctx: DetectorContext, failOn: FailOn = ctx.config
     findings,
     errorCount,
     warningCount,
-    result: shouldFail(findings, failOn) ? "fail" : "pass"
+    result: shouldFail(findings, failOn) ? "fail" : "pass",
+    detectorResults
   };
+}
+
+function summarizeDetectorRun(findings: Finding[]): DetectorRunSummary["status"] {
+  if (findings.some((finding) => finding.severity === "error")) {
+    return "fail";
+  }
+  if (findings.some((finding) => finding.severity === "warning")) {
+    return "review";
+  }
+  return "pass";
 }
 
 async function detectParseFailures(ctx: DetectorContext): Promise<Finding[]> {

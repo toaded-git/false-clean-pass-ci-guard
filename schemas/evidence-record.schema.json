@@ -50,16 +50,50 @@
       }
     },
     "license": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["org", "licenseId", "signaturePresent"],
-      "properties": {
-        "org": { "const": false },
-        "licenseId": { "type": "null" },
-        "signaturePresent": { "const": false }
-      }
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["org", "licenseId", "signaturePresent"],
+          "properties": {
+            "org": { "const": false },
+            "licenseId": { "type": "null" },
+            "signaturePresent": { "const": false }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["org", "licenseId", "signaturePresent"],
+          "properties": {
+            "org": { "const": true },
+            "licenseId": { "type": "string", "minLength": 1 },
+            "signaturePresent": { "const": true }
+          }
+        }
+      ]
     },
-    "signature": { "type": "null" }
+    "signature": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alg", "keyId", "value", "signedFields", "note"],
+          "properties": {
+            "alg": { "const": "ed25519" },
+            "keyId": { "type": "string", "minLength": 1 },
+            "value": { "type": "string", "minLength": 1 },
+            "signedFields": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 1
+            },
+            "note": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    }
   },
   "$defs": {
     "attempt": {

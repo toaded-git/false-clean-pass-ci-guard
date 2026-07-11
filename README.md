@@ -58,6 +58,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: toaded-git/false-clean-pass-ci-guard@v1
+        env:
+          FCP_LICENSE: ${{ secrets.FCP_LICENSE }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           requiredJobs: test,lint,false-clean-pass
@@ -96,7 +98,8 @@ The important shape here is running `verify` as an independent job with `if: alw
 | `comment-mode` | `update` | `update`, `new`, or `off`. |
 | `attestation-mode` | `marker` | `marker` or `off`; marker is non-cryptographic. |
 | `requiredJobs` | | Comma-separated required check names to protect against skip-as-success workflow weakening. Keep this synchronized with branch protection. |
-| `evidenceOutput` | `fcp-evidence.json` | Output unsigned Evidence Record JSON file. |
+| `evidenceOutput` | `fcp-evidence.json` | Output Evidence Record JSON file. |
+| `license` | | Optional C-lite license string. Prefer `env.FCP_LICENSE` from an organization secret. |
 
 Outputs: `result`, `error-count`, `warning-count`, `sarif-path`, `evidence-path`.
 
@@ -153,7 +156,34 @@ Known limits:
 - step-level `if:` is not detected here; this detector watches job-level `if:`;
 - direct branch protection changes in the GitHub UI are outside PR diff analysis.
 
-Each run writes an unsigned Evidence Record JSON. In this M2 implementation, `license.org=false` and `signature=null`; signing and organization aggregation are not implemented here.
+Each run writes an Evidence Record JSON. Personal repositories (`owner.type=User`) and unlicensed organization repositories still get the full detector result with `license.org=false` and `signature=null`.
+
+## Personal Free And Organization License
+
+Single-repository detection is free for both personal and organization repositories. The C-lite license only controls organization evidence marking for paid, issuer-side aggregation workflows:
+
+- Personal repositories (`owner.type=User`) do not need `FCP_LICENSE`.
+- Organization repositories (`owner.type=Organization`) keep running all detectors without a license, but the Evidence Record stays unsigned: `license.org=false`, `signature=null`.
+- Organization repositories with a valid `FCP_LICENSE` get `license.org=true`, `licenseId`, and a `signature` object containing the issuer `keyId`.
+
+The `owner.type` gate is an honor-system compliance signal, not a technical wall. A team can route work through a one-person org, move a repository to a personal account, or fork this Action and remove the gate. We do not describe that as blocked. The paid defense that cannot be copied by a fork is the issuer aggregation pipeline, 즉 발급자 집계 파이프라인: unsigned Evidence Records are excluded from issuer-produced organization reports. That pipeline, not local runtime enforcement, is the paid boundary.
+
+The signature is a D-1 integrity aid only: 무결성 보조, 감사 신뢰의 원천 아님. Do not treat it as the reason an auditor should trust a control, and do not sell it as a standalone assurance feature. The paid value is organization-wide aggregation, long-lived history, and operating the evidence pipeline.
+
+Key rollover is release-based, 즉 릴리스 기반이다. `embeddedPublicKeys` is a `keyId -> public key` map, so a new issuer key is introduced by adding a new `keyId` in a release and issuing new licenses with that `keyId`. Old licenses keep verifying while their old `keyId` remains in the map. This is not 실시간 revocation: pinned Action versions or commit SHAs keep the public-key map they already contain until the organization updates.
+
+Issuer-side license creation is offline and uses no network:
+
+```bash
+npm run build
+FCP_ISSUER_PRIVATE_KEY="$FCP_ISSUER_PRIVATE_KEY" node tools/issue-license.mjs \
+  --org acme \
+  --key-id k1 \
+  --expires-at 2027-07-01T00:00:00.000Z \
+  --max-repos 50
+```
+
+`FCP_ISSUER_PRIVATE_KEY` is only for the issuer's local machine or issuer CI. Never put a private key in repository files, examples, or customer workflows.
 
 ## Baseline CODEOWNER Sealing
 
@@ -208,7 +238,7 @@ docker compose run --rm dev
 - Required jobs hidden behind external reusable workflows or dynamic job names, beyond `mapping_unresolved` warnings.
 - Step-level `if:` conditions that skip individual steps while the required job still runs.
 
-The `test-results-glob` and baseline guards make the common bypasses visible, but they do not prove the result file is authentic. Evidence signing is not part of this M2 implementation.
+The `test-results-glob` and baseline guards make the common bypasses visible, but they do not prove the result file is authentic. Licensed organization Evidence Records carry an issuer license signature marker; that is an integrity aid, not proof that the underlying tests or controls are trustworthy.
 
 ## Why One Integrated Guard
 
