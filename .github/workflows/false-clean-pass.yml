@@ -47,16 +47,14 @@ jobs:
         with:
           name: junit
           path: reports
-        continue-on-error: true
       - uses: toaded-git/false-clean-pass-ci-guard@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           test-results-glob: reports/junit.xml
           fail-on: error
           sarif-path: false-clean-pass.sarif
-      - name: Upload SARIF
-        if: always()
-        continue-on-error: true
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: false-clean-pass.sarif
+      # SARIF upload to code scanning is intentionally omitted here so this
+      # self-check does not depend on the repo's code-scanning setup. The action
+      # still generates the SARIF file and reports findings via its Check Run and
+      # annotations. See examples/consumer-workflow.yml for the full workflow that
+      # uploads SARIF (requires code scanning enabled).
