@@ -1,6 +1,9 @@
 name: false-clean-pass
 description: Detects new false-clean-pass signals in pull request diffs.
 author: false-clean-pass-ci-guard
+branding:
+  icon: shield
+  color: blue
 inputs:
   config-path:
     description: Path to the false-clean-pass config file.
