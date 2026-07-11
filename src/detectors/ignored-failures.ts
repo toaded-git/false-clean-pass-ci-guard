@@ -1,6 +1,9 @@
 import { matchesAnyGlob } from "../core/globs";
+import { isContinueOnErrorAllowed } from "../core/allowlist";
+import { findAllowedJobForLine } from "../core/job-scope";
 import type { Detector, DetectorContext, Finding, Severity } from "../core/types";
-import { isWorkflowFile, workflowHasGuardStep } from "../parse/yaml-scan";
+import { workflowHasGuardStep } from "../parse/yaml-scan";
+import { findStepForLine, isWorkflowFile, parseWorkflow, type ParsedWorkflow } from "../parse/workflow-parser";
 
 const failOnRank: Record<string, number> = {
   error: 0,
@@ -38,7 +41,8 @@ export const ignoredFailuresDetector: Detector = {
         continue;
       }
 
-      findings.push(...scanFailureIgnorePatterns(file, options));
+      const workflowContext = await parseHeadWorkflow(ctx, file.filename);
+      findings.push(...scanFailureIgnorePatterns(file, options, workflowContext));
       findings.push(...scanGuardWeakeningDiff(file, options.guardWeakeningSeverity, options.guardStepNames, guardExistsInHead));
       findings.push(...scanConfigWeakeningDiff(file, options.guardWeakeningSeverity));
     }
@@ -51,8 +55,11 @@ function scanFailureIgnorePatterns(
   file: DetectorContext["diff"][number],
   options: {
     newSeverity: Severity;
+    allowJobs: string[];
+    allowContinueOnErrorSteps: string[];
     allowCleanupCommands: boolean;
-  }
+  },
+  workflowContext: WorkflowScanContext | undefined
 ): Finding[] {
   if (!isFailureIgnoreTarget(file.filename)) {
     return [];
@@ -66,7 +73,18 @@ function scanFailureIgnorePatterns(
       continue;
     }
 
-    findings.push({
+    if (
+      rule.ruleId === "false-clean-pass/continue-on-error" &&
+      isContinueOnErrorAllowed(
+        workflowContext ? findStepForLine(workflowContext.workflow, line) : undefined,
+        workflowContext?.source ?? "",
+        options.allowContinueOnErrorSteps
+      )
+    ) {
+      continue;
+    }
+
+    const finding: Finding = {
       detector: ignoredFailuresDetector.id,
       severity: options.newSeverity,
       ruleId: rule.ruleId,
@@ -74,7 +92,13 @@ function scanFailureIgnorePatterns(
       line,
       evidence: trimmed,
       message: rule.message
-    });
+    };
+
+    if (findAllowedJobForLine(workflowContext?.workflow, finding.line, options.allowJobs)) {
+      continue;
+    }
+
+    findings.push(finding);
   }
   return findings;
 }
@@ -298,6 +322,27 @@ async function hasGuardStepInHeadWorkflows(ctx: DetectorContext): Promise<boolea
     }
   }
   return false;
+}
+
+interface WorkflowScanContext {
+  source: string;
+  workflow: ParsedWorkflow;
+}
+
+async function parseHeadWorkflow(ctx: DetectorContext, file: string): Promise<WorkflowScanContext | undefined> {
+  if (!isWorkflowFile(file)) {
+    return undefined;
+  }
+
+  try {
+    const source = await ctx.readFile(file);
+    return {
+      source,
+      workflow: parseWorkflow(source, { filePath: file })
+    };
+  } catch {
+    return undefined;
+  }
 }
 
 function isFailureIgnoreTarget(file: string): boolean {

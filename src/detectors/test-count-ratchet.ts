@@ -69,9 +69,9 @@ export const testCountRatchetDetector: Detector = {
           severity: "error",
           ruleId: "false-clean-pass/test-count-drop",
           file: ctx.testResultsGlob,
-          message: `Executed test count dropped from ${base.executed} to ${currentSummary.executed} (${dropPercent.toFixed(
+          message: `Review required: executed test count dropped from ${base.executed} to ${currentSummary.executed} (${dropPercent.toFixed(
             1
-          )}%), above maxDropPercent=${options.maxDropPercent}.`
+          )}%), above maxDropPercent=${options.maxDropPercent}. Update the baseline after a reviewed intentional test-count change.`
         });
       }
     }

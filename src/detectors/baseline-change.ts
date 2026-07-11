@@ -64,7 +64,7 @@ export const baselineChangeDetector: Detector = {
         continue;
       }
 
-      const approval = await hasCodeOwnerApproval(owners, reviews, provider);
+      const approval = await hasCodeOwnerApproval(owners, reviews, provider, options.codeownerTeamFallback);
       if (!approval.ok) {
         findings.push(
           baselineFinding(
@@ -104,12 +104,12 @@ async function readCodeowners(ctx: DetectorContext): Promise<{ path: string; sou
 async function hasCodeOwnerApproval(
   owners: string[],
   reviews: PullRequestReview[],
-  provider: CodeOwnerReviewProvider
+  provider: CodeOwnerReviewProvider,
+  codeownerTeamFallback: boolean
 ): Promise<{ ok: true; reviewer: string } | { ok: false; reason: string }> {
   const latest = latestReviewsByUser(reviews);
-  const approvedReviewers = [...latest.values()]
-    .filter((review) => review.state.toUpperCase() === "APPROVED")
-    .map((review) => review.user);
+  const approvedReviews = [...latest.values()].filter((review) => review.state.toUpperCase() === "APPROVED");
+  const approvedReviewers = approvedReviews.map((review) => review.user);
 
   for (const owner of owners) {
     const normalized = owner.replace(/^@/, "");
@@ -122,23 +122,30 @@ async function hasCodeOwnerApproval(
     }
 
     const [teamOwner, teamSlug] = normalized.split("/");
-    if (!teamOwner || !teamSlug || !provider.isTeamMember) {
+    if (!teamOwner || !teamSlug || !codeownerTeamFallback) {
       continue;
     }
 
-    for (const reviewer of approvedReviewers) {
-      const isMember = await provider.isTeamMember(teamOwner, teamSlug, reviewer);
-      if (isMember) {
-        return { ok: true, reviewer };
+    if (provider.isTeamMember) {
+      for (const reviewer of approvedReviewers) {
+        const isMember = await provider.isTeamMember(teamOwner, teamSlug, reviewer);
+        if (isMember) {
+          return { ok: true, reviewer };
+        }
       }
+    }
+
+    const fallbackReview = approvedReviews.find((review) => isTrustedTeamFallbackAssociation(review.authorAssociation));
+    if (fallbackReview) {
+      return { ok: true, reviewer: fallbackReview.user };
     }
   }
 
   const teamOwners = owners.filter((owner) => owner.includes("/"));
-  if (teamOwners.length > 0 && !provider.isTeamMember) {
+  if (teamOwners.length > 0 && !codeownerTeamFallback) {
     return {
       ok: false,
-      reason: `CODEOWNER is a team (${teamOwners.join(", ")}), but team membership cannot be verified; blocking fail-closed.`
+      reason: `CODEOWNER is a team (${teamOwners.join(", ")}), but codeownerTeamFallback is disabled; blocking fail-closed.`
     };
   }
 
@@ -146,6 +153,10 @@ async function hasCodeOwnerApproval(
     ok: false,
     reason: `No approving PR review from matching CODEOWNER (${owners.join(", ")}) was verified.`
   };
+}
+
+function isTrustedTeamFallbackAssociation(authorAssociation: string | undefined): boolean {
+  return authorAssociation === "OWNER" || authorAssociation === "MEMBER";
 }
 
 function latestReviewsByUser(reviews: PullRequestReview[]): Map<string, PullRequestReview> {

@@ -43,6 +43,7 @@ const ignoredFailuresSchema = z.object({
   newSeverity: severitySchema.optional(),
   legacySeverity: severitySchema.optional(),
   allowJobs: z.array(z.string()).optional(),
+  allowContinueOnErrorSteps: z.array(z.string()).optional(),
   allowCleanupCommands: z.boolean().optional(),
   guardStepNames: z.array(z.string()).optional(),
   guardWeakeningSeverity: severitySchema.optional(),
@@ -70,7 +71,8 @@ const baselineGuardSchema = z.object({
   paths: z.array(z.string()).optional(),
   changeSeverity: severitySchema.optional(),
   exemptLabel: z.string().optional(),
-  allowInitialCreate: z.boolean().optional()
+  allowInitialCreate: z.boolean().optional(),
+  codeownerTeamFallback: z.boolean().optional()
 });
 
 const testCountRatchetSchema = z.object({
@@ -144,6 +146,7 @@ export type GuardConfig = {
       newSeverity: SeverityConfig;
       legacySeverity: SeverityConfig;
       allowJobs: string[];
+      allowContinueOnErrorSteps: string[];
       allowCleanupCommands: boolean;
       guardStepNames: string[];
       guardWeakeningSeverity: SeverityConfig;
@@ -169,6 +172,7 @@ export type GuardConfig = {
       changeSeverity: SeverityConfig;
       exemptLabel: string;
       allowInitialCreate: boolean;
+      codeownerTeamFallback: boolean;
     };
   };
   baselineGuard: {
@@ -177,6 +181,7 @@ export type GuardConfig = {
     changeSeverity: SeverityConfig;
     exemptLabel: string;
     allowInitialCreate: boolean;
+    codeownerTeamFallback: boolean;
   };
   testCountRatchet: {
     enabled: boolean;
@@ -225,6 +230,7 @@ export const defaultConfig: GuardConfig = {
       newSeverity: "error",
       legacySeverity: "warning",
       allowJobs: ["experimental-nightly"],
+      allowContinueOnErrorSteps: [],
       allowCleanupCommands: true,
       guardStepNames: ["false-clean-pass"],
       guardWeakeningSeverity: "error",
@@ -249,7 +255,8 @@ export const defaultConfig: GuardConfig = {
       paths: [".github/false-clean-pass-*.json"],
       changeSeverity: "error",
       exemptLabel: "baseline-update",
-      allowInitialCreate: true
+      allowInitialCreate: true,
+      codeownerTeamFallback: false
     }
   },
   baselineGuard: {
@@ -257,7 +264,8 @@ export const defaultConfig: GuardConfig = {
     paths: [".github/false-clean-pass-*.json"],
     changeSeverity: "error",
     exemptLabel: "baseline-update",
-    allowInitialCreate: true
+    allowInitialCreate: true,
+    codeownerTeamFallback: false
   },
   testCountRatchet: {
     enabled: true,
@@ -318,6 +326,9 @@ export function mergeConfig(...parts: GuardConfigInput[]): GuardConfig {
         ...defaultConfig.detectors.ignoredFailures,
         ...parsed.detectors?.ignoredFailures,
         allowJobs: parsed.detectors?.ignoredFailures?.allowJobs ?? defaultConfig.detectors.ignoredFailures.allowJobs,
+        allowContinueOnErrorSteps:
+          parsed.detectors?.ignoredFailures?.allowContinueOnErrorSteps ??
+          defaultConfig.detectors.ignoredFailures.allowContinueOnErrorSteps,
         guardStepNames:
           parsed.detectors?.ignoredFailures?.guardStepNames ?? defaultConfig.detectors.ignoredFailures.guardStepNames
       },

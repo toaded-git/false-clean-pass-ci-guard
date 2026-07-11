@@ -387,6 +387,7 @@ const ignoredFailuresSchema = zod_1.z.object({
     newSeverity: severitySchema.optional(),
     legacySeverity: severitySchema.optional(),
     allowJobs: zod_1.z.array(zod_1.z.string()).optional(),
+    allowContinueOnErrorSteps: zod_1.z.array(zod_1.z.string()).optional(),
     allowCleanupCommands: zod_1.z.boolean().optional(),
     guardStepNames: zod_1.z.array(zod_1.z.string()).optional(),
     guardWeakeningSeverity: severitySchema.optional(),
@@ -411,7 +412,8 @@ const baselineGuardSchema = zod_1.z.object({
     paths: zod_1.z.array(zod_1.z.string()).optional(),
     changeSeverity: severitySchema.optional(),
     exemptLabel: zod_1.z.string().optional(),
-    allowInitialCreate: zod_1.z.boolean().optional()
+    allowInitialCreate: zod_1.z.boolean().optional(),
+    codeownerTeamFallback: zod_1.z.boolean().optional()
 });
 const testCountRatchetSchema = zod_1.z.object({
     enabled: zod_1.z.boolean().optional(),
@@ -479,6 +481,7 @@ exports.defaultConfig = {
             newSeverity: "error",
             legacySeverity: "warning",
             allowJobs: ["experimental-nightly"],
+            allowContinueOnErrorSteps: [],
             allowCleanupCommands: true,
             guardStepNames: ["false-clean-pass"],
             guardWeakeningSeverity: "error",
@@ -503,7 +506,8 @@ exports.defaultConfig = {
             paths: [".github/false-clean-pass-*.json"],
             changeSeverity: "error",
             exemptLabel: "baseline-update",
-            allowInitialCreate: true
+            allowInitialCreate: true,
+            codeownerTeamFallback: false
         }
     },
     baselineGuard: {
@@ -511,7 +515,8 @@ exports.defaultConfig = {
         paths: [".github/false-clean-pass-*.json"],
         changeSeverity: "error",
         exemptLabel: "baseline-update",
-        allowInitialCreate: true
+        allowInitialCreate: true,
+        codeownerTeamFallback: false
     },
     testCountRatchet: {
         enabled: true,
@@ -566,6 +571,8 @@ function mergeConfig(...parts) {
                 ...exports.defaultConfig.detectors.ignoredFailures,
                 ...parsed.detectors?.ignoredFailures,
                 allowJobs: parsed.detectors?.ignoredFailures?.allowJobs ?? exports.defaultConfig.detectors.ignoredFailures.allowJobs,
+                allowContinueOnErrorSteps: parsed.detectors?.ignoredFailures?.allowContinueOnErrorSteps ??
+                    exports.defaultConfig.detectors.ignoredFailures.allowContinueOnErrorSteps,
                 guardStepNames: parsed.detectors?.ignoredFailures?.guardStepNames ?? exports.defaultConfig.detectors.ignoredFailures.guardStepNames
             },
             coverageRatchet: {
@@ -648,6 +655,47 @@ function deepMerge(left, right) {
             ...right.zeroTests
         }
     };
+}
+
+
+/***/ }),
+
+/***/ 1905:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isContinueOnErrorAllowed = isContinueOnErrorAllowed;
+const globs_1 = __nccwpck_require__(8879);
+const continueOnErrorAllowComment = /#\s*fcp-allow:\s*continue-on-error\s+(.+)$/i;
+function isContinueOnErrorAllowed(step, source, allowContinueOnErrorSteps) {
+    if (!step) {
+        return false;
+    }
+    if (matchesStepAllowlist(step, allowContinueOnErrorSteps)) {
+        return true;
+    }
+    return hasInlineAllowComment(source, step);
+}
+function matchesStepAllowlist(step, patterns) {
+    if (patterns.length === 0) {
+        return false;
+    }
+    const candidates = [step.stepName, step.uses].filter((value) => Boolean(value));
+    return candidates.some((candidate) => (0, globs_1.matchesAnyGlob)(candidate, patterns));
+}
+function hasInlineAllowComment(source, step) {
+    const lines = source.split(/\r?\n/);
+    const start = Math.max(1, step.line - 2);
+    for (let line = start; line <= step.endLine; line += 1) {
+        const content = lines[line - 1] ?? "";
+        const match = content.match(continueOnErrorAllowComment);
+        if (match?.[1]?.trim()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -803,6 +851,33 @@ function escapeRegExp(value) {
 
 /***/ }),
 
+/***/ 8026:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.findAllowedJobForLine = findAllowedJobForLine;
+const globs_1 = __nccwpck_require__(8879);
+const workflow_parser_1 = __nccwpck_require__(9245);
+function findAllowedJobForLine(workflow, line, allowJobs) {
+    if (!workflow || line === undefined || allowJobs.length === 0) {
+        return undefined;
+    }
+    const job = (0, workflow_parser_1.findJobForLine)(workflow, line);
+    if (!job) {
+        return undefined;
+    }
+    return jobMatchesAllowlist(job, allowJobs) ? job : undefined;
+}
+function jobMatchesAllowlist(job, allowJobs) {
+    const candidates = [job.id, job.name].filter((value) => Boolean(value));
+    return candidates.some((candidate) => (0, globs_1.matchesAnyGlob)(candidate, allowJobs));
+}
+
+
+/***/ }),
+
 /***/ 250:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -934,7 +1009,7 @@ exports.baselineChangeDetector = {
                 findings.push(baselineFinding(ctx, file.filename, "No CODEOWNERS entry matches this baseline file."));
                 continue;
             }
-            const approval = await hasCodeOwnerApproval(owners, reviews, provider);
+            const approval = await hasCodeOwnerApproval(owners, reviews, provider, options.codeownerTeamFallback);
             if (!approval.ok) {
                 findings.push(baselineFinding(ctx, file.filename, `${approval.reason} ${labelHint(ctx)}`.trim()));
                 continue;
@@ -961,11 +1036,10 @@ async function readCodeowners(ctx) {
     }
     return undefined;
 }
-async function hasCodeOwnerApproval(owners, reviews, provider) {
+async function hasCodeOwnerApproval(owners, reviews, provider, codeownerTeamFallback) {
     const latest = latestReviewsByUser(reviews);
-    const approvedReviewers = [...latest.values()]
-        .filter((review) => review.state.toUpperCase() === "APPROVED")
-        .map((review) => review.user);
+    const approvedReviews = [...latest.values()].filter((review) => review.state.toUpperCase() === "APPROVED");
+    const approvedReviewers = approvedReviews.map((review) => review.user);
     for (const owner of owners) {
         const normalized = owner.replace(/^@/, "");
         if (!normalized.includes("/")) {
@@ -976,27 +1050,36 @@ async function hasCodeOwnerApproval(owners, reviews, provider) {
             continue;
         }
         const [teamOwner, teamSlug] = normalized.split("/");
-        if (!teamOwner || !teamSlug || !provider.isTeamMember) {
+        if (!teamOwner || !teamSlug || !codeownerTeamFallback) {
             continue;
         }
-        for (const reviewer of approvedReviewers) {
-            const isMember = await provider.isTeamMember(teamOwner, teamSlug, reviewer);
-            if (isMember) {
-                return { ok: true, reviewer };
+        if (provider.isTeamMember) {
+            for (const reviewer of approvedReviewers) {
+                const isMember = await provider.isTeamMember(teamOwner, teamSlug, reviewer);
+                if (isMember) {
+                    return { ok: true, reviewer };
+                }
             }
+        }
+        const fallbackReview = approvedReviews.find((review) => isTrustedTeamFallbackAssociation(review.authorAssociation));
+        if (fallbackReview) {
+            return { ok: true, reviewer: fallbackReview.user };
         }
     }
     const teamOwners = owners.filter((owner) => owner.includes("/"));
-    if (teamOwners.length > 0 && !provider.isTeamMember) {
+    if (teamOwners.length > 0 && !codeownerTeamFallback) {
         return {
             ok: false,
-            reason: `CODEOWNER is a team (${teamOwners.join(", ")}), but team membership cannot be verified; blocking fail-closed.`
+            reason: `CODEOWNER is a team (${teamOwners.join(", ")}), but codeownerTeamFallback is disabled; blocking fail-closed.`
         };
     }
     return {
         ok: false,
         reason: `No approving PR review from matching CODEOWNER (${owners.join(", ")}) was verified.`
     };
+}
+function isTrustedTeamFallbackAssociation(authorAssociation) {
+    return authorAssociation === "OWNER" || authorAssociation === "MEMBER";
 }
 function latestReviewsByUser(reviews) {
     const sorted = [...reviews].sort((left, right) => (left.submittedAt ?? "").localeCompare(right.submittedAt ?? ""));
@@ -1362,7 +1445,10 @@ function isIgnoredKey(key, ignore) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ignoredFailuresDetector = void 0;
 const globs_1 = __nccwpck_require__(8879);
+const allowlist_1 = __nccwpck_require__(1905);
+const job_scope_1 = __nccwpck_require__(8026);
 const yaml_scan_1 = __nccwpck_require__(8029);
+const workflow_parser_1 = __nccwpck_require__(9245);
 const failOnRank = {
     error: 0,
     warning: 1,
@@ -1394,14 +1480,15 @@ exports.ignoredFailuresDetector = {
             if (file.status === "removed") {
                 continue;
             }
-            findings.push(...scanFailureIgnorePatterns(file, options));
+            const workflowContext = await parseHeadWorkflow(ctx, file.filename);
+            findings.push(...scanFailureIgnorePatterns(file, options, workflowContext));
             findings.push(...scanGuardWeakeningDiff(file, options.guardWeakeningSeverity, options.guardStepNames, guardExistsInHead));
             findings.push(...scanConfigWeakeningDiff(file, options.guardWeakeningSeverity));
         }
         return dedupeFindings(findings);
     }
 };
-function scanFailureIgnorePatterns(file, options) {
+function scanFailureIgnorePatterns(file, options, workflowContext) {
     if (!isFailureIgnoreTarget(file.filename)) {
         return [];
     }
@@ -1412,7 +1499,11 @@ function scanFailureIgnorePatterns(file, options) {
         if (!rule) {
             continue;
         }
-        findings.push({
+        if (rule.ruleId === "false-clean-pass/continue-on-error" &&
+            (0, allowlist_1.isContinueOnErrorAllowed)(workflowContext ? (0, workflow_parser_1.findStepForLine)(workflowContext.workflow, line) : undefined, workflowContext?.source ?? "", options.allowContinueOnErrorSteps)) {
+            continue;
+        }
+        const finding = {
             detector: exports.ignoredFailuresDetector.id,
             severity: options.newSeverity,
             ruleId: rule.ruleId,
@@ -1420,7 +1511,11 @@ function scanFailureIgnorePatterns(file, options) {
             line,
             evidence: trimmed,
             message: rule.message
-        });
+        };
+        if ((0, job_scope_1.findAllowedJobForLine)(workflowContext?.workflow, finding.line, options.allowJobs)) {
+            continue;
+        }
+        findings.push(finding);
     }
     return findings;
 }
@@ -1456,7 +1551,7 @@ function failureIgnoreRule(content, allowCleanupCommands) {
 }
 function scanGuardWeakeningDiff(file, severity, guardStepNames, guardExistsInHead) {
     const findings = [];
-    if (!(0, yaml_scan_1.isWorkflowFile)(file.filename)) {
+    if (!(0, workflow_parser_1.isWorkflowFile)(file.filename)) {
         return findings;
     }
     const removedLines = [...file.removedLineContent.entries()];
@@ -1603,7 +1698,7 @@ function scanConfigWeakeningDiff(file, severity) {
 }
 async function hasGuardStepInHeadWorkflows(ctx) {
     const files = await ctx.listFiles();
-    const workflowFiles = files.filter(yaml_scan_1.isWorkflowFile);
+    const workflowFiles = files.filter(workflow_parser_1.isWorkflowFile);
     for (const file of workflowFiles) {
         try {
             if ((0, yaml_scan_1.workflowHasGuardStep)(await ctx.readFile(file), ctx.config.detectors.ignoredFailures.guardStepNames)) {
@@ -1616,8 +1711,23 @@ async function hasGuardStepInHeadWorkflows(ctx) {
     }
     return false;
 }
+async function parseHeadWorkflow(ctx, file) {
+    if (!(0, workflow_parser_1.isWorkflowFile)(file)) {
+        return undefined;
+    }
+    try {
+        const source = await ctx.readFile(file);
+        return {
+            source,
+            workflow: (0, workflow_parser_1.parseWorkflow)(source, { filePath: file })
+        };
+    }
+    catch {
+        return undefined;
+    }
+}
 function isFailureIgnoreTarget(file) {
-    return ((0, yaml_scan_1.isWorkflowFile)(file) ||
+    return ((0, workflow_parser_1.isWorkflowFile)(file) ||
         file === "package.json" ||
         file === "Makefile" ||
         (0, globs_1.matchesAnyGlob)(file, ["**/*.sh", "**/*.bash", "**/*.zsh"]));
@@ -1788,7 +1898,7 @@ function collectNewSuppressions(ctx) {
         }
         for (const [line, content] of file.addedLineContent.entries()) {
             if (suppressionPatterns.some((pattern) => pattern.test(content)) &&
-                !(options.requireReason && suppressionHasReason(content))) {
+                !(options.requireReason && suppressionHasValidReason(content))) {
                 hits.push({
                     file: file.filename,
                     line,
@@ -1864,8 +1974,25 @@ function numberFromUnknown(value) {
     }
     return undefined;
 }
-function suppressionHasReason(line) {
-    return /\s--\s+\S/.test(line) || /@ts-expect-error\s+\S/.test(line) || /@ts-ignore\s+\S/.test(line) || /#\s*noqa:.+\S/.test(line);
+function suppressionHasValidReason(line) {
+    const reason = extractSuppressionReason(line);
+    if (!reason) {
+        return false;
+    }
+    const normalized = reason.trim();
+    return normalized.length >= 8 && !/^(?:auto|todo|fixme|n\/a|none)$/i.test(normalized);
+}
+function extractSuppressionReason(line) {
+    const separated = line.match(/\s--\s*(.+)$/);
+    if (separated?.[1]) {
+        return separated[1];
+    }
+    const tsDirective = line.match(/@ts-(?:expect-error|ignore)\b(?::|\s+)\s*(.+)$/);
+    if (tsDirective?.[1]) {
+        return tsDirective[1];
+    }
+    const noqa = line.match(/#\s*noqa:\s*(.+)$/);
+    return noqa?.[1];
 }
 function isSuppressionScanFile(file) {
     return /\.(?:[cm]?[jt]sx?|py|mjs|cjs|ts|tsx)$/.test(file);
@@ -1941,7 +2068,7 @@ exports.testCountRatchetDetector = {
                     severity: "error",
                     ruleId: "false-clean-pass/test-count-drop",
                     file: ctx.testResultsGlob,
-                    message: `Executed test count dropped from ${base.executed} to ${currentSummary.executed} (${dropPercent.toFixed(1)}%), above maxDropPercent=${options.maxDropPercent}.`
+                    message: `Review required: executed test count dropped from ${base.executed} to ${currentSummary.executed} (${dropPercent.toFixed(1)}%), above maxDropPercent=${options.maxDropPercent}. Update the baseline after a reviewed intentional test-count change.`
                 });
             }
         }
@@ -2053,7 +2180,8 @@ function createGitHubReviewProvider(runtime) {
                 .map((review) => ({
                 user: review.user?.login ?? "",
                 state: review.state ?? "",
-                submittedAt: review.submitted_at ?? undefined
+                submittedAt: review.submitted_at ?? undefined,
+                authorAssociation: review.author_association
             }));
         },
         async isTeamMember(teamOwner, teamSlug, username) {
@@ -2801,6 +2929,455 @@ function numericAttribute(value) {
 }
 function isRecord(value) {
     return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
+
+/***/ }),
+
+/***/ 9245:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseWorkflow = parseWorkflow;
+exports.parseWorkflowFiles = parseWorkflowFiles;
+exports.isWorkflowFile = isWorkflowFile;
+exports.findJobForLine = findJobForLine;
+exports.findStepForLine = findStepForLine;
+const yaml_1 = __nccwpck_require__(8815);
+const emptyTrigger = {
+    paths: [],
+    pathsIgnore: [],
+    branches: [],
+    branchesIgnore: []
+};
+function parseWorkflow(source, options = {}) {
+    const lineOffsets = buildLineOffsets(source);
+    const file = options.filePath ?? ".github/workflows/workflow.yml";
+    const seenFiles = new Set(options.seenFiles ?? []);
+    seenFiles.add(file);
+    const parseErrors = [];
+    const document = (0, yaml_1.parseDocument)(source, { keepSourceTokens: true });
+    parseErrors.push(...document.errors.map((error) => error.message));
+    const root = document.contents;
+    const on = parseWorkflowTriggers(getMapValue(root, "on"));
+    const jobsNode = getMapValue(root, "jobs");
+    const jobs = [];
+    const steps = [];
+    const checkMappings = [];
+    const unresolvedCheckMappings = [];
+    for (const jobEntry of mapEntries(jobsNode)) {
+        const jobId = jobEntry.key;
+        const jobNode = jobEntry.value;
+        const jobName = stringValue(getMapValue(jobNode, "name"));
+        const jobIf = stringValue(getMapValue(jobNode, "if"));
+        const uses = stringValue(getMapValue(jobNode, "uses"));
+        const line = nodeStartLine(jobEntry.keyNode, lineOffsets) ?? nodeStartLine(jobNode, lineOffsets) ?? 1;
+        const endLine = nodeEndLine(jobNode, lineOffsets) ?? line;
+        const dynamicName = jobName ? isDynamicExpression(jobName) : false;
+        const jobSteps = parseSteps(jobNode, jobId, jobName, lineOffsets);
+        const job = {
+            id: jobId,
+            name: jobName,
+            if: jobIf,
+            uses,
+            line,
+            endLine,
+            steps: jobSteps,
+            checkNames: [],
+            dynamicName,
+            reusable: Boolean(uses)
+        };
+        const mappingResult = buildCheckMappings(job, jobNode, {
+            file,
+            workflowFiles: options.workflowFiles,
+            seenFiles,
+            lineOffsets
+        });
+        job.checkNames = mappingResult.mappings.map((mapping) => mapping.checkName);
+        checkMappings.push(...mappingResult.mappings);
+        unresolvedCheckMappings.push(...mappingResult.unresolved);
+        jobs.push(job);
+        steps.push(...jobSteps);
+    }
+    return {
+        file,
+        on,
+        jobs,
+        steps,
+        checkMappings,
+        unresolvedCheckMappings,
+        parseErrors
+    };
+}
+function parseWorkflowFiles(files) {
+    return Object.entries(files)
+        .filter(([file]) => isWorkflowFile(file))
+        .map(([file, source]) => parseWorkflow(source, {
+        filePath: file,
+        workflowFiles: files
+    }));
+}
+function isWorkflowFile(file) {
+    return /^\.github\/workflows\/.+\.ya?ml$/.test(normalizeWorkflowPath(file));
+}
+function findJobForLine(workflow, line) {
+    return workflow.jobs.find((job) => line >= job.line && line <= job.endLine);
+}
+function findStepForLine(workflow, line) {
+    return workflow.steps.find((step) => line >= step.line && line <= step.endLine);
+}
+function parseWorkflowTriggers(onNode) {
+    const events = {};
+    if ((0, yaml_1.isScalar)(onNode)) {
+        const eventName = scalarToString(onNode.value);
+        if (eventName) {
+            events[eventName] = { ...emptyTrigger };
+        }
+    }
+    else if ((0, yaml_1.isSeq)(onNode)) {
+        for (const item of onNode.items) {
+            const eventName = stringValue(item);
+            if (eventName) {
+                events[eventName] = { ...emptyTrigger };
+            }
+        }
+    }
+    else if ((0, yaml_1.isMap)(onNode)) {
+        for (const entry of mapEntries(onNode)) {
+            events[entry.key] = parseWorkflowEvent(entry.value);
+        }
+    }
+    return {
+        eventNames: Object.keys(events),
+        events
+    };
+}
+function parseWorkflowEvent(node) {
+    if (!(0, yaml_1.isMap)(node)) {
+        return { ...emptyTrigger };
+    }
+    return {
+        paths: stringArrayValue(getMapValue(node, "paths")),
+        pathsIgnore: stringArrayValue(getMapValue(node, "paths-ignore")),
+        branches: stringArrayValue(getMapValue(node, "branches")),
+        branchesIgnore: stringArrayValue(getMapValue(node, "branches-ignore"))
+    };
+}
+function parseSteps(jobNode, jobId, jobName, lineOffsets) {
+    const stepsNode = getMapValue(jobNode, "steps");
+    if (!(0, yaml_1.isSeq)(stepsNode)) {
+        return [];
+    }
+    const steps = [];
+    for (const item of stepsNode.items) {
+        if (!(0, yaml_1.isMap)(item)) {
+            continue;
+        }
+        const continueOnErrorEntry = findMapEntry(item, "continue-on-error");
+        const step = {
+            jobId,
+            jobName,
+            stepName: stringValue(getMapValue(item, "name")),
+            uses: stringValue(getMapValue(item, "uses")),
+            run: stringValue(getMapValue(item, "run")),
+            line: nodeStartLine(item, lineOffsets) ?? 1,
+            endLine: nodeEndLine(item, lineOffsets) ?? nodeStartLine(item, lineOffsets) ?? 1,
+            continueOnError: booleanValue(continueOnErrorEntry?.value),
+            continueOnErrorLine: continueOnErrorEntry ? nodeStartLine(continueOnErrorEntry.keyNode, lineOffsets) : undefined
+        };
+        steps.push(step);
+    }
+    return steps;
+}
+function buildCheckMappings(job, jobNode, context) {
+    if (job.dynamicName) {
+        return {
+            mappings: [],
+            unresolved: [
+                {
+                    jobId: job.id,
+                    jobName: job.name,
+                    reason: "dynamic-name",
+                    file: context.file,
+                    line: job.line
+                }
+            ]
+        };
+    }
+    const displayName = job.name ?? job.id;
+    if (job.uses) {
+        return buildReusableCheckMappings(job, displayName, context);
+    }
+    const matrix = expandMatrix(getMapValue(getMapValue(jobNode, "strategy"), "matrix"));
+    if (matrix.length > 0) {
+        return {
+            mappings: matrix.map((combo) => ({
+                checkName: `${displayName} (${Object.values(combo).join(", ")})`,
+                jobId: job.id,
+                jobName: job.name,
+                kind: "matrix",
+                file: context.file,
+                line: job.line,
+                matrix: combo
+            })),
+            unresolved: []
+        };
+    }
+    return {
+        mappings: [
+            {
+                checkName: displayName,
+                jobId: job.id,
+                jobName: job.name,
+                kind: "job",
+                file: context.file,
+                line: job.line
+            }
+        ],
+        unresolved: []
+    };
+}
+function buildReusableCheckMappings(job, displayName, context) {
+    const uses = job.uses ?? "";
+    const localPath = normalizeLocalReusablePath(uses);
+    if (!localPath) {
+        return {
+            mappings: [],
+            unresolved: [
+                {
+                    jobId: job.id,
+                    jobName: job.name,
+                    reason: "external-reusable",
+                    file: context.file,
+                    line: job.line,
+                    uses
+                }
+            ]
+        };
+    }
+    const source = context.workflowFiles?.[localPath];
+    if (source === undefined || context.seenFiles.has(localPath)) {
+        return {
+            mappings: [],
+            unresolved: [
+                {
+                    jobId: job.id,
+                    jobName: job.name,
+                    reason: "local-reusable-missing",
+                    file: context.file,
+                    line: job.line,
+                    uses
+                }
+            ]
+        };
+    }
+    const inner = parseWorkflow(source, {
+        filePath: localPath,
+        workflowFiles: context.workflowFiles,
+        seenFiles: context.seenFiles
+    });
+    return {
+        mappings: inner.checkMappings.map((mapping) => ({
+            ...mapping,
+            checkName: `${displayName} / ${mapping.checkName}`,
+            jobId: job.id,
+            jobName: job.name,
+            kind: "reusable",
+            file: context.file,
+            line: job.line,
+            reusableWorkflow: localPath
+        })),
+        unresolved: inner.unresolvedCheckMappings.map((mapping) => ({
+            ...mapping,
+            jobId: job.id,
+            jobName: job.name,
+            file: context.file,
+            line: job.line,
+            uses
+        }))
+    };
+}
+function expandMatrix(matrixNode) {
+    if (!(0, yaml_1.isMap)(matrixNode)) {
+        return [];
+    }
+    const axes = [];
+    const include = [];
+    const exclude = [];
+    for (const entry of mapEntries(matrixNode)) {
+        if (entry.key === "include") {
+            include.push(...objectArrayValue(entry.value));
+            continue;
+        }
+        if (entry.key === "exclude") {
+            exclude.push(...objectArrayValue(entry.value));
+            continue;
+        }
+        const values = stringArrayValue(entry.value);
+        if (values.length > 0) {
+            axes.push({ key: entry.key, values });
+        }
+    }
+    if (axes.length === 0 && include.length === 0) {
+        return [];
+    }
+    let combinations = axes.reduce((acc, axis) => acc.flatMap((combo) => axis.values.map((value) => ({
+        ...combo,
+        [axis.key]: value
+    }))), [{}]);
+    for (const includeEntry of include) {
+        let applied = false;
+        combinations = combinations.map((combo) => {
+            if (canMergeMatrixInclude(combo, includeEntry)) {
+                applied = true;
+                return { ...combo, ...includeEntry };
+            }
+            return combo;
+        });
+        if (!applied) {
+            combinations.push(includeEntry);
+        }
+    }
+    return combinations.filter((combo) => !exclude.some((excludeEntry) => matrixEntryMatches(combo, excludeEntry)));
+}
+function canMergeMatrixInclude(combo, includeEntry) {
+    return Object.entries(includeEntry).every(([key, value]) => combo[key] === undefined || combo[key] === value);
+}
+function matrixEntryMatches(combo, expected) {
+    return Object.entries(expected).every(([key, value]) => combo[key] === value);
+}
+function objectArrayValue(node) {
+    if (!(0, yaml_1.isSeq)(node)) {
+        return [];
+    }
+    return node.items.flatMap((item) => {
+        if (!(0, yaml_1.isMap)(item)) {
+            return [];
+        }
+        const record = {};
+        for (const entry of mapEntries(item)) {
+            const value = stringValue(entry.value);
+            if (value !== undefined) {
+                record[entry.key] = value;
+            }
+        }
+        return Object.keys(record).length > 0 ? [record] : [];
+    });
+}
+function stringArrayValue(node) {
+    if ((0, yaml_1.isSeq)(node)) {
+        return node.items.map((item) => stringValue(item)).filter((value) => value !== undefined);
+    }
+    const value = stringValue(node);
+    return value === undefined ? [] : [value];
+}
+function getMapValue(map, key) {
+    return findMapEntry(map, key)?.value;
+}
+function findMapEntry(map, key) {
+    return mapEntries(map).find((entry) => entry.key === key);
+}
+function mapEntries(map) {
+    if (!(0, yaml_1.isMap)(map)) {
+        return [];
+    }
+    return map.items.flatMap((pair) => {
+        const key = stringValue(pair.key);
+        if (key === undefined) {
+            return [];
+        }
+        return [
+            {
+                key,
+                keyNode: pair.key,
+                value: pair.value
+            }
+        ];
+    });
+}
+function stringValue(node) {
+    if (!(0, yaml_1.isScalar)(node)) {
+        return undefined;
+    }
+    return scalarToString(node.value);
+}
+function scalarToString(value) {
+    if (value === null || value === undefined) {
+        return undefined;
+    }
+    return String(value);
+}
+function booleanValue(node) {
+    if (!(0, yaml_1.isScalar)(node)) {
+        return undefined;
+    }
+    if (typeof node.value === "boolean") {
+        return node.value;
+    }
+    if (typeof node.value === "string") {
+        if (/^true$/i.test(node.value)) {
+            return true;
+        }
+        if (/^false$/i.test(node.value)) {
+            return false;
+        }
+    }
+    return undefined;
+}
+function isDynamicExpression(value) {
+    return /\$\{\{[\s\S]*\}\}/.test(value);
+}
+function normalizeLocalReusablePath(uses) {
+    if (!uses.startsWith("./")) {
+        return undefined;
+    }
+    return normalizeWorkflowPath(uses.slice(2));
+}
+function normalizeWorkflowPath(file) {
+    return file.replace(/\\/g, "/").replace(/^\/+/, "");
+}
+function nodeStartLine(node, lineOffsets) {
+    const range = nodeRange(node);
+    return range ? offsetToLine(range[0], lineOffsets) : undefined;
+}
+function nodeEndLine(node, lineOffsets) {
+    const range = nodeRange(node);
+    return range ? offsetToLine(Math.max(range[2] - 1, range[0]), lineOffsets) : undefined;
+}
+function nodeRange(node) {
+    const range = node?.range;
+    if (!Array.isArray(range) || range.length < 3) {
+        return undefined;
+    }
+    const [start, valueEnd, end] = range;
+    return typeof start === "number" && typeof valueEnd === "number" && typeof end === "number"
+        ? [start, valueEnd, end]
+        : undefined;
+}
+function buildLineOffsets(source) {
+    const offsets = [0];
+    for (let index = 0; index < source.length; index += 1) {
+        if (source[index] === "\n") {
+            offsets.push(index + 1);
+        }
+    }
+    return offsets;
+}
+function offsetToLine(offset, lineOffsets) {
+    let low = 0;
+    let high = lineOffsets.length - 1;
+    while (low <= high) {
+        const middle = Math.floor((low + high) / 2);
+        if (lineOffsets[middle] <= offset) {
+            low = middle + 1;
+        }
+        else {
+            high = middle - 1;
+        }
+    }
+    return high + 1;
 }
 
 

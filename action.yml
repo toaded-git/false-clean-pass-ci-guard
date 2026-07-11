@@ -44,6 +44,13 @@ inputs:
     description: Self-attestation mode. marker emits and verifies a non-cryptographic Check Run marker; off disables it.
     required: false
     default: marker
+  allow-continue-on-error-steps:
+    description: Comma-separated step name or uses globs allowed to set continue-on-error true.
+    required: false
+  codeowner-team-fallback:
+    description: Enable CODEOWNER team fallback using approved OWNER/MEMBER PR reviews.
+    required: false
+    default: "false"
 outputs:
   result:
     description: pass or fail.

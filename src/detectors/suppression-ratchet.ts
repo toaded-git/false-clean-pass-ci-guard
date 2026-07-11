@@ -68,7 +68,7 @@ function collectNewSuppressions(ctx: DetectorContext): SuppressionHit[] {
     for (const [line, content] of file.addedLineContent.entries()) {
       if (
         suppressionPatterns.some((pattern) => pattern.test(content)) &&
-        !(options.requireReason && suppressionHasReason(content))
+        !(options.requireReason && suppressionHasValidReason(content))
       ) {
         hits.push({
           file: file.filename,
@@ -152,8 +152,29 @@ function numberFromUnknown(value: unknown): number | undefined {
   return undefined;
 }
 
-function suppressionHasReason(line: string): boolean {
-  return /\s--\s+\S/.test(line) || /@ts-expect-error\s+\S/.test(line) || /@ts-ignore\s+\S/.test(line) || /#\s*noqa:.+\S/.test(line);
+function suppressionHasValidReason(line: string): boolean {
+  const reason = extractSuppressionReason(line);
+  if (!reason) {
+    return false;
+  }
+
+  const normalized = reason.trim();
+  return normalized.length >= 8 && !/^(?:auto|todo|fixme|n\/a|none)$/i.test(normalized);
+}
+
+function extractSuppressionReason(line: string): string | undefined {
+  const separated = line.match(/\s--\s*(.+)$/);
+  if (separated?.[1]) {
+    return separated[1];
+  }
+
+  const tsDirective = line.match(/@ts-(?:expect-error|ignore)\b(?::|\s+)\s*(.+)$/);
+  if (tsDirective?.[1]) {
+    return tsDirective[1];
+  }
+
+  const noqa = line.match(/#\s*noqa:\s*(.+)$/);
+  return noqa?.[1];
 }
 
 function isSuppressionScanFile(file: string): boolean {

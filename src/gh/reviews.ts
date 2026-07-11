@@ -15,14 +15,20 @@ export function createGitHubReviewProvider(runtime: GitHubRuntime): CodeOwnerRev
         repo: runtime.repo,
         pull_number: pullNumber,
         per_page: 100
-      })) as Array<{ user?: { login?: string }; state?: string; submitted_at?: string | null }>;
+      })) as Array<{
+        user?: { login?: string };
+        state?: string;
+        submitted_at?: string | null;
+        author_association?: string;
+      }>;
 
       return reviews
         .filter((review) => review.user?.login)
         .map((review) => ({
           user: review.user?.login ?? "",
           state: review.state ?? "",
-          submittedAt: review.submitted_at ?? undefined
+          submittedAt: review.submitted_at ?? undefined,
+          authorAssociation: review.author_association
         }));
     },
     async isTeamMember(teamOwner: string, teamSlug: string, username: string): Promise<boolean | undefined> {

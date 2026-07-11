@@ -20,7 +20,9 @@ export async function runAction(): Promise<void> {
   const attestationMode = parseAttestationMode(core.getInput("attestation-mode"));
   const token = core.getInput("github-token");
   const config = applyInputConfigOverrides(loadConfig(rootDir, configPath), {
-    testCountBaseline: core.getInput("test-count-baseline")
+    testCountBaseline: core.getInput("test-count-baseline"),
+    allowContinueOnErrorSteps: splitCommaList(core.getInput("allow-continue-on-error-steps")),
+    codeownerTeamFallback: parseBooleanInput(core.getInput("codeowner-team-fallback"))
   });
   const diff = await getActionDiff(rootDir, token);
   const runtime = await getGitHubRuntime(token);
@@ -212,19 +214,61 @@ function applyInputConfigOverrides(
   config: GuardConfig,
   options: {
     testCountBaseline?: string;
+    allowContinueOnErrorSteps?: string[];
+    codeownerTeamFallback?: boolean;
   }
 ): GuardConfig {
-  if (!options.testCountBaseline) {
-    return config;
+  let next = config;
+
+  if (options.testCountBaseline) {
+    next = {
+      ...next,
+      testCountRatchet: {
+        ...next.testCountRatchet,
+        baselineFile: options.testCountBaseline
+      }
+    };
   }
 
-  return {
-    ...config,
-    testCountRatchet: {
-      ...config.testCountRatchet,
-      baselineFile: options.testCountBaseline
-    }
-  };
+  if (options.allowContinueOnErrorSteps && options.allowContinueOnErrorSteps.length > 0) {
+    next = {
+      ...next,
+      detectors: {
+        ...next.detectors,
+        ignoredFailures: {
+          ...next.detectors.ignoredFailures,
+          allowContinueOnErrorSteps: options.allowContinueOnErrorSteps
+        }
+      }
+    };
+  }
+
+  if (options.codeownerTeamFallback !== undefined) {
+    const baselineGuard = {
+      ...next.baselineGuard,
+      codeownerTeamFallback: options.codeownerTeamFallback
+    };
+    next = {
+      ...next,
+      baselineGuard,
+      detectors: {
+        ...next.detectors,
+        baselineGuard
+      }
+    };
+  }
+
+  return next;
+}
+
+function parseBooleanInput(value: string): boolean | undefined {
+  if (value === "true") {
+    return true;
+  }
+  if (value === "false") {
+    return false;
+  }
+  return undefined;
 }
 
 void runAction();

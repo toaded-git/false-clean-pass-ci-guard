@@ -58,11 +58,11 @@ describe("testCountRatchetDetector", () => {
     rmSync(root, { recursive: true, force: true });
   });
 
-  it("reports executed test count drops beyond maxDropPercent", async () => {
+  it("reports 210 to 40 executed test count drops beyond maxDropPercent", async () => {
     const root = makeVerifyTempDir("test-count-");
     mkdirSync(join(root, "reports"), { recursive: true });
-    writeFileSync(join(root, "reports/current.xml"), `<testsuite tests="70" skipped="0"></testsuite>`);
-    writeFileSync(join(root, "reports/base.xml"), `<testsuite tests="100" skipped="0"></testsuite>`);
+    writeFileSync(join(root, "reports/current.xml"), `<testsuite tests="40" skipped="0"></testsuite>`);
+    writeFileSync(join(root, "reports/base.xml"), `<testsuite tests="210" skipped="0"></testsuite>`);
 
     const findings = await testCountRatchetDetector.run(
       contextForRoot(root, [], {}, { testResultsGlob: "reports/current.xml", baseTestResultsGlob: "reports/base.xml" })
@@ -71,9 +71,25 @@ describe("testCountRatchetDetector", () => {
     expect(findings).toEqual([
       expect.objectContaining({
         severity: "error",
-        ruleId: "false-clean-pass/test-count-drop"
+        ruleId: "false-clean-pass/test-count-drop",
+        message: expect.stringContaining("Review required")
       })
     ]);
+    rmSync(root, { recursive: true, force: true });
+  });
+
+  it("passes when the executed test count baseline is intentionally updated", async () => {
+    const root = makeVerifyTempDir("test-count-");
+    mkdirSync(join(root, ".github"), { recursive: true });
+    mkdirSync(join(root, "reports"), { recursive: true });
+    writeFileSync(join(root, ".github/false-clean-pass-test-count.json"), JSON.stringify({ executed: 40 }));
+    writeFileSync(join(root, "reports/current.xml"), `<testsuite tests="40" skipped="0"></testsuite>`);
+
+    const findings = await testCountRatchetDetector.run(
+      contextForRoot(root, [], {}, { testResultsGlob: "reports/current.xml" })
+    );
+
+    expect(findings).toEqual([]);
     rmSync(root, { recursive: true, force: true });
   });
 });

@@ -26,6 +26,7 @@ export interface PullRequestReview {
   user: string;
   state: string;
   submittedAt?: string;
+  authorAssociation?: string;
 }
 
 export interface CodeOwnerReviewProvider {
