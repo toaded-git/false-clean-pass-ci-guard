@@ -1,6 +1,8 @@
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { loadConfig, type GuardConfig } from "./config/schema";
 import { createDetectorContext } from "./core/context";
+import { createEvidenceRecord, writeEvidenceRecord } from "./core/evidenceRecord";
 import { runGuard } from "./core/orchestrator";
 import type { FailOn } from "./core/types";
 import { getLocalGitDiff, parseUnifiedDiff } from "./git/diff";
@@ -27,13 +29,30 @@ export async function runCli(
       testResultsGlob: args.testResultsGlob,
       baseTestResultsGlob: args.baseTestResultsGlob,
       coverageSummaryPath: args.coverageSummary,
-      prLabels: args.prLabels
+      prLabels: args.prLabels,
+      readBaseFile: createLocalBaseFileReader(rootDir, args.base ?? "HEAD~1")
     }),
     args.failOn ?? config.failOn
   );
 
   if (args.sarifPath) {
     await writeSarifLogFile(result, { rootDir, sarifPath: args.sarifPath });
+  }
+
+  if (args.evidenceOutput) {
+    await writeEvidenceRecord(
+      createEvidenceRecord({
+        result,
+        repo: "local/local",
+        prNumber: null,
+        headSha: args.head ?? "HEAD",
+        baseSha: args.base ?? null,
+        actor: "local",
+        runId: null
+      }),
+      args.evidenceOutput,
+      rootDir
+    );
   }
 
   if (args.json) {
@@ -60,7 +79,9 @@ interface CliArgs {
   testCountBaseline?: string;
   coverageSummary?: string;
   sarifPath?: string;
+  evidenceOutput?: string;
   prLabels?: string[];
+  requiredJobs?: string[];
   json: boolean;
 }
 
@@ -107,6 +128,12 @@ function parseArgs(argv: string[]): CliArgs {
     } else if (arg === "--sarif-path" && value) {
       args.sarifPath = value;
       index += 1;
+    } else if (arg === "--evidence-output" && value) {
+      args.evidenceOutput = value;
+      index += 1;
+    } else if (arg === "--required-jobs" && value) {
+      args.requiredJobs = splitCommaList(value);
+      index += 1;
     } else if (arg === "--pr-label" && value) {
       args.prLabels = [...(args.prLabels ?? []), value];
       index += 1;
@@ -135,17 +162,48 @@ function parseFailOn(value: string): FailOn {
 }
 
 function applyCliConfigOverrides(config: GuardConfig, args: CliArgs): GuardConfig {
-  if (!args.testCountBaseline) {
-    return config;
+  let next = config;
+
+  if (args.testCountBaseline) {
+    next = {
+      ...next,
+      testCountRatchet: {
+        ...next.testCountRatchet,
+        baselineFile: args.testCountBaseline
+      }
+    };
   }
 
-  return {
-    ...config,
-    testCountRatchet: {
-      ...config.testCountRatchet,
-      baselineFile: args.testCountBaseline
-    }
-  };
+  if (args.requiredJobs && args.requiredJobs.length > 0) {
+    next = {
+      ...next,
+      requiredJobs: args.requiredJobs,
+      detectors: {
+        ...next.detectors,
+        requiredJobSkip: {
+          ...next.detectors.requiredJobSkip,
+          requiredJobs: args.requiredJobs
+        }
+      }
+    };
+  }
+
+  if (args.evidenceOutput) {
+    next = {
+      ...next,
+      evidenceOutput: args.evidenceOutput
+    };
+  }
+
+  return next;
+}
+
+function createLocalBaseFileReader(rootDir: string, base: string): (file: string) => Promise<string> {
+  return async (file: string) =>
+    execFileSync("git", ["show", `${base}:${file}`], {
+      cwd: rootDir,
+      encoding: "utf8"
+    });
 }
 
 if (require.main === module) {

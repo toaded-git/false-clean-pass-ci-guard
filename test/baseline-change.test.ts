@@ -103,26 +103,38 @@ describe("baselineChangeDetector", () => {
     rmSync(root, { recursive: true, force: true });
   });
 
-  it("accepts team CODEOWNER approval only when team membership can be verified", async () => {
+  it("fails closed for team CODEOWNER approval when team fallback is disabled", async () => {
     const root = baselineRepo("@org/security");
-    const approvedProvider: CodeOwnerReviewProvider = {
+    const provider: CodeOwnerReviewProvider = {
       listReviews: async () => [{ user: "carol", state: "APPROVED" }],
       isTeamMember: async () => true
     };
-    const unknownProvider: CodeOwnerReviewProvider = {
-      listReviews: async () => [{ user: "carol", state: "APPROVED" }]
+
+    const blocked = await baselineChangeDetector.run(
+      contextForRoot(root, baselineDiff(), {}, { codeOwnerReviewProvider: provider })
+    );
+
+    expect(blocked).toEqual([expect.objectContaining({ severity: "error" })]);
+    expect(blocked[0]?.message).toContain("codeownerTeamFallback is disabled");
+    rmSync(root, { recursive: true, force: true });
+  });
+
+  it("accepts team CODEOWNER fallback only when explicitly enabled", async () => {
+    const root = baselineRepo("@org/security");
+    const provider: CodeOwnerReviewProvider = {
+      listReviews: async () => [{ user: "carol", state: "APPROVED", authorAssociation: "MEMBER" }]
     };
 
     const approved = await baselineChangeDetector.run(
-      contextForRoot(root, baselineDiff(), {}, { codeOwnerReviewProvider: approvedProvider })
-    );
-    const blocked = await baselineChangeDetector.run(
-      contextForRoot(root, baselineDiff(), {}, { codeOwnerReviewProvider: unknownProvider })
+      contextForRoot(
+        root,
+        baselineDiff(),
+        { baselineGuard: { codeownerTeamFallback: true } },
+        { codeOwnerReviewProvider: provider }
+      )
     );
 
     expect(approved).toEqual([expect.objectContaining({ severity: "info" })]);
-    expect(blocked).toEqual([expect.objectContaining({ severity: "error" })]);
-    expect(blocked[0]?.message).toContain("team membership cannot be verified");
     rmSync(root, { recursive: true, force: true });
   });
 });

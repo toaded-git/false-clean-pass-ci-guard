@@ -12,13 +12,19 @@ export interface Finding {
   file?: string;
   line?: number;
   evidence?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface GitHubRuntime {
   token: string;
   owner: string;
+  ownerType?: string;
   repo: string;
   headSha: string;
+  baseSha?: string;
+  actor?: string;
+  runId?: string;
+  baseRef?: string;
   pullNumber?: number;
 }
 
@@ -26,6 +32,7 @@ export interface PullRequestReview {
   user: string;
   state: string;
   submittedAt?: string;
+  authorAssociation?: string;
 }
 
 export interface CodeOwnerReviewProvider {
@@ -64,9 +71,15 @@ export interface Detector {
   run(ctx: DetectorContext): Promise<Finding[]>;
 }
 
+export interface DetectorRunSummary {
+  id: string;
+  status: "pass" | "fail" | "review";
+}
+
 export interface RunResult {
   findings: Finding[];
   errorCount: number;
   warningCount: number;
   result: "pass" | "fail";
+  detectorResults?: DetectorRunSummary[];
 }

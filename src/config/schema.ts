@@ -43,6 +43,7 @@ const ignoredFailuresSchema = z.object({
   newSeverity: severitySchema.optional(),
   legacySeverity: severitySchema.optional(),
   allowJobs: z.array(z.string()).optional(),
+  allowContinueOnErrorSteps: z.array(z.string()).optional(),
   allowCleanupCommands: z.boolean().optional(),
   guardStepNames: z.array(z.string()).optional(),
   guardWeakeningSeverity: severitySchema.optional(),
@@ -70,7 +71,8 @@ const baselineGuardSchema = z.object({
   paths: z.array(z.string()).optional(),
   changeSeverity: severitySchema.optional(),
   exemptLabel: z.string().optional(),
-  allowInitialCreate: z.boolean().optional()
+  allowInitialCreate: z.boolean().optional(),
+  codeownerTeamFallback: z.boolean().optional()
 });
 
 const testCountRatchetSchema = z.object({
@@ -80,6 +82,11 @@ const testCountRatchetSchema = z.object({
   baselineFile: z.string().optional()
 });
 
+const requiredJobSkipSchema = z.object({
+  enabled: z.boolean().optional(),
+  requiredJobs: z.array(z.string()).optional()
+});
+
 const detectorsSchema = z.object({
   skippedTests: skippedTestsSchema.optional(),
   emptyAssertions: emptyAssertionsSchema.optional(),
@@ -87,7 +94,8 @@ const detectorsSchema = z.object({
   ignoredFailures: ignoredFailuresSchema.optional(),
   coverageRatchet: coverageRatchetSchema.optional(),
   suppressionRatchet: suppressionRatchetSchema.optional(),
-  baselineGuard: baselineGuardSchema.optional()
+  baselineGuard: baselineGuardSchema.optional(),
+  requiredJobSkip: requiredJobSkipSchema.optional()
 });
 
 const configInputSchema = z
@@ -96,6 +104,8 @@ const configInputSchema = z
     preset: z.string().optional(),
     failOn: failOnSchema.optional(),
     testGlobs: z.array(z.string()).optional(),
+    requiredJobs: z.array(z.string()).optional(),
+    evidenceOutput: z.string().optional(),
     detectors: detectorsSchema.optional(),
     baselineGuard: baselineGuardSchema.optional(),
     testCountRatchet: testCountRatchetSchema.optional(),
@@ -110,6 +120,8 @@ export type GuardConfig = {
   preset: string;
   failOn: "error" | "warning" | "never";
   testGlobs: string[];
+  requiredJobs: string[];
+  evidenceOutput: string;
   detectors: {
     skippedTests: {
       enabled: boolean;
@@ -144,6 +156,7 @@ export type GuardConfig = {
       newSeverity: SeverityConfig;
       legacySeverity: SeverityConfig;
       allowJobs: string[];
+      allowContinueOnErrorSteps: string[];
       allowCleanupCommands: boolean;
       guardStepNames: string[];
       guardWeakeningSeverity: SeverityConfig;
@@ -169,6 +182,11 @@ export type GuardConfig = {
       changeSeverity: SeverityConfig;
       exemptLabel: string;
       allowInitialCreate: boolean;
+      codeownerTeamFallback: boolean;
+    };
+    requiredJobSkip: {
+      enabled: boolean;
+      requiredJobs: string[];
     };
   };
   baselineGuard: {
@@ -177,6 +195,7 @@ export type GuardConfig = {
     changeSeverity: SeverityConfig;
     exemptLabel: string;
     allowInitialCreate: boolean;
+    codeownerTeamFallback: boolean;
   };
   testCountRatchet: {
     enabled: boolean;
@@ -191,6 +210,8 @@ export const defaultConfig: GuardConfig = {
   preset: "node",
   failOn: "error",
   testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}", "tests/**/*_test.py", "**/test_*.py"],
+  requiredJobs: [],
+  evidenceOutput: "fcp-evidence.json",
   detectors: {
     skippedTests: {
       enabled: true,
@@ -225,6 +246,7 @@ export const defaultConfig: GuardConfig = {
       newSeverity: "error",
       legacySeverity: "warning",
       allowJobs: ["experimental-nightly"],
+      allowContinueOnErrorSteps: [],
       allowCleanupCommands: true,
       guardStepNames: ["false-clean-pass"],
       guardWeakeningSeverity: "error",
@@ -249,7 +271,12 @@ export const defaultConfig: GuardConfig = {
       paths: [".github/false-clean-pass-*.json"],
       changeSeverity: "error",
       exemptLabel: "baseline-update",
-      allowInitialCreate: true
+      allowInitialCreate: true,
+      codeownerTeamFallback: false
+    },
+    requiredJobSkip: {
+      enabled: true,
+      requiredJobs: []
     }
   },
   baselineGuard: {
@@ -257,7 +284,8 @@ export const defaultConfig: GuardConfig = {
     paths: [".github/false-clean-pass-*.json"],
     changeSeverity: "error",
     exemptLabel: "baseline-update",
-    allowInitialCreate: true
+    allowInitialCreate: true,
+    codeownerTeamFallback: false
   },
   testCountRatchet: {
     enabled: true,
@@ -293,6 +321,8 @@ export function mergeConfig(...parts: GuardConfigInput[]): GuardConfig {
     preset: parsed.preset ?? defaultConfig.preset,
     failOn: parsed.failOn ?? defaultConfig.failOn,
     testGlobs: parsed.testGlobs ?? defaultConfig.testGlobs,
+    requiredJobs: parsed.requiredJobs ?? defaultConfig.requiredJobs,
+    evidenceOutput: parsed.evidenceOutput ?? defaultConfig.evidenceOutput,
     detectors: {
       skippedTests: {
         ...defaultConfig.detectors.skippedTests,
@@ -318,6 +348,9 @@ export function mergeConfig(...parts: GuardConfigInput[]): GuardConfig {
         ...defaultConfig.detectors.ignoredFailures,
         ...parsed.detectors?.ignoredFailures,
         allowJobs: parsed.detectors?.ignoredFailures?.allowJobs ?? defaultConfig.detectors.ignoredFailures.allowJobs,
+        allowContinueOnErrorSteps:
+          parsed.detectors?.ignoredFailures?.allowContinueOnErrorSteps ??
+          defaultConfig.detectors.ignoredFailures.allowContinueOnErrorSteps,
         guardStepNames:
           parsed.detectors?.ignoredFailures?.guardStepNames ?? defaultConfig.detectors.ignoredFailures.guardStepNames
       },
@@ -335,6 +368,14 @@ export function mergeConfig(...parts: GuardConfigInput[]): GuardConfig {
         ...defaultConfig.detectors.baselineGuard,
         ...topLevelBaselineGuard,
         paths: topLevelBaselineGuard?.paths ?? defaultConfig.detectors.baselineGuard.paths
+      },
+      requiredJobSkip: {
+        ...defaultConfig.detectors.requiredJobSkip,
+        ...parsed.detectors?.requiredJobSkip,
+        requiredJobs:
+          parsed.detectors?.requiredJobSkip?.requiredJobs ??
+          parsed.requiredJobs ??
+          defaultConfig.detectors.requiredJobSkip.requiredJobs
       }
     },
     baselineGuard: {
@@ -390,6 +431,10 @@ function deepMerge(left: GuardConfigInput, right: GuardConfigInput): GuardConfig
       baselineGuard: {
         ...left.detectors?.baselineGuard,
         ...right.detectors?.baselineGuard
+      },
+      requiredJobSkip: {
+        ...left.detectors?.requiredJobSkip,
+        ...right.detectors?.requiredJobSkip
       }
     },
     baselineGuard: {

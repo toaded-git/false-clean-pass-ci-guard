@@ -26382,7 +26382,7 @@ module.exports = { PerMessageDeflate }
 
 /***/ }),
 
-/***/ 1652:
+/***/ 9271:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -27392,7 +27392,7 @@ const {
   fireEvent
 } = __webpack_require__(8625)
 const { establishWebSocketConnection, closeWebSocketConnection } = __webpack_require__(6897)
-const { ByteParser } = __webpack_require__(1652)
+const { ByteParser } = __webpack_require__(9271)
 const { kEnumerableProperty, isBlobLike } = __webpack_require__(3440)
 const { getGlobalDispatcher } = __webpack_require__(2581)
 const { types } = __webpack_require__(7975)

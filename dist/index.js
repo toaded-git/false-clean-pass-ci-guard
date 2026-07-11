@@ -419,6 +419,7 @@ const ignoredFailuresSchema = zod_1.z.object({
     newSeverity: severitySchema.optional(),
     legacySeverity: severitySchema.optional(),
     allowJobs: zod_1.z.array(zod_1.z.string()).optional(),
+    allowContinueOnErrorSteps: zod_1.z.array(zod_1.z.string()).optional(),
     allowCleanupCommands: zod_1.z.boolean().optional(),
     guardStepNames: zod_1.z.array(zod_1.z.string()).optional(),
     guardWeakeningSeverity: severitySchema.optional(),
@@ -443,13 +444,18 @@ const baselineGuardSchema = zod_1.z.object({
     paths: zod_1.z.array(zod_1.z.string()).optional(),
     changeSeverity: severitySchema.optional(),
     exemptLabel: zod_1.z.string().optional(),
-    allowInitialCreate: zod_1.z.boolean().optional()
+    allowInitialCreate: zod_1.z.boolean().optional(),
+    codeownerTeamFallback: zod_1.z.boolean().optional()
 });
 const testCountRatchetSchema = zod_1.z.object({
     enabled: zod_1.z.boolean().optional(),
     maxDropPercent: zod_1.z.number().min(0).max(100).optional(),
     skipRatioMax: zod_1.z.number().min(0).max(1).optional(),
     baselineFile: zod_1.z.string().optional()
+});
+const requiredJobSkipSchema = zod_1.z.object({
+    enabled: zod_1.z.boolean().optional(),
+    requiredJobs: zod_1.z.array(zod_1.z.string()).optional()
 });
 const detectorsSchema = zod_1.z.object({
     skippedTests: skippedTestsSchema.optional(),
@@ -458,7 +464,8 @@ const detectorsSchema = zod_1.z.object({
     ignoredFailures: ignoredFailuresSchema.optional(),
     coverageRatchet: coverageRatchetSchema.optional(),
     suppressionRatchet: suppressionRatchetSchema.optional(),
-    baselineGuard: baselineGuardSchema.optional()
+    baselineGuard: baselineGuardSchema.optional(),
+    requiredJobSkip: requiredJobSkipSchema.optional()
 });
 const configInputSchema = zod_1.z
     .object({
@@ -466,6 +473,8 @@ const configInputSchema = zod_1.z
     preset: zod_1.z.string().optional(),
     failOn: failOnSchema.optional(),
     testGlobs: zod_1.z.array(zod_1.z.string()).optional(),
+    requiredJobs: zod_1.z.array(zod_1.z.string()).optional(),
+    evidenceOutput: zod_1.z.string().optional(),
     detectors: detectorsSchema.optional(),
     baselineGuard: baselineGuardSchema.optional(),
     testCountRatchet: testCountRatchetSchema.optional(),
@@ -477,6 +486,8 @@ exports.defaultConfig = {
     preset: "node",
     failOn: "error",
     testGlobs: ["**/*.{test,spec}.{js,ts,jsx,tsx}", "tests/**/*_test.py", "**/test_*.py"],
+    requiredJobs: [],
+    evidenceOutput: "fcp-evidence.json",
     detectors: {
         skippedTests: {
             enabled: true,
@@ -511,6 +522,7 @@ exports.defaultConfig = {
             newSeverity: "error",
             legacySeverity: "warning",
             allowJobs: ["experimental-nightly"],
+            allowContinueOnErrorSteps: [],
             allowCleanupCommands: true,
             guardStepNames: ["false-clean-pass"],
             guardWeakeningSeverity: "error",
@@ -535,7 +547,12 @@ exports.defaultConfig = {
             paths: [".github/false-clean-pass-*.json"],
             changeSeverity: "error",
             exemptLabel: "baseline-update",
-            allowInitialCreate: true
+            allowInitialCreate: true,
+            codeownerTeamFallback: false
+        },
+        requiredJobSkip: {
+            enabled: true,
+            requiredJobs: []
         }
     },
     baselineGuard: {
@@ -543,7 +560,8 @@ exports.defaultConfig = {
         paths: [".github/false-clean-pass-*.json"],
         changeSeverity: "error",
         exemptLabel: "baseline-update",
-        allowInitialCreate: true
+        allowInitialCreate: true,
+        codeownerTeamFallback: false
     },
     testCountRatchet: {
         enabled: true,
@@ -574,6 +592,8 @@ function mergeConfig(...parts) {
         preset: parsed.preset ?? exports.defaultConfig.preset,
         failOn: parsed.failOn ?? exports.defaultConfig.failOn,
         testGlobs: parsed.testGlobs ?? exports.defaultConfig.testGlobs,
+        requiredJobs: parsed.requiredJobs ?? exports.defaultConfig.requiredJobs,
+        evidenceOutput: parsed.evidenceOutput ?? exports.defaultConfig.evidenceOutput,
         detectors: {
             skippedTests: {
                 ...exports.defaultConfig.detectors.skippedTests,
@@ -598,6 +618,8 @@ function mergeConfig(...parts) {
                 ...exports.defaultConfig.detectors.ignoredFailures,
                 ...parsed.detectors?.ignoredFailures,
                 allowJobs: parsed.detectors?.ignoredFailures?.allowJobs ?? exports.defaultConfig.detectors.ignoredFailures.allowJobs,
+                allowContinueOnErrorSteps: parsed.detectors?.ignoredFailures?.allowContinueOnErrorSteps ??
+                    exports.defaultConfig.detectors.ignoredFailures.allowContinueOnErrorSteps,
                 guardStepNames: parsed.detectors?.ignoredFailures?.guardStepNames ?? exports.defaultConfig.detectors.ignoredFailures.guardStepNames
             },
             coverageRatchet: {
@@ -613,6 +635,13 @@ function mergeConfig(...parts) {
                 ...exports.defaultConfig.detectors.baselineGuard,
                 ...topLevelBaselineGuard,
                 paths: topLevelBaselineGuard?.paths ?? exports.defaultConfig.detectors.baselineGuard.paths
+            },
+            requiredJobSkip: {
+                ...exports.defaultConfig.detectors.requiredJobSkip,
+                ...parsed.detectors?.requiredJobSkip,
+                requiredJobs: parsed.detectors?.requiredJobSkip?.requiredJobs ??
+                    parsed.requiredJobs ??
+                    exports.defaultConfig.detectors.requiredJobSkip.requiredJobs
             }
         },
         baselineGuard: {
@@ -665,6 +694,10 @@ function deepMerge(left, right) {
             baselineGuard: {
                 ...left.detectors?.baselineGuard,
                 ...right.detectors?.baselineGuard
+            },
+            requiredJobSkip: {
+                ...left.detectors?.requiredJobSkip,
+                ...right.detectors?.requiredJobSkip
             }
         },
         baselineGuard: {
@@ -680,6 +713,101 @@ function deepMerge(left, right) {
             ...right.zeroTests
         }
     };
+}
+
+
+/***/ }),
+
+/***/ 1905:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isContinueOnErrorAllowed = isContinueOnErrorAllowed;
+const globs_1 = __nccwpck_require__(8879);
+const continueOnErrorAllowComment = /#\s*fcp-allow:\s*continue-on-error\s+(.+)$/i;
+function isContinueOnErrorAllowed(step, source, allowContinueOnErrorSteps) {
+    if (!step) {
+        return false;
+    }
+    if (matchesStepAllowlist(step, allowContinueOnErrorSteps)) {
+        return true;
+    }
+    return hasInlineAllowComment(source, step);
+}
+function matchesStepAllowlist(step, patterns) {
+    if (patterns.length === 0) {
+        return false;
+    }
+    const candidates = [step.stepName, step.uses].filter((value) => Boolean(value));
+    return candidates.some((candidate) => (0, globs_1.matchesAnyGlob)(candidate, patterns));
+}
+function hasInlineAllowComment(source, step) {
+    const lines = source.split(/\r?\n/);
+    const start = Math.max(1, step.line - 2);
+    for (let line = start; line <= step.endLine; line += 1) {
+        const content = lines[line - 1] ?? "";
+        const match = content.match(continueOnErrorAllowComment);
+        if (match?.[1]?.trim()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/***/ }),
+
+/***/ 8080:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.canonicalJson = canonicalJson;
+function canonicalJson(value) {
+    return serializeJsonValue(value, "$");
+}
+function serializeJsonValue(value, path) {
+    if (value === null) {
+        return "null";
+    }
+    if (Array.isArray(value)) {
+        return `[${value.map((item, index) => serializeJsonValue(item, `${path}[${index}]`)).join(",")}]`;
+    }
+    switch (typeof value) {
+        case "boolean":
+            return value ? "true" : "false";
+        case "number":
+            if (!Number.isFinite(value)) {
+                throw new TypeError(`Cannot canonicalize non-finite number at ${path}.`);
+            }
+            return JSON.stringify(value);
+        case "string":
+            return JSON.stringify(value);
+        case "object": {
+            if (!isPlainObject(value)) {
+                throw new TypeError(`Cannot canonicalize non-plain object at ${path}.`);
+            }
+            const entries = Object.keys(value)
+                .sort()
+                .map((key) => {
+                const item = value[key];
+                if (item === undefined) {
+                    throw new TypeError(`Cannot canonicalize undefined value at ${path}.${key}.`);
+                }
+                return `${JSON.stringify(key)}:${serializeJsonValue(item, `${path}.${key}`)}`;
+            });
+            return `{${entries.join(",")}}`;
+        }
+        default:
+            throw new TypeError(`Cannot canonicalize ${typeof value} at ${path}.`);
+    }
+}
+function isPlainObject(value) {
+    const prototype = Object.getPrototypeOf(value);
+    return prototype === Object.prototype || prototype === null;
 }
 
 
@@ -749,6 +877,183 @@ async function walk(rootDir, relativeDir, files) {
 }
 function isIgnoredDirectory(relativePath) {
     return [".git", "node_modules", "build", "dist", ".verify-tmp"].some((dir) => relativePath === dir || relativePath.startsWith(`${dir}/`));
+}
+
+
+/***/ }),
+
+/***/ 2962:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createEvidenceRecord = createEvidenceRecord;
+exports.writeEvidenceRecord = writeEvidenceRecord;
+const promises_1 = __nccwpck_require__(1455);
+const node_path_1 = __nccwpck_require__(6760);
+function createEvidenceRecord(input) {
+    const attempts = input.result.findings.flatMap((finding) => findingToAttempt(finding));
+    const weakenings = input.result.findings.flatMap((finding) => findingToWeakening(finding));
+    const detectorSummary = summarizeDetectorResults(input.result);
+    const licenseFields = createLicenseFields(input);
+    return {
+        schemaVersion: "1.0",
+        repo: input.repo,
+        prNumber: input.prNumber ?? null,
+        headSha: input.headSha,
+        baseSha: input.baseSha ?? null,
+        actor: input.actor ?? "unknown",
+        runId: input.runId === undefined || input.runId === null ? null : String(input.runId),
+        timestamp: input.timestamp ?? new Date().toISOString(),
+        verdict: input.result.result,
+        attempts,
+        weakenings,
+        detectorSummary,
+        license: licenseFields.license,
+        signature: licenseFields.signature
+    };
+}
+async function writeEvidenceRecord(record, outputPath, rootDir = process.cwd()) {
+    const absolutePath = (0, node_path_1.resolve)(rootDir, outputPath);
+    await (0, promises_1.mkdir)((0, node_path_1.dirname)(absolutePath), { recursive: true });
+    await (0, promises_1.writeFile)(absolutePath, `${JSON.stringify(record, null, 2)}\n`, "utf8");
+    return absolutePath;
+}
+function findingToAttempt(finding) {
+    const metadata = evidenceMetadata(finding);
+    if (metadata?.recordSection !== "attempts") {
+        return [];
+    }
+    return [
+        {
+            kind: metadata.kind,
+            severity: metadata.severity === "review" ? "review" : "high",
+            target: metadata.target ?? finding.file ?? finding.ruleId,
+            detail: metadata.detail,
+            file: metadata.file ?? finding.file,
+            line: metadata.line ?? finding.line,
+            baseValue: metadata.baseValue,
+            headValue: metadata.headValue
+        }
+    ];
+}
+function findingToWeakening(finding) {
+    const metadata = evidenceMetadata(finding);
+    if (metadata?.recordSection === "weakenings") {
+        return [
+            {
+                kind: metadata.kind,
+                severity: metadata.severity === "high" || metadata.severity === "low" ? metadata.severity : "medium",
+                target: metadata.target,
+                detail: metadata.detail,
+                file: metadata.file ?? finding.file,
+                line: metadata.line ?? finding.line,
+                delta: metadata.delta,
+                baseline: metadata.baseline,
+                current: metadata.current
+            }
+        ];
+    }
+    if (metadata?.recordSection === "attempts" || finding.severity === "info") {
+        return [];
+    }
+    return [
+        {
+            kind: classifyWeakeningKind(finding),
+            severity: finding.severity === "error" ? "high" : "medium",
+            target: finding.file,
+            detail: finding.message,
+            file: finding.file,
+            line: finding.line
+        }
+    ];
+}
+function evidenceMetadata(finding) {
+    const metadata = finding.metadata?.evidenceRecord;
+    if (!metadata || typeof metadata !== "object") {
+        return undefined;
+    }
+    return metadata;
+}
+function summarizeDetectorResults(result) {
+    if (result.detectorResults) {
+        const failed = result.detectorResults.filter((detector) => detector.status === "fail").length;
+        const review = result.detectorResults.filter((detector) => detector.status === "review").length;
+        return {
+            total: result.detectorResults.length,
+            failed,
+            review,
+            passed: result.detectorResults.length - failed - review
+        };
+    }
+    const reviewCount = result.findings.filter((finding) => finding.severity === "warning").length;
+    const total = result.findings.length;
+    return {
+        total,
+        failed: result.errorCount,
+        review: reviewCount,
+        passed: Math.max(0, total - result.errorCount - reviewCount)
+    };
+}
+function createLicenseFields(input) {
+    if (input.ownerType !== "Organization" || !input.licenseVerification?.valid) {
+        return {
+            license: {
+                org: false,
+                licenseId: null,
+                signaturePresent: false
+            },
+            signature: null
+        };
+    }
+    return {
+        license: {
+            org: true,
+            licenseId: input.licenseVerification.payload.licenseId,
+            signaturePresent: true
+        },
+        signature: {
+            alg: "ed25519",
+            keyId: input.licenseVerification.payload.keyId,
+            value: input.licenseVerification.signature,
+            signedFields: ["license.payload"],
+            note: "Integrity helper only; not a source of audit trust."
+        }
+    };
+}
+function classifyWeakeningKind(finding) {
+    if (finding.ruleId.includes("suppression")) {
+        return "suppression_increase";
+    }
+    if (finding.ruleId.includes("test-count") || finding.ruleId.includes("zero-tests")) {
+        return "run_count_drop";
+    }
+    if (finding.ruleId.includes("guard") || finding.ruleId.includes("required-list") || finding.ruleId.includes("fail-on")) {
+        return "guard_weakening";
+    }
+    if (finding.ruleId.includes("continue-on-error") || finding.ruleId.includes("ignore-failure")) {
+        return "ignored_failure";
+    }
+    if (finding.ruleId.includes("baseline-change")) {
+        return "baseline_change";
+    }
+    if (finding.ruleId.includes("coverage")) {
+        return "coverage_drop";
+    }
+    if (finding.ruleId.includes("env-")) {
+        return "env_missing";
+    }
+    if (finding.ruleId.includes("skipped-tests")) {
+        return "test_skip";
+    }
+    if (finding.ruleId.includes("empty-test") || finding.ruleId.includes("no-assertions")) {
+        return "empty_assertion";
+    }
+    if (finding.ruleId.includes("parse-failed")) {
+        return "parse_failure";
+    }
+    return "other";
 }
 
 
@@ -835,6 +1140,33 @@ function escapeRegExp(value) {
 
 /***/ }),
 
+/***/ 8026:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.findAllowedJobForLine = findAllowedJobForLine;
+const globs_1 = __nccwpck_require__(8879);
+const workflow_parser_1 = __nccwpck_require__(9245);
+function findAllowedJobForLine(workflow, line, allowJobs) {
+    if (!workflow || line === undefined || allowJobs.length === 0) {
+        return undefined;
+    }
+    const job = (0, workflow_parser_1.findJobForLine)(workflow, line);
+    if (!job) {
+        return undefined;
+    }
+    return jobMatchesAllowlist(job, allowJobs) ? job : undefined;
+}
+function jobMatchesAllowlist(job, allowJobs) {
+    const candidates = [job.id, job.name].filter((value) => Boolean(value));
+    return candidates.some((candidate) => (0, globs_1.matchesAnyGlob)(candidate, allowJobs));
+}
+
+
+/***/ }),
+
 /***/ 250:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -849,6 +1181,7 @@ const coverage_ratchet_1 = __nccwpck_require__(1162);
 const empty_assertions_1 = __nccwpck_require__(9425);
 const env_missing_1 = __nccwpck_require__(9920);
 const ignored_failures_1 = __nccwpck_require__(974);
+const requiredJobSkip_1 = __nccwpck_require__(3457);
 const skipped_tests_1 = __nccwpck_require__(9610);
 const suppression_ratchet_1 = __nccwpck_require__(1373);
 const test_count_ratchet_1 = __nccwpck_require__(1578);
@@ -860,6 +1193,7 @@ exports.milestone1Detectors = [
     suppression_ratchet_1.suppressionRatchetDetector
 ];
 exports.milestone2Detectors = [
+    requiredJobSkip_1.requiredJobSkipDetector,
     env_missing_1.envMissingDetector,
     ignored_failures_1.ignoredFailuresDetector,
     coverage_ratchet_1.coverageRatchetDetector,
@@ -868,8 +1202,14 @@ exports.milestone2Detectors = [
 ];
 async function runGuard(ctx, failOn = ctx.config.failOn) {
     const findings = await detectParseFailures(ctx);
+    const detectorResults = [];
     for (const detector of [...exports.milestone1Detectors, ...exports.milestone2Detectors]) {
-        findings.push(...(await detector.run(ctx)));
+        const detectorFindings = await detector.run(ctx);
+        findings.push(...detectorFindings);
+        detectorResults.push({
+            id: detector.id,
+            status: summarizeDetectorRun(detectorFindings)
+        });
     }
     const errorCount = findings.filter((finding) => finding.severity === "error").length;
     const warningCount = findings.filter((finding) => finding.severity === "warning").length;
@@ -877,8 +1217,18 @@ async function runGuard(ctx, failOn = ctx.config.failOn) {
         findings,
         errorCount,
         warningCount,
-        result: shouldFail(findings, failOn) ? "fail" : "pass"
+        result: shouldFail(findings, failOn) ? "fail" : "pass",
+        detectorResults
     };
+}
+function summarizeDetectorRun(findings) {
+    if (findings.some((finding) => finding.severity === "error")) {
+        return "fail";
+    }
+    if (findings.some((finding) => finding.severity === "warning")) {
+        return "review";
+    }
+    return "pass";
 }
 async function detectParseFailures(ctx) {
     const findings = [];
@@ -966,7 +1316,7 @@ exports.baselineChangeDetector = {
                 findings.push(baselineFinding(ctx, file.filename, "No CODEOWNERS entry matches this baseline file."));
                 continue;
             }
-            const approval = await hasCodeOwnerApproval(owners, reviews, provider);
+            const approval = await hasCodeOwnerApproval(owners, reviews, provider, options.codeownerTeamFallback);
             if (!approval.ok) {
                 findings.push(baselineFinding(ctx, file.filename, `${approval.reason} ${labelHint(ctx)}`.trim()));
                 continue;
@@ -993,11 +1343,10 @@ async function readCodeowners(ctx) {
     }
     return undefined;
 }
-async function hasCodeOwnerApproval(owners, reviews, provider) {
+async function hasCodeOwnerApproval(owners, reviews, provider, codeownerTeamFallback) {
     const latest = latestReviewsByUser(reviews);
-    const approvedReviewers = [...latest.values()]
-        .filter((review) => review.state.toUpperCase() === "APPROVED")
-        .map((review) => review.user);
+    const approvedReviews = [...latest.values()].filter((review) => review.state.toUpperCase() === "APPROVED");
+    const approvedReviewers = approvedReviews.map((review) => review.user);
     for (const owner of owners) {
         const normalized = owner.replace(/^@/, "");
         if (!normalized.includes("/")) {
@@ -1008,27 +1357,36 @@ async function hasCodeOwnerApproval(owners, reviews, provider) {
             continue;
         }
         const [teamOwner, teamSlug] = normalized.split("/");
-        if (!teamOwner || !teamSlug || !provider.isTeamMember) {
+        if (!teamOwner || !teamSlug || !codeownerTeamFallback) {
             continue;
         }
-        for (const reviewer of approvedReviewers) {
-            const isMember = await provider.isTeamMember(teamOwner, teamSlug, reviewer);
-            if (isMember) {
-                return { ok: true, reviewer };
+        if (provider.isTeamMember) {
+            for (const reviewer of approvedReviewers) {
+                const isMember = await provider.isTeamMember(teamOwner, teamSlug, reviewer);
+                if (isMember) {
+                    return { ok: true, reviewer };
+                }
             }
+        }
+        const fallbackReview = approvedReviews.find((review) => isTrustedTeamFallbackAssociation(review.authorAssociation));
+        if (fallbackReview) {
+            return { ok: true, reviewer: fallbackReview.user };
         }
     }
     const teamOwners = owners.filter((owner) => owner.includes("/"));
-    if (teamOwners.length > 0 && !provider.isTeamMember) {
+    if (teamOwners.length > 0 && !codeownerTeamFallback) {
         return {
             ok: false,
-            reason: `CODEOWNER is a team (${teamOwners.join(", ")}), but team membership cannot be verified; blocking fail-closed.`
+            reason: `CODEOWNER is a team (${teamOwners.join(", ")}), but codeownerTeamFallback is disabled; blocking fail-closed.`
         };
     }
     return {
         ok: false,
         reason: `No approving PR review from matching CODEOWNER (${owners.join(", ")}) was verified.`
     };
+}
+function isTrustedTeamFallbackAssociation(authorAssociation) {
+    return authorAssociation === "OWNER" || authorAssociation === "MEMBER";
 }
 function latestReviewsByUser(reviews) {
     const sorted = [...reviews].sort((left, right) => (left.submittedAt ?? "").localeCompare(right.submittedAt ?? ""));
@@ -1394,7 +1752,10 @@ function isIgnoredKey(key, ignore) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ignoredFailuresDetector = void 0;
 const globs_1 = __nccwpck_require__(8879);
+const allowlist_1 = __nccwpck_require__(1905);
+const job_scope_1 = __nccwpck_require__(8026);
 const yaml_scan_1 = __nccwpck_require__(8029);
+const workflow_parser_1 = __nccwpck_require__(9245);
 const failOnRank = {
     error: 0,
     warning: 1,
@@ -1426,14 +1787,15 @@ exports.ignoredFailuresDetector = {
             if (file.status === "removed") {
                 continue;
             }
-            findings.push(...scanFailureIgnorePatterns(file, options));
+            const workflowContext = await parseHeadWorkflow(ctx, file.filename);
+            findings.push(...scanFailureIgnorePatterns(file, options, workflowContext));
             findings.push(...scanGuardWeakeningDiff(file, options.guardWeakeningSeverity, options.guardStepNames, guardExistsInHead));
             findings.push(...scanConfigWeakeningDiff(file, options.guardWeakeningSeverity));
         }
         return dedupeFindings(findings);
     }
 };
-function scanFailureIgnorePatterns(file, options) {
+function scanFailureIgnorePatterns(file, options, workflowContext) {
     if (!isFailureIgnoreTarget(file.filename)) {
         return [];
     }
@@ -1444,7 +1806,11 @@ function scanFailureIgnorePatterns(file, options) {
         if (!rule) {
             continue;
         }
-        findings.push({
+        if (rule.ruleId === "false-clean-pass/continue-on-error" &&
+            (0, allowlist_1.isContinueOnErrorAllowed)(workflowContext ? (0, workflow_parser_1.findStepForLine)(workflowContext.workflow, line) : undefined, workflowContext?.source ?? "", options.allowContinueOnErrorSteps)) {
+            continue;
+        }
+        const finding = {
             detector: exports.ignoredFailuresDetector.id,
             severity: options.newSeverity,
             ruleId: rule.ruleId,
@@ -1452,7 +1818,11 @@ function scanFailureIgnorePatterns(file, options) {
             line,
             evidence: trimmed,
             message: rule.message
-        });
+        };
+        if ((0, job_scope_1.findAllowedJobForLine)(workflowContext?.workflow, finding.line, options.allowJobs)) {
+            continue;
+        }
+        findings.push(finding);
     }
     return findings;
 }
@@ -1488,7 +1858,7 @@ function failureIgnoreRule(content, allowCleanupCommands) {
 }
 function scanGuardWeakeningDiff(file, severity, guardStepNames, guardExistsInHead) {
     const findings = [];
-    if (!(0, yaml_scan_1.isWorkflowFile)(file.filename)) {
+    if (!(0, workflow_parser_1.isWorkflowFile)(file.filename)) {
         return findings;
     }
     const removedLines = [...file.removedLineContent.entries()];
@@ -1635,7 +2005,7 @@ function scanConfigWeakeningDiff(file, severity) {
 }
 async function hasGuardStepInHeadWorkflows(ctx) {
     const files = await ctx.listFiles();
-    const workflowFiles = files.filter(yaml_scan_1.isWorkflowFile);
+    const workflowFiles = files.filter(workflow_parser_1.isWorkflowFile);
     for (const file of workflowFiles) {
         try {
             if ((0, yaml_scan_1.workflowHasGuardStep)(await ctx.readFile(file), ctx.config.detectors.ignoredFailures.guardStepNames)) {
@@ -1648,8 +2018,23 @@ async function hasGuardStepInHeadWorkflows(ctx) {
     }
     return false;
 }
+async function parseHeadWorkflow(ctx, file) {
+    if (!(0, workflow_parser_1.isWorkflowFile)(file)) {
+        return undefined;
+    }
+    try {
+        const source = await ctx.readFile(file);
+        return {
+            source,
+            workflow: (0, workflow_parser_1.parseWorkflow)(source, { filePath: file })
+        };
+    }
+    catch {
+        return undefined;
+    }
+}
 function isFailureIgnoreTarget(file) {
-    return ((0, yaml_scan_1.isWorkflowFile)(file) ||
+    return ((0, workflow_parser_1.isWorkflowFile)(file) ||
         file === "package.json" ||
         file === "Makefile" ||
         (0, globs_1.matchesAnyGlob)(file, ["**/*.sh", "**/*.bash", "**/*.zsh"]));
@@ -1668,6 +2053,480 @@ function dedupeFindings(findings) {
     const seen = new Set();
     return findings.filter((finding) => {
         const key = `${finding.ruleId}:${finding.file ?? ""}:${finding.line ?? 0}:${finding.message}`;
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
+    });
+}
+
+
+/***/ }),
+
+/***/ 3457:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.requiredJobSkipDetector = void 0;
+const workflow_parser_1 = __nccwpck_require__(9245);
+const detectorId = "required-job-skip";
+exports.requiredJobSkipDetector = {
+    id: detectorId,
+    async run(ctx) {
+        const options = ctx.config.detectors.requiredJobSkip;
+        if (!options.enabled) {
+            return [];
+        }
+        const workflowChanged = ctx.diff.some((file) => (0, workflow_parser_1.isWorkflowFile)(file.filename) || (0, workflow_parser_1.isWorkflowFile)(file.previousFilename ?? ""));
+        const requiredJobs = normalizeList(options.requiredJobs);
+        if (requiredJobs.length === 0 && !workflowChanged) {
+            return [];
+        }
+        const [headState, baseState] = await Promise.all([loadHeadWorkflowState(ctx), loadBaseWorkflowState(ctx)]);
+        const findings = dedupeFindings([
+            ...detectRequiredJobsInputNarrowed(baseState, headState),
+            ...detectRequiredWorkflowTriggerNarrowed(requiredJobs, baseState, headState)
+        ]);
+        if (requiredJobs.length === 0) {
+            findings.push({
+                detector: detectorId,
+                severity: "info",
+                ruleId: "false-clean-pass/required-jobs-unconfigured",
+                message: "requiredJobs is not configured, and branch protection required checks were not available to this run; required job skip detection is informational only."
+            });
+            return dedupeFindings(findings);
+        }
+        findings.push(...(await detectCheckRunSupplement(ctx, requiredJobs)));
+        for (const requiredJob of requiredJobs) {
+            findings.push(...detectRequiredJobMapping(requiredJob, baseState, headState));
+            findings.push(...detectRequiredJobIfChange(requiredJob, baseState, headState));
+        }
+        return dedupeFindings(findings);
+    }
+};
+async function detectCheckRunSupplement(ctx, requiredJobs) {
+    if (!ctx.github || requiredJobs.length === 0) {
+        return [];
+    }
+    try {
+        const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+        const octokit = github.getOctokit(ctx.github.token);
+        const response = await octokit.rest.checks.listForRef({
+            owner: ctx.github.owner,
+            repo: ctx.github.repo,
+            ref: ctx.github.headSha,
+            per_page: 100
+        });
+        const checkRuns = response.data.check_runs ?? [];
+        const findings = [];
+        for (const requiredJob of requiredJobs) {
+            const checkRun = checkRuns.find((run) => run.name === requiredJob);
+            if (!checkRun) {
+                findings.push({
+                    detector: detectorId,
+                    severity: "warning",
+                    ruleId: "false-clean-pass/required_check_run_missing",
+                    message: `Required check '${requiredJob}' was not present in head check-runs; this is a supplementary signal only.`
+                });
+            }
+            else if (checkRun.conclusion === "skipped") {
+                findings.push({
+                    detector: detectorId,
+                    severity: "warning",
+                    ruleId: "false-clean-pass/required_check_run_skipped",
+                    message: `Required check '${requiredJob}' concluded skipped; this is a supplementary signal only.`
+                });
+            }
+        }
+        return findings;
+    }
+    catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return [
+            {
+                detector: detectorId,
+                severity: "info",
+                ruleId: "false-clean-pass/check-runs-unavailable",
+                message: `Check-runs supplementary lookup was unavailable: ${message}`
+            }
+        ];
+    }
+}
+async function loadHeadWorkflowState(ctx) {
+    const files = (await ctx.listFiles()).filter(workflow_parser_1.isWorkflowFile);
+    const sources = {};
+    for (const file of files) {
+        try {
+            sources[file] = await ctx.readFile(file);
+        }
+        catch {
+            // Removed files are represented in the diff and do not exist in head.
+        }
+    }
+    return buildWorkflowState(sources);
+}
+async function loadBaseWorkflowState(ctx) {
+    if (!ctx.readBaseFile) {
+        return buildWorkflowState({});
+    }
+    const headFiles = (await ctx.listFiles()).filter(workflow_parser_1.isWorkflowFile);
+    const diffFiles = ctx.diff.flatMap((file) => [file.filename, file.previousFilename].filter((name) => Boolean(name)));
+    const candidateFiles = [...new Set([...headFiles, ...diffFiles].filter(workflow_parser_1.isWorkflowFile))];
+    const sources = {};
+    for (const file of candidateFiles) {
+        try {
+            sources[file] = await ctx.readBaseFile(file);
+        }
+        catch {
+            // New workflow files have no base version.
+        }
+    }
+    return buildWorkflowState(sources);
+}
+function buildWorkflowState(sources) {
+    const workflows = (0, workflow_parser_1.parseWorkflowFiles)(sources);
+    const mappings = new Map();
+    const unresolved = [];
+    for (const workflow of workflows) {
+        for (const mapping of workflow.checkMappings) {
+            mappings.set(mapping.checkName, [...(mappings.get(mapping.checkName) ?? []), mapping]);
+        }
+        unresolved.push(...workflow.unresolvedCheckMappings);
+    }
+    return {
+        sources,
+        workflows,
+        mappings,
+        unresolved
+    };
+}
+function detectRequiredJobMapping(requiredJob, baseState, headState) {
+    const headMappings = headState.mappings.get(requiredJob) ?? [];
+    if (headMappings.length > 0) {
+        return [];
+    }
+    const unresolved = findPlausibleUnresolved(requiredJob, headState.unresolved);
+    if (unresolved) {
+        const detail = mappingUnresolvedDetail(requiredJob, unresolved);
+        return [
+            {
+                detector: detectorId,
+                severity: "warning",
+                ruleId: "false-clean-pass/mapping_unresolved",
+                file: unresolved.file,
+                line: unresolved.line,
+                message: detail,
+                metadata: {
+                    evidenceRecord: {
+                        recordSection: "weakenings",
+                        kind: "mapping_unresolved",
+                        severity: "medium",
+                        target: requiredJob,
+                        detail,
+                        file: unresolved.file,
+                        line: unresolved.line
+                    }
+                }
+            }
+        ];
+    }
+    const baseMappings = baseState.mappings.get(requiredJob) ?? [];
+    const mapping = baseMappings[0];
+    const detail = baseMappings.length > 0
+        ? `required job '${requiredJob}' existed in base workflow mapping but is missing from head workflow mapping.`
+        : `required job '${requiredJob}' is not produced by any statically mapped head workflow job.`;
+    return [
+        {
+            detector: detectorId,
+            severity: "error",
+            ruleId: "false-clean-pass/required_job_missing",
+            file: mapping?.file,
+            line: mapping?.line,
+            message: detail,
+            metadata: {
+                evidenceRecord: {
+                    recordSection: "attempts",
+                    kind: "required_job_missing",
+                    severity: "high",
+                    target: requiredJob,
+                    detail,
+                    file: mapping?.file,
+                    line: mapping?.line,
+                    baseValue: requiredJob,
+                    headValue: null
+                }
+            }
+        }
+    ];
+}
+function detectRequiredJobIfChange(requiredJob, baseState, headState) {
+    const baseMappings = baseState.mappings.get(requiredJob) ?? [];
+    const headMappings = headState.mappings.get(requiredJob) ?? [];
+    const findings = [];
+    for (const headMapping of headMappings) {
+        const headJob = findWorkflowJob(headState, headMapping);
+        if (!headJob?.if) {
+            continue;
+        }
+        const baseMapping = baseMappings.find((mapping) => mapping.file === headMapping.file && mapping.jobId === headMapping.jobId) ?? baseMappings[0];
+        const baseJob = baseMapping ? findWorkflowJob(baseState, baseMapping) : undefined;
+        if (normalizeIfExpression(baseJob?.if) === normalizeIfExpression(headJob.if)) {
+            continue;
+        }
+        const classification = classifyJobIf(headJob.if);
+        if (classification === "legitimate") {
+            continue;
+        }
+        const kind = classification === "skip-risk" ? "required_job_if_skip_risk" : "required_job_if_added_review";
+        const severity = classification === "skip-risk" ? "error" : "warning";
+        const recordSeverity = classification === "skip-risk" ? "high" : "review";
+        const detail = classification === "skip-risk"
+            ? `job-level if adds a skip-risk condition to required job '${requiredJob}'.`
+            : `ambiguous job-level if added to required job '${requiredJob}' requires manual review.`;
+        findings.push({
+            detector: detectorId,
+            severity,
+            ruleId: `false-clean-pass/${kind}`,
+            file: headMapping.file,
+            line: headJob.ifLine ?? headMapping.line,
+            evidence: headJob.if,
+            message: detail,
+            metadata: {
+                evidenceRecord: {
+                    recordSection: "attempts",
+                    kind,
+                    severity: recordSeverity,
+                    target: requiredJob,
+                    detail,
+                    file: headMapping.file,
+                    line: headJob.ifLine ?? headMapping.line,
+                    baseValue: baseJob?.if ?? null,
+                    headValue: headJob.if
+                }
+            }
+        });
+    }
+    return findings;
+}
+function detectRequiredWorkflowTriggerNarrowed(requiredJobs, baseState, headState) {
+    if (requiredJobs.length === 0) {
+        return [];
+    }
+    const findings = [];
+    const seenFiles = new Set();
+    for (const requiredJob of requiredJobs) {
+        const mappings = [...(baseState.mappings.get(requiredJob) ?? []), ...(headState.mappings.get(requiredJob) ?? [])];
+        for (const mapping of mappings) {
+            if (seenFiles.has(mapping.file)) {
+                continue;
+            }
+            seenFiles.add(mapping.file);
+            const baseWorkflow = baseState.workflows.find((workflow) => workflow.file === mapping.file);
+            const headWorkflow = headState.workflows.find((workflow) => workflow.file === mapping.file);
+            if (!baseWorkflow || !headWorkflow) {
+                continue;
+            }
+            const narrowed = pullRequestTriggerNarrowed(baseWorkflow.on, headWorkflow.on);
+            if (!narrowed) {
+                continue;
+            }
+            const detail = `workflow pull_request trigger for required job '${requiredJob}' was narrowed: ${narrowed}.`;
+            findings.push({
+                detector: detectorId,
+                severity: "error",
+                ruleId: "false-clean-pass/required_workflow_trigger_narrowed",
+                file: mapping.file,
+                line: 1,
+                message: detail,
+                metadata: {
+                    evidenceRecord: {
+                        recordSection: "attempts",
+                        kind: "required_workflow_trigger_narrowed",
+                        severity: "high",
+                        target: requiredJob,
+                        detail,
+                        file: mapping.file,
+                        line: 1,
+                        baseValue: JSON.stringify(baseWorkflow.on.events.pull_request ?? null),
+                        headValue: JSON.stringify(headWorkflow.on.events.pull_request ?? null)
+                    }
+                }
+            });
+        }
+    }
+    return findings;
+}
+function detectRequiredJobsInputNarrowed(baseState, headState) {
+    const baseInputs = extractGuardRequiredJobsInputs(baseState.workflows);
+    if (baseInputs.length === 0) {
+        return [];
+    }
+    const headInputs = extractGuardRequiredJobsInputs(headState.workflows);
+    const baseJobs = new Set(baseInputs.flatMap((input) => input.requiredJobs));
+    const headJobs = new Set(headInputs.flatMap((input) => input.requiredJobs));
+    const removed = [...baseJobs].filter((job) => !headJobs.has(job));
+    if (removed.length === 0) {
+        return [];
+    }
+    const input = baseInputs[0];
+    const detail = `with.requiredJobs was narrowed; removed required job(s): ${removed.join(", ")}.`;
+    return [
+        {
+            detector: detectorId,
+            severity: "error",
+            ruleId: "false-clean-pass/required_config_narrowed",
+            file: input?.file,
+            line: input?.line,
+            message: detail,
+            metadata: {
+                evidenceRecord: {
+                    recordSection: "attempts",
+                    kind: "required_config_narrowed",
+                    severity: "high",
+                    target: removed.join(", "),
+                    detail,
+                    file: input?.file,
+                    line: input?.line,
+                    baseValue: [...baseJobs].join(","),
+                    headValue: [...headJobs].join(",") || null
+                }
+            }
+        }
+    ];
+}
+function extractGuardRequiredJobsInputs(workflows) {
+    const inputs = [];
+    for (const workflow of workflows) {
+        for (const step of workflow.steps) {
+            if (!step.uses || !isFalseCleanPassAction(step.uses)) {
+                continue;
+            }
+            const raw = step.with?.requiredJobs ?? step.with?.["required-jobs"];
+            const requiredJobs = normalizeList(raw);
+            if (requiredJobs.length > 0 || raw !== undefined) {
+                inputs.push({
+                    file: workflow.file,
+                    line: step.line,
+                    requiredJobs
+                });
+            }
+        }
+    }
+    return inputs;
+}
+function pullRequestTriggerNarrowed(base, head) {
+    const basePullRequest = base.events.pull_request;
+    if (!basePullRequest) {
+        return undefined;
+    }
+    const headPullRequest = head.events.pull_request;
+    if (!headPullRequest) {
+        return "pull_request event was removed";
+    }
+    if (hasAddedEntries(basePullRequest.pathsIgnore, headPullRequest.pathsIgnore)) {
+        return "paths-ignore was expanded; manual confirmation is required for boundary globs";
+    }
+    if (hasAddedEntries(basePullRequest.branchesIgnore, headPullRequest.branchesIgnore)) {
+        return "branches-ignore was expanded";
+    }
+    if (positiveFilterNarrowed(basePullRequest.paths, headPullRequest.paths)) {
+        return "paths filter was narrowed or changed; manual confirmation is required for boundary globs";
+    }
+    if (positiveFilterNarrowed(basePullRequest.branches, headPullRequest.branches)) {
+        return "branches filter was narrowed";
+    }
+    return undefined;
+}
+function positiveFilterNarrowed(baseValues, headValues) {
+    if (baseValues.length === 0) {
+        return headValues.length > 0;
+    }
+    if (headValues.length === 0) {
+        return false;
+    }
+    return baseValues.some((value) => !headValues.includes(value));
+}
+function hasAddedEntries(baseValues, headValues) {
+    return headValues.some((value) => !baseValues.includes(value));
+}
+function findWorkflowJob(state, mapping) {
+    return state.workflows.find((workflow) => workflow.file === mapping.file)?.jobs.find((job) => job.id === mapping.jobId);
+}
+function findPlausibleUnresolved(requiredJob, unresolved) {
+    return (unresolved.find((mapping) => {
+        const displayName = mapping.jobName ?? mapping.jobId;
+        return requiredJob === displayName || requiredJob.startsWith(`${displayName} / `);
+    }) ?? unresolved[0]);
+}
+function mappingUnresolvedDetail(requiredJob, unresolved) {
+    if (unresolved.reason === "external-reusable") {
+        return `required '${requiredJob}' maps through an external reusable workflow; static mapping is unresolved.`;
+    }
+    if (unresolved.reason === "dynamic-name") {
+        return `required '${requiredJob}' may map to a job with a dynamic name expression; static mapping is unresolved.`;
+    }
+    return `required '${requiredJob}' maps through a local reusable workflow that could not be parsed; static mapping is unresolved.`;
+}
+function classifyJobIf(value) {
+    const expression = normalizeIfExpression(value);
+    if (isLegitimateIfExpression(expression)) {
+        return "legitimate";
+    }
+    if (isSkipRiskIfExpression(expression)) {
+        return "skip-risk";
+    }
+    return "review";
+}
+function isSkipRiskIfExpression(expression) {
+    if (/^false$/i.test(expression)) {
+        return true;
+    }
+    if (/\bgithub\.(actor|ref|event_name)\s*!=/.test(expression)) {
+        return true;
+    }
+    if (/^(?:!\s*cancelled\(\)|always\(\))\s*&&\s*.+/i.test(expression)) {
+        return true;
+    }
+    return false;
+}
+function isLegitimateIfExpression(expression) {
+    if (/^(?:always\(\)|!\s*cancelled\(\)|success\(\))$/i.test(expression)) {
+        return true;
+    }
+    if (/^github\.ref\s*==\s*['"]refs\/heads\/main['"]$/i.test(expression)) {
+        return true;
+    }
+    if (/^github\.event_name\s*==\s*['"]push['"]$/i.test(expression)) {
+        return true;
+    }
+    const parts = expression.split(/\s*&&\s*/).map((part) => part.trim());
+    return (parts.length > 0 &&
+        parts.every((part) => /^success\(\)$/i.test(part) ||
+            /^needs\.[A-Za-z0-9_-]+\.result\s*==\s*['"]success['"]$/i.test(part) ||
+            /^needs\.\*\.result\s*==\s*['"]success['"]$/i.test(part)));
+}
+function normalizeIfExpression(value) {
+    if (!value) {
+        return "";
+    }
+    const trimmed = value.trim();
+    const expression = trimmed.match(/^\$\{\{\s*([\s\S]*?)\s*\}\}$/)?.[1] ?? trimmed;
+    return expression.replace(/\s+/g, " ").trim();
+}
+function normalizeList(value) {
+    const items = Array.isArray(value) ? value : (value ?? "").split(",");
+    return [...new Set(items.map((item) => item.trim()).filter(Boolean))];
+}
+function isFalseCleanPassAction(uses) {
+    return /(^|\/)false-clean-pass(?:-ci-guard)?(?:@|$)/i.test(uses);
+}
+function dedupeFindings(findings) {
+    const seen = new Set();
+    return findings.filter((finding) => {
+        const key = [finding.ruleId, finding.file, finding.line, finding.message].join("\0");
         if (seen.has(key)) {
             return false;
         }
@@ -1820,7 +2679,7 @@ function collectNewSuppressions(ctx) {
         }
         for (const [line, content] of file.addedLineContent.entries()) {
             if (suppressionPatterns.some((pattern) => pattern.test(content)) &&
-                !(options.requireReason && suppressionHasReason(content))) {
+                !(options.requireReason && suppressionHasValidReason(content))) {
                 hits.push({
                     file: file.filename,
                     line,
@@ -1896,8 +2755,25 @@ function numberFromUnknown(value) {
     }
     return undefined;
 }
-function suppressionHasReason(line) {
-    return /\s--\s+\S/.test(line) || /@ts-expect-error\s+\S/.test(line) || /@ts-ignore\s+\S/.test(line) || /#\s*noqa:.+\S/.test(line);
+function suppressionHasValidReason(line) {
+    const reason = extractSuppressionReason(line);
+    if (!reason) {
+        return false;
+    }
+    const normalized = reason.trim();
+    return normalized.length >= 8 && !/^(?:auto|todo|fixme|n\/a|none)$/i.test(normalized);
+}
+function extractSuppressionReason(line) {
+    const separated = line.match(/\s--\s*(.+)$/);
+    if (separated?.[1]) {
+        return separated[1];
+    }
+    const tsDirective = line.match(/@ts-(?:expect-error|ignore)\b(?::|\s+)\s*(.+)$/);
+    if (tsDirective?.[1]) {
+        return tsDirective[1];
+    }
+    const noqa = line.match(/#\s*noqa:\s*(.+)$/);
+    return noqa?.[1];
 }
 function isSuppressionScanFile(file) {
     return /\.(?:[cm]?[jt]sx?|py|mjs|cjs|ts|tsx)$/.test(file);
@@ -1973,7 +2849,7 @@ exports.testCountRatchetDetector = {
                     severity: "error",
                     ruleId: "false-clean-pass/test-count-drop",
                     file: ctx.testResultsGlob,
-                    message: `Executed test count dropped from ${base.executed} to ${currentSummary.executed} (${dropPercent.toFixed(1)}%), above maxDropPercent=${options.maxDropPercent}.`
+                    message: `Review required: executed test count dropped from ${base.executed} to ${currentSummary.executed} (${dropPercent.toFixed(1)}%), above maxDropPercent=${options.maxDropPercent}. Update the baseline after a reviewed intentional test-count change.`
                 });
             }
         }
@@ -2162,7 +3038,8 @@ function createGitHubReviewProvider(runtime) {
                 .map((review) => ({
                 user: review.user?.login ?? "",
                 state: review.state ?? "",
-                submittedAt: review.submitted_at ?? undefined
+                submittedAt: review.submitted_at ?? undefined,
+                authorAssociation: review.author_association
             }));
         },
         async isTeamMember(teamOwner, teamSlug, username) {
@@ -2328,6 +3205,131 @@ function stripDiffPrefix(path) {
         return path.slice(2);
     }
     return path;
+}
+
+
+/***/ }),
+
+/***/ 1652:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.embeddedPublicKeys = void 0;
+exports.embeddedPublicKeys = {
+    // keyId -> base64(SPKI DER Ed25519 public key). Issuer private keys are held by the
+    // human issuer only. For key rotation (see DESIGN §8.5), add a new keyId entry in a
+    // release; keep the old entry until its licenses expire, then remove it.
+    key1: "MCowBQYDK2VwAyEAQkh/cYscROSGArfHp+IPhxgHJkzipsPB1E2uNEwEpEs="
+};
+
+
+/***/ }),
+
+/***/ 2493:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.verifyLicense = verifyLicense;
+exports.encodeLicenseEnvelope = encodeLicenseEnvelope;
+const node_crypto_1 = __nccwpck_require__(7598);
+const canonicalJson_1 = __nccwpck_require__(8080);
+const embeddedPublicKey_1 = __nccwpck_require__(1652);
+function verifyLicense(licenseText, options) {
+    if (!licenseText || !licenseText.trim()) {
+        return invalid("missing", "FCP_LICENSE is not set.");
+    }
+    const envelope = decodeLicenseEnvelope(licenseText);
+    if (!envelope) {
+        return invalid("malformed", "FCP_LICENSE must be base64 JSON with payload and signature.");
+    }
+    const publicKeyBase64 = (options.publicKeys ?? embeddedPublicKey_1.embeddedPublicKeys)[envelope.payload.keyId];
+    if (!publicKeyBase64) {
+        return invalid("unregistered_key", `License keyId '${envelope.payload.keyId}' is not registered.`, envelope.payload);
+    }
+    const canonicalPayload = (0, canonicalJson_1.canonicalJson)(envelope.payload);
+    const publicKey = createEd25519PublicKey(publicKeyBase64);
+    if (!publicKey) {
+        return invalid("invalid_public_key", `Embedded public key for '${envelope.payload.keyId}' is not usable.`, envelope.payload);
+    }
+    const signature = Buffer.from(envelope.signature, "base64");
+    let verified = false;
+    try {
+        verified = (0, node_crypto_1.verify)(null, Buffer.from(canonicalPayload, "utf8"), publicKey, signature);
+    }
+    catch {
+        verified = false;
+    }
+    if (!verified) {
+        return invalid("invalid_signature", "License signature verification failed.", envelope.payload);
+    }
+    const expiresAt = Date.parse(envelope.payload.expiresAt);
+    if (!Number.isFinite(expiresAt) || expiresAt <= (options.now ?? new Date()).getTime()) {
+        return invalid("expired", "License is expired.", envelope.payload);
+    }
+    if (!sameGitHubOwner(envelope.payload.org, options.org)) {
+        return invalid("org_mismatch", `License org '${envelope.payload.org}' does not match '${options.org}'.`, envelope.payload);
+    }
+    return {
+        valid: true,
+        payload: envelope.payload,
+        signature: envelope.signature,
+        canonicalPayload
+    };
+}
+function encodeLicenseEnvelope(envelope) {
+    return Buffer.from(JSON.stringify(envelope), "utf8").toString("base64");
+}
+function decodeLicenseEnvelope(licenseText) {
+    try {
+        const decoded = Buffer.from(licenseText.trim(), "base64").toString("utf8");
+        const parsed = JSON.parse(decoded);
+        if (!isLicenseEnvelope(parsed)) {
+            return undefined;
+        }
+        return parsed;
+    }
+    catch {
+        return undefined;
+    }
+}
+function isLicenseEnvelope(value) {
+    if (!value || typeof value !== "object") {
+        return false;
+    }
+    const envelope = value;
+    if (!envelope.payload || typeof envelope.payload !== "object" || typeof envelope.signature !== "string") {
+        return false;
+    }
+    const payload = envelope.payload;
+    return (typeof payload.licenseId === "string" &&
+        typeof payload.keyId === "string" &&
+        typeof payload.org === "string" &&
+        typeof payload.plan === "string" &&
+        typeof payload.issuedAt === "string" &&
+        typeof payload.expiresAt === "string" &&
+        typeof payload.maxRepos === "number");
+}
+function createEd25519PublicKey(publicKeyBase64) {
+    try {
+        return (0, node_crypto_1.createPublicKey)({
+            key: Buffer.from(publicKeyBase64, "base64"),
+            format: "der",
+            type: "spki"
+        });
+    }
+    catch {
+        return undefined;
+    }
+}
+function invalid(reason, message, payload) {
+    return payload ? { valid: false, reason, message, payload } : { valid: false, reason, message };
+}
+function sameGitHubOwner(left, right) {
+    return left.trim().toLowerCase() === right.trim().toLowerCase();
 }
 
 
@@ -2910,6 +3912,471 @@ function numericAttribute(value) {
 }
 function isRecord(value) {
     return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
+
+/***/ }),
+
+/***/ 9245:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parseWorkflow = parseWorkflow;
+exports.parseWorkflowFiles = parseWorkflowFiles;
+exports.isWorkflowFile = isWorkflowFile;
+exports.findJobForLine = findJobForLine;
+exports.findStepForLine = findStepForLine;
+const yaml_1 = __nccwpck_require__(8815);
+const emptyTrigger = {
+    paths: [],
+    pathsIgnore: [],
+    branches: [],
+    branchesIgnore: []
+};
+function parseWorkflow(source, options = {}) {
+    const lineOffsets = buildLineOffsets(source);
+    const file = options.filePath ?? ".github/workflows/workflow.yml";
+    const seenFiles = new Set(options.seenFiles ?? []);
+    seenFiles.add(file);
+    const parseErrors = [];
+    const document = (0, yaml_1.parseDocument)(source, { keepSourceTokens: true });
+    parseErrors.push(...document.errors.map((error) => error.message));
+    const root = document.contents;
+    const on = parseWorkflowTriggers(getMapValue(root, "on"));
+    const jobsNode = getMapValue(root, "jobs");
+    const jobs = [];
+    const steps = [];
+    const checkMappings = [];
+    const unresolvedCheckMappings = [];
+    for (const jobEntry of mapEntries(jobsNode)) {
+        const jobId = jobEntry.key;
+        const jobNode = jobEntry.value;
+        const jobName = stringValue(getMapValue(jobNode, "name"));
+        const ifEntry = findMapEntry(jobNode, "if");
+        const jobIf = stringValue(ifEntry?.value);
+        const uses = stringValue(getMapValue(jobNode, "uses"));
+        const line = nodeStartLine(jobEntry.keyNode, lineOffsets) ?? nodeStartLine(jobNode, lineOffsets) ?? 1;
+        const endLine = nodeEndLine(jobNode, lineOffsets) ?? line;
+        const dynamicName = jobName ? isDynamicExpression(jobName) : false;
+        const jobSteps = parseSteps(jobNode, jobId, jobName, lineOffsets);
+        const job = {
+            id: jobId,
+            name: jobName,
+            if: jobIf,
+            ifLine: ifEntry ? nodeStartLine(ifEntry.keyNode, lineOffsets) : undefined,
+            uses,
+            line,
+            endLine,
+            steps: jobSteps,
+            checkNames: [],
+            dynamicName,
+            reusable: Boolean(uses)
+        };
+        const mappingResult = buildCheckMappings(job, jobNode, {
+            file,
+            workflowFiles: options.workflowFiles,
+            seenFiles,
+            lineOffsets
+        });
+        job.checkNames = mappingResult.mappings.map((mapping) => mapping.checkName);
+        checkMappings.push(...mappingResult.mappings);
+        unresolvedCheckMappings.push(...mappingResult.unresolved);
+        jobs.push(job);
+        steps.push(...jobSteps);
+    }
+    return {
+        file,
+        on,
+        jobs,
+        steps,
+        checkMappings,
+        unresolvedCheckMappings,
+        parseErrors
+    };
+}
+function parseWorkflowFiles(files) {
+    return Object.entries(files)
+        .filter(([file]) => isWorkflowFile(file))
+        .map(([file, source]) => parseWorkflow(source, {
+        filePath: file,
+        workflowFiles: files
+    }));
+}
+function isWorkflowFile(file) {
+    return /^\.github\/workflows\/.+\.ya?ml$/.test(normalizeWorkflowPath(file));
+}
+function findJobForLine(workflow, line) {
+    return workflow.jobs.find((job) => line >= job.line && line <= job.endLine);
+}
+function findStepForLine(workflow, line) {
+    return workflow.steps.find((step) => line >= step.line && line <= step.endLine);
+}
+function parseWorkflowTriggers(onNode) {
+    const events = {};
+    if ((0, yaml_1.isScalar)(onNode)) {
+        const eventName = scalarToString(onNode.value);
+        if (eventName) {
+            events[eventName] = { ...emptyTrigger };
+        }
+    }
+    else if ((0, yaml_1.isSeq)(onNode)) {
+        for (const item of onNode.items) {
+            const eventName = stringValue(item);
+            if (eventName) {
+                events[eventName] = { ...emptyTrigger };
+            }
+        }
+    }
+    else if ((0, yaml_1.isMap)(onNode)) {
+        for (const entry of mapEntries(onNode)) {
+            events[entry.key] = parseWorkflowEvent(entry.value);
+        }
+    }
+    return {
+        eventNames: Object.keys(events),
+        events
+    };
+}
+function parseWorkflowEvent(node) {
+    if (!(0, yaml_1.isMap)(node)) {
+        return { ...emptyTrigger };
+    }
+    return {
+        paths: stringArrayValue(getMapValue(node, "paths")),
+        pathsIgnore: stringArrayValue(getMapValue(node, "paths-ignore")),
+        branches: stringArrayValue(getMapValue(node, "branches")),
+        branchesIgnore: stringArrayValue(getMapValue(node, "branches-ignore"))
+    };
+}
+function parseSteps(jobNode, jobId, jobName, lineOffsets) {
+    const stepsNode = getMapValue(jobNode, "steps");
+    if (!(0, yaml_1.isSeq)(stepsNode)) {
+        return [];
+    }
+    const steps = [];
+    for (const item of stepsNode.items) {
+        if (!(0, yaml_1.isMap)(item)) {
+            continue;
+        }
+        const continueOnErrorEntry = findMapEntry(item, "continue-on-error");
+        const step = {
+            jobId,
+            jobName,
+            stepName: stringValue(getMapValue(item, "name")),
+            uses: stringValue(getMapValue(item, "uses")),
+            run: stringValue(getMapValue(item, "run")),
+            with: stringRecordValue(getMapValue(item, "with")),
+            line: nodeStartLine(item, lineOffsets) ?? 1,
+            endLine: nodeEndLine(item, lineOffsets) ?? nodeStartLine(item, lineOffsets) ?? 1,
+            continueOnError: booleanValue(continueOnErrorEntry?.value),
+            continueOnErrorLine: continueOnErrorEntry ? nodeStartLine(continueOnErrorEntry.keyNode, lineOffsets) : undefined
+        };
+        steps.push(step);
+    }
+    return steps;
+}
+function buildCheckMappings(job, jobNode, context) {
+    if (job.dynamicName) {
+        return {
+            mappings: [],
+            unresolved: [
+                {
+                    jobId: job.id,
+                    jobName: job.name,
+                    reason: "dynamic-name",
+                    file: context.file,
+                    line: job.line
+                }
+            ]
+        };
+    }
+    const displayName = job.name ?? job.id;
+    if (job.uses) {
+        return buildReusableCheckMappings(job, displayName, context);
+    }
+    const matrix = expandMatrix(getMapValue(getMapValue(jobNode, "strategy"), "matrix"));
+    if (matrix.length > 0) {
+        return {
+            mappings: matrix.map((combo) => ({
+                checkName: `${displayName} (${Object.values(combo).join(", ")})`,
+                jobId: job.id,
+                jobName: job.name,
+                kind: "matrix",
+                file: context.file,
+                line: job.line,
+                matrix: combo
+            })),
+            unresolved: []
+        };
+    }
+    return {
+        mappings: [
+            {
+                checkName: displayName,
+                jobId: job.id,
+                jobName: job.name,
+                kind: "job",
+                file: context.file,
+                line: job.line
+            }
+        ],
+        unresolved: []
+    };
+}
+function buildReusableCheckMappings(job, displayName, context) {
+    const uses = job.uses ?? "";
+    const localPath = normalizeLocalReusablePath(uses);
+    if (!localPath) {
+        return {
+            mappings: [],
+            unresolved: [
+                {
+                    jobId: job.id,
+                    jobName: job.name,
+                    reason: "external-reusable",
+                    file: context.file,
+                    line: job.line,
+                    uses
+                }
+            ]
+        };
+    }
+    const source = context.workflowFiles?.[localPath];
+    if (source === undefined || context.seenFiles.has(localPath)) {
+        return {
+            mappings: [],
+            unresolved: [
+                {
+                    jobId: job.id,
+                    jobName: job.name,
+                    reason: "local-reusable-missing",
+                    file: context.file,
+                    line: job.line,
+                    uses
+                }
+            ]
+        };
+    }
+    const inner = parseWorkflow(source, {
+        filePath: localPath,
+        workflowFiles: context.workflowFiles,
+        seenFiles: context.seenFiles
+    });
+    return {
+        mappings: inner.checkMappings.map((mapping) => ({
+            ...mapping,
+            checkName: `${displayName} / ${mapping.checkName}`,
+            jobId: job.id,
+            jobName: job.name,
+            kind: "reusable",
+            file: context.file,
+            line: job.line,
+            reusableWorkflow: localPath
+        })),
+        unresolved: inner.unresolvedCheckMappings.map((mapping) => ({
+            ...mapping,
+            jobId: job.id,
+            jobName: job.name,
+            file: context.file,
+            line: job.line,
+            uses
+        }))
+    };
+}
+function expandMatrix(matrixNode) {
+    if (!(0, yaml_1.isMap)(matrixNode)) {
+        return [];
+    }
+    const axes = [];
+    const include = [];
+    const exclude = [];
+    for (const entry of mapEntries(matrixNode)) {
+        if (entry.key === "include") {
+            include.push(...objectArrayValue(entry.value));
+            continue;
+        }
+        if (entry.key === "exclude") {
+            exclude.push(...objectArrayValue(entry.value));
+            continue;
+        }
+        const values = stringArrayValue(entry.value);
+        if (values.length > 0) {
+            axes.push({ key: entry.key, values });
+        }
+    }
+    if (axes.length === 0 && include.length === 0) {
+        return [];
+    }
+    let combinations = axes.reduce((acc, axis) => acc.flatMap((combo) => axis.values.map((value) => ({
+        ...combo,
+        [axis.key]: value
+    }))), [{}]);
+    for (const includeEntry of include) {
+        let applied = false;
+        combinations = combinations.map((combo) => {
+            if (canMergeMatrixInclude(combo, includeEntry)) {
+                applied = true;
+                return { ...combo, ...includeEntry };
+            }
+            return combo;
+        });
+        if (!applied) {
+            combinations.push(includeEntry);
+        }
+    }
+    return combinations.filter((combo) => !exclude.some((excludeEntry) => matrixEntryMatches(combo, excludeEntry)));
+}
+function canMergeMatrixInclude(combo, includeEntry) {
+    return Object.entries(includeEntry).every(([key, value]) => combo[key] === undefined || combo[key] === value);
+}
+function matrixEntryMatches(combo, expected) {
+    return Object.entries(expected).every(([key, value]) => combo[key] === value);
+}
+function objectArrayValue(node) {
+    if (!(0, yaml_1.isSeq)(node)) {
+        return [];
+    }
+    return node.items.flatMap((item) => {
+        if (!(0, yaml_1.isMap)(item)) {
+            return [];
+        }
+        const record = {};
+        for (const entry of mapEntries(item)) {
+            const value = stringValue(entry.value);
+            if (value !== undefined) {
+                record[entry.key] = value;
+            }
+        }
+        return Object.keys(record).length > 0 ? [record] : [];
+    });
+}
+function stringRecordValue(node) {
+    if (!(0, yaml_1.isMap)(node)) {
+        return undefined;
+    }
+    const record = {};
+    for (const entry of mapEntries(node)) {
+        const value = stringValue(entry.value);
+        if (value !== undefined) {
+            record[entry.key] = value;
+        }
+    }
+    return Object.keys(record).length > 0 ? record : undefined;
+}
+function stringArrayValue(node) {
+    if ((0, yaml_1.isSeq)(node)) {
+        return node.items.map((item) => stringValue(item)).filter((value) => value !== undefined);
+    }
+    const value = stringValue(node);
+    return value === undefined ? [] : [value];
+}
+function getMapValue(map, key) {
+    return findMapEntry(map, key)?.value;
+}
+function findMapEntry(map, key) {
+    return mapEntries(map).find((entry) => entry.key === key);
+}
+function mapEntries(map) {
+    if (!(0, yaml_1.isMap)(map)) {
+        return [];
+    }
+    return map.items.flatMap((pair) => {
+        const key = stringValue(pair.key);
+        if (key === undefined) {
+            return [];
+        }
+        return [
+            {
+                key,
+                keyNode: pair.key,
+                value: pair.value
+            }
+        ];
+    });
+}
+function stringValue(node) {
+    if (!(0, yaml_1.isScalar)(node)) {
+        return undefined;
+    }
+    return scalarToString(node.value);
+}
+function scalarToString(value) {
+    if (value === null || value === undefined) {
+        return undefined;
+    }
+    return String(value);
+}
+function booleanValue(node) {
+    if (!(0, yaml_1.isScalar)(node)) {
+        return undefined;
+    }
+    if (typeof node.value === "boolean") {
+        return node.value;
+    }
+    if (typeof node.value === "string") {
+        if (/^true$/i.test(node.value)) {
+            return true;
+        }
+        if (/^false$/i.test(node.value)) {
+            return false;
+        }
+    }
+    return undefined;
+}
+function isDynamicExpression(value) {
+    return /\$\{\{[\s\S]*\}\}/.test(value);
+}
+function normalizeLocalReusablePath(uses) {
+    if (!uses.startsWith("./")) {
+        return undefined;
+    }
+    return normalizeWorkflowPath(uses.slice(2));
+}
+function normalizeWorkflowPath(file) {
+    return file.replace(/\\/g, "/").replace(/^\/+/, "");
+}
+function nodeStartLine(node, lineOffsets) {
+    const range = nodeRange(node);
+    return range ? offsetToLine(range[0], lineOffsets) : undefined;
+}
+function nodeEndLine(node, lineOffsets) {
+    const range = nodeRange(node);
+    return range ? offsetToLine(Math.max(range[2] - 1, range[0]), lineOffsets) : undefined;
+}
+function nodeRange(node) {
+    const range = node?.range;
+    if (!Array.isArray(range) || range.length < 3) {
+        return undefined;
+    }
+    const [start, valueEnd, end] = range;
+    return typeof start === "number" && typeof valueEnd === "number" && typeof end === "number"
+        ? [start, valueEnd, end]
+        : undefined;
+}
+function buildLineOffsets(source) {
+    const offsets = [0];
+    for (let index = 0; index < source.length; index += 1) {
+        if (source[index] === "\n") {
+            offsets.push(index + 1);
+        }
+    }
+    return offsets;
+}
+function offsetToLine(offset, lineOffsets) {
+    let low = 0;
+    let high = lineOffsets.length - 1;
+    while (low <= high) {
+        const middle = Math.floor((low + high) / 2);
+        if (lineOffsets[middle] <= offset) {
+            low = middle + 1;
+        }
+        else {
+            high = middle - 1;
+        }
+    }
+    return high + 1;
 }
 
 
@@ -44067,10 +45534,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runAction = runAction;
 const schema_1 = __nccwpck_require__(9382);
 const context_1 = __nccwpck_require__(9619);
+const evidenceRecord_1 = __nccwpck_require__(2962);
 const orchestrator_1 = __nccwpck_require__(250);
 const diff_1 = __nccwpck_require__(4346);
 const checkrun_1 = __nccwpck_require__(9459);
 const reviews_1 = __nccwpck_require__(8325);
+const verify_1 = __nccwpck_require__(2493);
 const annotations_1 = __nccwpck_require__(6891);
 const checkrun_2 = __nccwpck_require__(8028);
 const comment_1 = __nccwpck_require__(1680);
@@ -44081,23 +45550,42 @@ async function runAction() {
     const configPath = core.getInput("config-path") || ".github/false-clean-pass.yml";
     const failOnInput = parseFailOn(core.getInput("fail-on"));
     const sarifPath = core.getInput("sarif-path") || core.getInput("sarif-output") || "false-clean-pass.sarif";
+    const evidenceOutput = core.getInput("evidenceOutput") || core.getInput("evidence-output") || "fcp-evidence.json";
+    const licenseText = core.getInput("license") || process.env.FCP_LICENSE;
     const commentMode = parseCommentMode(core.getInput("comment-mode"));
     const attestationMode = parseAttestationMode(core.getInput("attestation-mode"));
     const token = core.getInput("github-token");
     const config = applyInputConfigOverrides((0, schema_1.loadConfig)(rootDir, configPath), {
-        testCountBaseline: core.getInput("test-count-baseline")
+        testCountBaseline: core.getInput("test-count-baseline"),
+        allowContinueOnErrorSteps: splitCommaList(core.getInput("allow-continue-on-error-steps")),
+        codeownerTeamFallback: parseBooleanInput(core.getInput("codeowner-team-fallback")),
+        requiredJobs: splitCommaList(core.getInput("requiredJobs") || core.getInput("required-jobs")),
+        evidenceOutput
     });
     const diff = await getActionDiff(rootDir, token);
     const runtime = await getGitHubRuntime(token);
     const markerCheckRunId = runtime && attestationMode === "marker" ? await tryEmitCheckRunMarker(runtime) : undefined;
     const contextOptions = await buildContextOptions(core, runtime, attestationMode);
     const result = await (0, orchestrator_1.runGuard)((0, context_1.createDetectorContext)(rootDir, config, diff, contextOptions), failOnInput ?? config.failOn);
+    const licenseVerification = resolveLicenseVerification(core, runtime, licenseText);
+    const evidencePath = await (0, evidenceRecord_1.writeEvidenceRecord)((0, evidenceRecord_1.createEvidenceRecord)({
+        result,
+        repo: runtime ? `${runtime.owner}/${runtime.repo}` : "local/local",
+        prNumber: runtime?.pullNumber ?? null,
+        headSha: runtime?.headSha ?? "local",
+        baseSha: runtime?.baseSha ?? null,
+        actor: runtime?.actor ?? "local",
+        runId: runtime?.runId ?? null,
+        ownerType: runtime?.ownerType,
+        licenseVerification
+    }), config.evidenceOutput, rootDir);
     await (0, sarif_1.writeSarifLogFile)(result, { rootDir, sarifPath });
     await (0, annotations_1.emitAnnotations)(result.findings);
     core.setOutput("result", result.result);
     core.setOutput("error-count", String(result.errorCount));
     core.setOutput("warning-count", String(result.warningCount));
     core.setOutput("sarif-path", sarifPath);
+    core.setOutput("evidence-path", evidencePath);
     await tryCreateCheckRun(token, result, markerCheckRunId);
     await tryUpsertPullRequestComment(token, result, sarifPath, commentMode);
     if (result.result === "fail") {
@@ -44190,6 +45678,7 @@ async function buildContextOptions(core, runtime, attestationMode) {
         prLabels: await getPullRequestLabels(),
         github: runtime,
         codeOwnerReviewProvider: runtime ? (0, reviews_1.createGitHubReviewProvider)(runtime) : undefined,
+        readBaseFile: runtime?.baseSha ? createGitHubBaseFileReader(runtime) : undefined,
         checkRunAttestationVerifier: runtime && attestationMode === "marker" ? (0, checkrun_1.createCheckRunAttestationVerifier)(runtime) : undefined
     };
 }
@@ -44206,9 +45695,55 @@ async function getGitHubRuntime(token) {
     return {
         token,
         owner: github.context.repo.owner,
+        ownerType: getRepositoryOwnerType(github.context.payload),
         repo: github.context.repo.repo,
         headSha,
+        baseSha: pullRequest?.base.sha,
+        baseRef: pullRequest?.base.ref,
+        actor: github.context.actor,
+        runId: String(github.context.runId),
         pullNumber: pullRequest?.number
+    };
+}
+function resolveLicenseVerification(core, runtime, licenseText) {
+    if (runtime?.ownerType !== "Organization") {
+        return undefined;
+    }
+    const result = (0, verify_1.verifyLicense)(licenseText, { org: runtime.owner });
+    if (!result.valid) {
+        core.warning(`Organization Evidence Record signing disabled: ${result.message}`);
+    }
+    return result;
+}
+function getRepositoryOwnerType(payload) {
+    const repository = payload?.repository;
+    return typeof repository?.owner?.type === "string" ? repository.owner.type : undefined;
+}
+function createGitHubBaseFileReader(runtime) {
+    const baseSha = runtime.baseSha;
+    if (!baseSha) {
+        throw new Error("Base SHA is required to read base workflow files.");
+    }
+    return async (file) => {
+        const github = await Promise.all(/* import() */[__nccwpck_require__.e(119), __nccwpck_require__.e(157)]).then(__nccwpck_require__.bind(__nccwpck_require__, 157));
+        const octokit = github.getOctokit(runtime.token);
+        const response = await octokit.rest.repos.getContent({
+            owner: runtime.owner,
+            repo: runtime.repo,
+            path: file,
+            ref: baseSha,
+            mediaType: {
+                format: "raw"
+            }
+        });
+        if (typeof response.data === "string") {
+            return response.data;
+        }
+        const content = response.data.content;
+        if (content) {
+            return Buffer.from(content, "base64").toString("utf8");
+        }
+        throw new Error(`Base file is not readable as a file: ${file}`);
     };
 }
 async function getPullRequestLabels() {
@@ -44241,16 +45776,71 @@ function parseAttestationMode(value) {
     return value === "off" ? "off" : "marker";
 }
 function applyInputConfigOverrides(config, options) {
-    if (!options.testCountBaseline) {
-        return config;
+    let next = config;
+    if (options.testCountBaseline) {
+        next = {
+            ...next,
+            testCountRatchet: {
+                ...next.testCountRatchet,
+                baselineFile: options.testCountBaseline
+            }
+        };
     }
-    return {
-        ...config,
-        testCountRatchet: {
-            ...config.testCountRatchet,
-            baselineFile: options.testCountBaseline
-        }
-    };
+    if (options.allowContinueOnErrorSteps && options.allowContinueOnErrorSteps.length > 0) {
+        next = {
+            ...next,
+            detectors: {
+                ...next.detectors,
+                ignoredFailures: {
+                    ...next.detectors.ignoredFailures,
+                    allowContinueOnErrorSteps: options.allowContinueOnErrorSteps
+                }
+            }
+        };
+    }
+    if (options.codeownerTeamFallback !== undefined) {
+        const baselineGuard = {
+            ...next.baselineGuard,
+            codeownerTeamFallback: options.codeownerTeamFallback
+        };
+        next = {
+            ...next,
+            baselineGuard,
+            detectors: {
+                ...next.detectors,
+                baselineGuard
+            }
+        };
+    }
+    if (options.requiredJobs && options.requiredJobs.length > 0) {
+        next = {
+            ...next,
+            requiredJobs: options.requiredJobs,
+            detectors: {
+                ...next.detectors,
+                requiredJobSkip: {
+                    ...next.detectors.requiredJobSkip,
+                    requiredJobs: options.requiredJobs
+                }
+            }
+        };
+    }
+    if (options.evidenceOutput) {
+        next = {
+            ...next,
+            evidenceOutput: options.evidenceOutput
+        };
+    }
+    return next;
+}
+function parseBooleanInput(value) {
+    if (value === "true") {
+        return true;
+    }
+    if (value === "false") {
+        return false;
+    }
+    return undefined;
 }
 void runAction();
 

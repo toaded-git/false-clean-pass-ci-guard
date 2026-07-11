@@ -22,6 +22,9 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      # Build first: tools/aggregate-report.mjs require()s compiled build/ output,
+      # so the M4 aggregate-report tests fail on a fresh checkout without a build.
+      - run: npm run build
       - name: Run tests (JUnit output)
         run: npm test -- --reporter=junit --outputFile=reports/junit.xml
       - name: Upload JUnit results

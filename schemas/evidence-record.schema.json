@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://false-clean-pass.local/schemas/evidence-record.schema.json",
+  "title": "false-clean-pass Evidence Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "repo",
+    "prNumber",
+    "headSha",
+    "baseSha",
+    "actor",
+    "runId",
+    "timestamp",
+    "verdict",
+    "attempts",
+    "weakenings",
+    "detectorSummary",
+    "license",
+    "signature"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "repo": { "type": "string", "minLength": 1 },
+    "prNumber": { "type": ["integer", "null"], "minimum": 1 },
+    "headSha": { "type": "string", "minLength": 1 },
+    "baseSha": { "type": ["string", "null"] },
+    "actor": { "type": "string", "minLength": 1 },
+    "runId": { "type": ["string", "null"] },
+    "timestamp": { "type": "string", "minLength": 1 },
+    "verdict": { "enum": ["pass", "fail"] },
+    "attempts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/attempt" }
+    },
+    "weakenings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/weakening" }
+    },
+    "detectorSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "failed", "review", "passed"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "review": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "license": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["org", "licenseId", "signaturePresent"],
+          "properties": {
+            "org": { "const": false },
+            "licenseId": { "type": "null" },
+            "signaturePresent": { "const": false }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["org", "licenseId", "signaturePresent"],
+          "properties": {
+            "org": { "const": true },
+            "licenseId": { "type": "string", "minLength": 1 },
+            "signaturePresent": { "const": true }
+          }
+        }
+      ]
+    },
+    "signature": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alg", "keyId", "value", "signedFields", "note"],
+          "properties": {
+            "alg": { "const": "ed25519" },
+            "keyId": { "type": "string", "minLength": 1 },
+            "value": { "type": "string", "minLength": 1 },
+            "signedFields": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 1
+            },
+            "note": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "severity", "target", "detail"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "required_job_missing",
+            "required_job_if_skip_risk",
+            "required_job_if_added_review",
+            "required_workflow_trigger_narrowed",
+            "required_config_narrowed"
+          ]
+        },
+        "severity": { "enum": ["high", "review"] },
+        "target": { "type": "string", "minLength": 1 },
+        "detail": { "type": "string", "minLength": 1 },
+        "file": { "type": "string" },
+        "line": { "type": "integer", "minimum": 1 },
+        "baseValue": { "type": ["string", "null"] },
+        "headValue": { "type": ["string", "null"] }
+      }
+    },
+    "weakening": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "severity", "detail"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "mapping_unresolved",
+            "suppression_increase",
+            "run_count_drop",
+            "guard_weakening",
+            "ignored_failure",
+            "baseline_change",
+            "coverage_drop",
+            "env_missing",
+            "test_skip",
+            "empty_assertion",
+            "parse_failure",
+            "other"
+          ]
+        },
+        "severity": { "enum": ["high", "medium", "low"] },
+        "target": { "type": "string" },
+        "detail": { "type": "string", "minLength": 1 },
+        "file": { "type": "string" },
+        "line": { "type": "integer", "minimum": 1 },
+        "delta": { "type": "number" },
+        "baseline": { "type": "number" },
+        "current": { "type": "number" }
+      }
+    }
+  }
+}

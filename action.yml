@@ -44,6 +44,23 @@ inputs:
     description: Self-attestation mode. marker emits and verifies a non-cryptographic Check Run marker; off disables it.
     required: false
     default: marker
+  allow-continue-on-error-steps:
+    description: Comma-separated step name or uses globs allowed to set continue-on-error true.
+    required: false
+  codeowner-team-fallback:
+    description: Enable CODEOWNER team fallback using approved OWNER/MEMBER PR reviews.
+    required: false
+    default: "false"
+  requiredJobs:
+    description: Comma-separated branch-protection required check names to guard against skip-as-success workflow weakening.
+    required: false
+  evidenceOutput:
+    description: Path where the Evidence Record JSON is written.
+    required: false
+    default: fcp-evidence.json
+  license:
+    description: Optional C-lite license string. Prefer env FCP_LICENSE from the organization secret.
+    required: false
 outputs:
   result:
     description: pass or fail.
@@ -53,6 +70,8 @@ outputs:
     description: Number of warning findings.
   sarif-path:
     description: Path to the generated SARIF file.
+  evidence-path:
+    description: Path to the generated Evidence Record JSON file.
 runs:
   using: node20
   main: dist/index.js

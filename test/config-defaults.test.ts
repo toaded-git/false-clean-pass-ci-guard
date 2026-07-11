@@ -9,5 +9,10 @@ describe("default config reconciliation", () => {
     expect(defaultConfig.detectors.emptyAssertions.lenientAssertNames).toBe(true);
     expect(defaultConfig.detectors.skippedTests.pythonSkipifSilent).toBe(true);
     expect(defaultConfig.detectors.envMissing.missingSeverity).toBe("error");
+    expect(defaultConfig.detectors.ignoredFailures.allowContinueOnErrorSteps).toEqual([]);
+    expect(defaultConfig.baselineGuard.codeownerTeamFallback).toBe(false);
+    expect(defaultConfig.detectors.requiredJobSkip.enabled).toBe(true);
+    expect(defaultConfig.detectors.requiredJobSkip.requiredJobs).toEqual([]);
+    expect(defaultConfig.evidenceOutput).toBe("fcp-evidence.json");
   });
 });

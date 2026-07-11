@@ -50,6 +50,32 @@ describe("suppressionRatchetDetector", () => {
     expect(findings).toEqual([]);
   });
 
+  it("treats meaningless suppression reasons as missing reasons for the hard cap", async () => {
+    const file = "test/fixtures/suppressions/src/suppressed.ts";
+    const findings = await suppressionRatchetDetector.run(
+      contextFor(
+        [
+          diffFile(
+            file,
+            `@@ -1,2 +1,3 @@
+ const value = 1;
++// eslint-disable-next-line no-console -- auto
+ console.log(value);
+`
+          )
+        ],
+        { detectors: { suppressionRatchet: { maxNewPerPR: 0 } } }
+      )
+    );
+
+    expect(findings).toEqual([
+      expect.objectContaining({
+        severity: "error",
+        ruleId: "false-clean-pass/new-suppression"
+      })
+    ]);
+  });
+
   it("reports repository-wide suppression total increases over baseline", async () => {
     const root = makeVerifyTempDir("suppressions-");
     mkdirSync(join(root, ".github"), { recursive: true });
